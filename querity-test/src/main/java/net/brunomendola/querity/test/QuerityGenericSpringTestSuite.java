@@ -1,5 +1,6 @@
 package net.brunomendola.querity.test;
 
+import lombok.SneakyThrows;
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
 import net.brunomendola.querity.test.domain.Person;
@@ -43,7 +44,10 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
     assertThat(people).hasSize(PEOPLE.size());
   }
 
-  protected abstract List<T> getEntities();
+  @SneakyThrows
+  private List<T> getEntities() {
+    return CsvUtils.readCsv("/querity/test-data.csv", getEntityClass());
+  }
 
   @SuppressWarnings("unchecked")
   private Class<T> getEntityClass() {

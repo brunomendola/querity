@@ -9,10 +9,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import java.util.List;
-
-import static net.brunomendola.querity.spring.data.mongodb.TestData.getPeople;
-
 @Testcontainers
 class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person> {
 
@@ -22,10 +18,5 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person> {
   @DynamicPropertySource
   static void setProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.mongodb.uri", MONGO_DB_CONTAINER::getReplicaSetUrl);
-  }
-
-  @Override
-  protected List<Person> getEntities() {
-    return getPeople();
   }
 }
