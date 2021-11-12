@@ -24,3 +24,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: ./mvnw -B package --file pom.xml
+    - name: Codecov
+      uses: codecov/codecov-action@v2.1.0
+      with:
+        token: 72a52f77-e563-4af3-adf3-6b5fb66f5a84
+        file: ./**/target/site/jacoco/jacoco.xml
