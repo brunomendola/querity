@@ -1,6 +1,7 @@
 package net.brunomendola.querity.test;
 
 import lombok.SneakyThrows;
+import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
 import net.brunomendola.querity.test.domain.Person;
@@ -42,6 +43,15 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
         .build();
     List<T> people = querity.findAll(getEntityClass(), query);
     assertThat(people).hasSize(PEOPLE.size());
+  }
+
+  @Test
+  void givenStringEqualsFilter_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
+        .build();
+    List<T> people = querity.findAll(getEntityClass(), query);
+    assertThat(people).hasSize((int) PEOPLE.stream().filter(p -> p.getLastName().equals("Skywalker")).count());
   }
 
   @SneakyThrows

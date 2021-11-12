@@ -16,6 +16,7 @@ public class QuerityMongodbImpl implements Querity {
 
   @Override
   public <T> List<T> findAll(Class<T> entityClass, Query query) {
-    return mongoTemplate.find(new org.springframework.data.mongodb.core.query.Query(), entityClass);
+    org.springframework.data.mongodb.core.query.Query q = new MongodbQuery(query).toQuery();
+    return mongoTemplate.find(q, entityClass);
   }
 }
