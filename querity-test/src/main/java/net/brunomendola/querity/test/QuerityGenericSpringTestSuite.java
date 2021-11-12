@@ -1,6 +1,7 @@
 package net.brunomendola.querity.test;
 
 import lombok.SneakyThrows;
+import net.brunomendola.querity.api.LogicOperator;
 import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
@@ -52,6 +53,31 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
         .build();
     List<T> people = querity.findAll(getEntityClass(), query);
     assertThat(people).hasSize((int) PEOPLE.stream().filter(p -> p.getLastName().equals("Skywalker")).count());
+  }
+
+  @Test
+  void givenTwoStringEqualsFiltersWithAndLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
+        .addFilterCondition("firstName", Operator.EQUALS, "Luke")
+        .build();
+    List<T> people = querity.findAll(getEntityClass(), query);
+    assertThat(people).hasSize((int) PEOPLE.stream()
+        .filter(p -> p.getLastName().equals("Skywalker") && p.getFirstName().equals("Luke"))
+        .count());
+  }
+
+  @Test
+  void givenTwoStringEqualsFiltersWithOrLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .setFilterLogic(LogicOperator.OR)
+        .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
+        .addFilterCondition("lastName", Operator.EQUALS, "Kenobi")
+        .build();
+    List<T> people = querity.findAll(getEntityClass(), query);
+    assertThat(people).hasSize((int) PEOPLE.stream()
+        .filter(p -> p.getLastName().equals("Skywalker") || p.getLastName().equals("Kenobi"))
+        .count());
   }
 
   @SneakyThrows
