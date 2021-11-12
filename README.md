@@ -21,6 +21,7 @@ Available modules:
 
 * **querity-spring-data-jpa**: supports Spring Data JPA
 * **querity-spring-data-mongodb**: supports Spring Data MongoDB
+* **querity-spring-web**: supports JSON serialization and deserialization of Querity objects in Spring Web MVC
 
 All modules are "Spring Boot starters", you just need to add the dependency to your Spring Boot project and start using
 it, no other configuration needed.

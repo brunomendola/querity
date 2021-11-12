@@ -1,10 +1,14 @@
 package net.brunomendola.querity.api;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Getter
 public class Query {
   private Filter filter;
 
@@ -21,8 +25,8 @@ public class Query {
       return this;
     }
 
-    public QueryBuilder setFilterLogic(LogicOperator logicOperator) {
-      this.filter.setLogicOperator(logicOperator);
+    public QueryBuilder setFilterLogic(LogicOperator logic) {
+      this.filter.setLogic(logic);
       return this;
     }
   }

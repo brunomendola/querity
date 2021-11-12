@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class Filter {
   @Builder.Default
-  private LogicOperator logicOperator = LogicOperator.AND;
+  private LogicOperator logic = LogicOperator.AND;
   @Builder.Default
   private List<Condition> conditions = new ArrayList<>();
 }

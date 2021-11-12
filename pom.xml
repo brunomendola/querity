@@ -28,6 +28,7 @@
     <module>querity-spring-data-jpa</module>
     <module>querity-spring-data-mongodb</module>
     <module>querity-test</module>
+    <module>querity-spring-web</module>
   </modules>
 
   <dependencyManagement>
