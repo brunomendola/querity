@@ -10,23 +10,39 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+/**
+ * Tests JSON deserialization and serialization of a Query object given as a REST endpoint query parameter
+ */
 @WebMvcTest(controllers = QueritySpringWebMvcTestController.class)
 @Import(QueritySpringWebAutoConfiguration.class)
 class QueritySpringWebTests {
   @Autowired
   MockMvc mockMvc;
 
-  /**
-   * Tests JSON deserialization and serialization of a Query object given as a REST endpoint query parameter
-   *
-   * @throws Exception
-   */
   @Test
-  void givenJsonQueryAsQueryParameter_whenGetQuery_thenReturnTheSameQueryAsResponse() throws Exception {
-    String filter = "{\"filter\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}]}}";
+  void givenJsonQueryWithSimpleConditionAsQueryParameter_whenGetQuery_thenReturnTheSameQueryAsResponse() throws Exception {
+    String query = "{\"filter\":{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}}";
     mockMvc.perform(get("/query")
-            .queryParam("q", filter))
+            .queryParam("q", query))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(content().json(filter, false));
+        .andExpect(content().json(query, false));
+  }
+
+  @Test
+  void givenJsonQueryWithConditionsWrapperAsQueryParameter_whenGetQuery_thenReturnTheSameQueryAsResponse() throws Exception {
+    String query = "{\"filter\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}]}}";
+    mockMvc.perform(get("/query")
+            .queryParam("q", query))
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json(query, false));
+  }
+
+  @Test
+  void givenJsonQueryWithNestedConditionsWrapperAsQueryParameter_whenGetQuery_thenReturnTheSameQueryAsResponse() throws Exception {
+    String query = "{\"filter\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"},{\"logic\":\"OR\",\"conditions\":[{\"propertyName\":\"firstName\",\"operator\":\"EQUALS\",\"value\":\"Anakin\"},{\"propertyName\":\"firstName\",\"operator\":\"EQUALS\",\"value\":\"Luke\"}]}]}}";
+    mockMvc.perform(get("/query")
+            .queryParam("q", query))
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json(query, false));
   }
 }

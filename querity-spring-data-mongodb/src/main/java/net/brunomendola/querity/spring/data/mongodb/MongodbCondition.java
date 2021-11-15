@@ -1,19 +1,16 @@
 package net.brunomendola.querity.spring.data.mongodb;
 
-import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.Condition;
+import net.brunomendola.querity.api.ConditionsWrapper;
+import net.brunomendola.querity.api.SimpleCondition;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-public class MongodbCondition {
-  @Delegate
-  private final Condition condition;
+interface MongodbCondition {
+  Criteria toCriteria();
 
-  MongodbCondition(Condition condition) {
-    this.condition = condition;
-  }
-
-  Criteria toCriteria() {
-    Criteria criteria = Criteria.where(getPropertyName());
-    return criteria.is(getValue());
+  static MongodbCondition of(Condition condition) {
+    return condition instanceof ConditionsWrapper ?
+        new MongodbConditionsWrapper((ConditionsWrapper) condition) :
+        new MongodbSimpleCondition((SimpleCondition) condition);
   }
 }

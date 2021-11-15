@@ -10,24 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Query {
-  private Filter filter;
+  private Condition filter;
 
-  // Lombok builder customization
-  public static class QueryBuilder {
-    private Filter filter = new Filter();
+  public boolean isFilterConditionsWrapper() {
+    return filter instanceof ConditionsWrapper;
+  }
 
-    public QueryBuilder addFilterCondition(String propertyName, Operator operator, String value) {
-      this.filter.getConditions().add(Condition.builder()
-          .propertyName(propertyName)
-          .operator(operator)
-          .value(value)
-          .build());
-      return this;
-    }
-
-    public QueryBuilder setFilterLogic(LogicOperator logic) {
-      this.filter.setLogic(logic);
-      return this;
-    }
+  public boolean isEmptyFilter() {
+    return filter == null ||
+        filter instanceof ConditionsWrapper && ((ConditionsWrapper) filter).getConditions().isEmpty();
   }
 }

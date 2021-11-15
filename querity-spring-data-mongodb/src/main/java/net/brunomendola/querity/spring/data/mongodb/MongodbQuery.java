@@ -1,11 +1,12 @@
 package net.brunomendola.querity.spring.data.mongodb;
 
 import lombok.experimental.Delegate;
-import net.brunomendola.querity.api.LogicOperator;
+import net.brunomendola.querity.api.ConditionsWrapper;
 import net.brunomendola.querity.api.Query;
+import net.brunomendola.querity.api.SimpleCondition;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-public class MongodbQuery {
+class MongodbQuery {
   @Delegate
   private Query query;
 
@@ -14,22 +15,14 @@ public class MongodbQuery {
   }
 
   org.springframework.data.mongodb.core.query.Query toQuery() {
-    if (getFilter().getConditions().isEmpty())
+    if (isEmptyFilter())
       return new org.springframework.data.mongodb.core.query.Query();
-    Criteria[] conditionsCriteria = buildConditionsCriteria();
-    return new org.springframework.data.mongodb.core.query.Query(buildLogicCriteria(conditionsCriteria));
+    return new org.springframework.data.mongodb.core.query.Query(getCriteria());
   }
 
-  private Criteria buildLogicCriteria(Criteria[] conditionsCriteria) {
-    return getFilter().getLogic().equals(LogicOperator.AND) ?
-        new Criteria().andOperator(conditionsCriteria) :
-        new Criteria().orOperator(conditionsCriteria);
-  }
-
-  private Criteria[] buildConditionsCriteria() {
-    return getFilter().getConditions().stream()
-        .map(MongodbCondition::new)
-        .map(MongodbCondition::toCriteria)
-        .toArray(Criteria[]::new);
+  private Criteria getCriteria() {
+    return isFilterConditionsWrapper() ?
+        new MongodbConditionsWrapper((ConditionsWrapper) getFilter()).toCriteria() :
+        new MongodbSimpleCondition((SimpleCondition) getFilter()).toCriteria();
   }
 }

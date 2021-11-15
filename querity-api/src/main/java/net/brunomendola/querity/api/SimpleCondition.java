@@ -5,16 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Filter {
+public class SimpleCondition implements Condition {
+  private String propertyName;
   @Builder.Default
-  private LogicOperator logic = LogicOperator.AND;
-  @Builder.Default
-  private List<Condition> conditions = new ArrayList<>();
+  private Operator operator = Operator.EQUALS;
+  private String value;
 }

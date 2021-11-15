@@ -3,6 +3,7 @@ package net.brunomendola.querity.api;
 import net.brunomendola.querity.api.domain.Person;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +23,7 @@ class QuerityApiTests {
     Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
             .build());
     assertThat(people).isNotNull();
   }
@@ -32,8 +33,12 @@ class QuerityApiTests {
     Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .addFilterCondition("firstName", Operator.EQUALS, "Luke")
-            .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
+            .filter(ConditionsWrapper.builder()
+                .conditions(Arrays.asList(
+                    SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build(),
+                    SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build()
+                ))
+                .build())
             .build());
     assertThat(people).isNotNull();
   }
@@ -43,9 +48,34 @@ class QuerityApiTests {
     Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .setFilterLogic(LogicOperator.OR)
-            .addFilterCondition("firstName", Operator.EQUALS, "Luke")
-            .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
+            .filter(ConditionsWrapper.builder()
+                .logic(LogicOperator.OR)
+                .conditions(Arrays.asList(
+                    SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build(),
+                    SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build()
+                ))
+                .build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithNestedConditions_whenFindAll_thenReturnListOfEntity() {
+    Querity querity = new QuerityDummyImpl();
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(ConditionsWrapper.builder()
+                .conditions(Arrays.asList(
+                    SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build(),
+                    ConditionsWrapper.builder()
+                        .logic(LogicOperator.OR)
+                        .conditions(Arrays.asList(
+                            SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Anakin").build(),
+                            SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build()
+                        ))
+                        .build()
+                ))
+                .build())
             .build());
     assertThat(people).isNotNull();
   }

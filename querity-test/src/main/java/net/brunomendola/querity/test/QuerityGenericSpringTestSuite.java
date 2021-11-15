@@ -1,10 +1,7 @@
 package net.brunomendola.querity.test;
 
 import lombok.SneakyThrows;
-import net.brunomendola.querity.api.LogicOperator;
-import net.brunomendola.querity.api.Operator;
-import net.brunomendola.querity.api.Querity;
-import net.brunomendola.querity.api.Query;
+import net.brunomendola.querity.api.*;
 import net.brunomendola.querity.test.domain.Person;
 import net.brunomendola.querity.test.domain.PersonRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.GenericTypeResolver;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +47,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
   @Test
   void givenStringEqualsFilter_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
-        .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
+        .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
         .build();
     List<T> people = querity.findAll(getEntityClass(), query);
     assertThat(people).hasSize((int) PEOPLE.stream().filter(p -> p.getLastName().equals("Skywalker")).count());
@@ -58,8 +56,12 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
   @Test
   void givenTwoStringEqualsFiltersWithAndLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
-        .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
-        .addFilterCondition("firstName", Operator.EQUALS, "Luke")
+        .filter(ConditionsWrapper.builder()
+            .conditions(Arrays.asList(
+                SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build(),
+                SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build()
+            ))
+            .build())
         .build();
     List<T> people = querity.findAll(getEntityClass(), query);
     assertThat(people).hasSize((int) PEOPLE.stream()
@@ -70,13 +72,39 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
   @Test
   void givenTwoStringEqualsFiltersWithOrLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
-        .setFilterLogic(LogicOperator.OR)
-        .addFilterCondition("lastName", Operator.EQUALS, "Skywalker")
-        .addFilterCondition("lastName", Operator.EQUALS, "Kenobi")
+        .filter(ConditionsWrapper.builder()
+            .logic(LogicOperator.OR)
+            .conditions(Arrays.asList(
+                SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build(),
+                SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Kenobi").build()
+            ))
+            .build())
         .build();
     List<T> people = querity.findAll(getEntityClass(), query);
     assertThat(people).hasSize((int) PEOPLE.stream()
         .filter(p -> p.getLastName().equals("Skywalker") || p.getLastName().equals("Kenobi"))
+        .count());
+  }
+
+  @Test
+  void givenFilterWithNestedConditions_whenFindAll_thenReturnListOfEntity() {
+    Query query = Query.builder()
+        .filter(ConditionsWrapper.builder()
+            .conditions(Arrays.asList(
+                SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build(),
+                ConditionsWrapper.builder()
+                    .logic(LogicOperator.OR)
+                    .conditions(Arrays.asList(
+                        SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Anakin").build(),
+                        SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build()
+                    ))
+                    .build()
+            ))
+            .build())
+        .build();
+    List<T> people = querity.findAll(getEntityClass(), query);
+    assertThat(people).hasSize((int) PEOPLE.stream()
+        .filter(p -> p.getLastName().equals("Skywalker") && (p.getFirstName().equals("Anakin") || p.getFirstName().equals("Luke")))
         .count());
   }
 

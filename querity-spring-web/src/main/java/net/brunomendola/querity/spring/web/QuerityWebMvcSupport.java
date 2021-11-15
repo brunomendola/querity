@@ -20,9 +20,8 @@ public class QuerityWebMvcSupport extends WebMvcConfigurationSupport {
   @NonNull
   protected ConfigurableWebBindingInitializer getConfigurableWebBindingInitializer(@NonNull FormattingConversionService mvcConversionService, @NonNull Validator mvcValidator) {
     ConfigurableWebBindingInitializer initializer = super.getConfigurableWebBindingInitializer(mvcConversionService, mvcValidator);
-    initializer.setPropertyEditorRegistrar(propertyEditorRegistry -> {
-      propertyEditorRegistry.registerCustomEditor(Query.class, new QueryPropertyEditor(objectMapper));
-    });
+    initializer.setPropertyEditorRegistrar(propertyEditorRegistry ->
+        propertyEditorRegistry.registerCustomEditor(Query.class, new QueryPropertyEditor(objectMapper)));
     return initializer;
   }
 }
