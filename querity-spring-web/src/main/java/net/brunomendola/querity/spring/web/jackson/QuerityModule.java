@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import net.brunomendola.querity.api.Condition;
 
-public class QuerityModule extends Module {
+public class QuerityModule extends com.fasterxml.jackson.databind.Module {
   @Override
   public String getModuleName() {
     return getClass().getSimpleName();
