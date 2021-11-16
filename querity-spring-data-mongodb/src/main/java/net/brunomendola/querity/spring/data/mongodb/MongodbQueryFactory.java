@@ -10,12 +10,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class MongodbQueryFactory<T> {
-  private final Class<T> entityClass;
+class MongodbQueryFactory {
   private final Query query;
 
-  MongodbQueryFactory(Class<T> entityClass, Query query) {
-    this.entityClass = entityClass;
+  MongodbQueryFactory(Query query) {
     this.query = query;
   }
 
@@ -61,9 +59,5 @@ class MongodbQueryFactory<T> {
         .map(MongodbSort::new)
         .map(MongodbSort::toMongoSortOrder)
         .collect(Collectors.toList());
-  }
-
-  private org.springframework.data.mongodb.core.query.Query applySorting(org.springframework.data.mongodb.core.query.Query q) {
-    return q.with(getMongodbSort());
   }
 }

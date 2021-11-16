@@ -3,7 +3,10 @@ package net.brunomendola.querity.spring.data.jpa;
 import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.Sort;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 
 class JpaSort {
   @Delegate
@@ -13,7 +16,7 @@ class JpaSort {
     this.sort = sort;
   }
 
-  public <T> Order toOrder(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
+  public <T> Order toOrder(Root<T> root, CriteriaBuilder cb) {
     Path<?> path = JpaPropertyUtils.getPath(root, getPropertyName());
     return getDirection().equals(Sort.Direction.ASC) ?
         cb.asc(path) :

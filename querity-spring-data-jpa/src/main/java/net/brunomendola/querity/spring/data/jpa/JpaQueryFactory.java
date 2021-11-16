@@ -30,7 +30,7 @@ class JpaQueryFactory<T> {
       cq.where(getPredicate(root, cq, cb));
 
     if (query.hasSort()) {
-      cq.orderBy(getOrder(root, cq, cb));
+      cq.orderBy(getOrder(root, cb));
     }
 
     TypedQuery<T> tq = entityManager.createQuery(cq);
@@ -47,10 +47,10 @@ class JpaQueryFactory<T> {
         new JpaConditionsWrapper((ConditionsWrapper) query.getFilter()).toPredicate(root, cq, cb);
   }
 
-  private List<Order> getOrder(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
+  private List<Order> getOrder(Root<T> root, CriteriaBuilder cb) {
     return query.getSort().stream()
         .map(JpaSort::new)
-        .map(jpaSort -> jpaSort.toOrder(root, cq, cb))
+        .map(jpaSort -> jpaSort.toOrder(root, cb))
         .collect(Collectors.toList());
   }
 
