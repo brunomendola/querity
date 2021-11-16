@@ -6,10 +6,9 @@ import net.brunomendola.querity.api.SimpleCondition;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class JpaQueryFactory<T> {
   private final Class<T> entityClass;
@@ -23,25 +22,36 @@ class JpaQueryFactory<T> {
   }
 
   public TypedQuery<T> getJpaQuery() {
-    TypedQuery<T> tq = initJpaQuery(entityClass, entityManager);
-    if (query.isPaginationSet())
-      tq = applyPagination(tq);
-    return tq;
-  }
-
-  private TypedQuery<T> initJpaQuery(Class<T> entityClass, EntityManager entityManager) {
     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     CriteriaQuery<T> cq = cb.createQuery(entityClass);
     Root<T> root = cq.from(entityClass);
-    if (!query.isEmptyFilter())
+
+    if (query.hasFilter())
       cq.where(getPredicate(root, cq, cb));
-    return entityManager.createQuery(cq);
+
+    if (query.hasSort()) {
+      cq.orderBy(getOrder(root, cq, cb));
+    }
+
+    TypedQuery<T> tq = entityManager.createQuery(cq);
+
+    if (query.hasPagination())
+      tq = applyPagination(tq);
+
+    return tq;
   }
 
   private Predicate getPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
-    return query.isFilterConditionsWrapper() ?
-        new JpaConditionsWrapper((ConditionsWrapper) query.getFilter()).toPredicate(root, cq, cb) :
-        new JpaSimpleCondition((SimpleCondition) query.getFilter()).toPredicate(root, cq, cb);
+    return query.isSimpleConditionFilter() ?
+        new JpaSimpleCondition((SimpleCondition) query.getFilter()).toPredicate(root, cq, cb) :
+        new JpaConditionsWrapper((ConditionsWrapper) query.getFilter()).toPredicate(root, cq, cb);
+  }
+
+  private List<Order> getOrder(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
+    return query.getSort().stream()
+        .map(JpaSort::new)
+        .map(jpaSort -> jpaSort.toOrder(root, cq, cb))
+        .collect(Collectors.toList());
   }
 
   private TypedQuery<T> applyPagination(TypedQuery<T> tq) {

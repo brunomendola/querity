@@ -86,4 +86,15 @@ class QuerityApiTests {
             .build());
     assertThat(people).isNotNull();
   }
+
+  @Test
+  void givenSort_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .sort(Arrays.asList(
+                Sort.builder().propertyName("lastName").build(),
+                Sort.builder().propertyName("firstName").direction(Sort.Direction.DESC).build()))
+            .build());
+    assertThat(people).isNotNull();
+  }
 }

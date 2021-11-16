@@ -17,4 +17,8 @@ public class ConditionsWrapper implements Condition {
   private LogicOperator logic = LogicOperator.AND;
   @Builder.Default
   private List<Condition> conditions = new ArrayList<>();
+
+  public boolean isEmpty() {
+    return this.conditions.isEmpty();
+  }
 }

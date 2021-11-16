@@ -1,9 +1,9 @@
 package net.brunomendola.querity.api;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -12,17 +12,24 @@ import lombok.NoArgsConstructor;
 public class Query {
   private Condition filter;
   private Pagination pagination;
+  @Builder.Default
+  @NonNull
+  private List<Sort> sort = new ArrayList<>();
 
-  public boolean isFilterConditionsWrapper() {
-    return filter instanceof ConditionsWrapper;
+  public boolean isSimpleConditionFilter() {
+    return filter instanceof SimpleCondition;
   }
 
-  public boolean isEmptyFilter() {
-    return filter == null ||
-        filter instanceof ConditionsWrapper && ((ConditionsWrapper) filter).getConditions().isEmpty();
+  public boolean hasFilter() {
+    return filter != null &&
+        (isSimpleConditionFilter() || !((ConditionsWrapper) filter).isEmpty());
   }
 
-  public boolean isPaginationSet() {
+  public boolean hasPagination() {
     return pagination != null;
+  }
+
+  public boolean hasSort() {
+    return !sort.isEmpty();
   }
 }

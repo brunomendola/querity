@@ -12,7 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.GenericTypeResolver;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,7 +43,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
     Query query = Query.builder()
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).hasSize(entities.size());
+    assertThat(result).isEqualTo(entities);
   }
 
   @Test
@@ -50,7 +52,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).hasSize((int) entities.stream().filter(p -> p.getLastName().equals("Skywalker")).count());
+    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getLastName().equals("Skywalker")).collect(Collectors.toList()));
   }
 
   @Test
@@ -64,9 +66,9 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
             .build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).hasSize((int) entities.stream()
+    assertThat(result).isEqualTo(entities.stream()
         .filter(p -> p.getLastName().equals("Skywalker") && p.getFirstName().equals("Luke"))
-        .count());
+        .collect(Collectors.toList()));
   }
 
   @Test
@@ -81,9 +83,9 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
             .build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).hasSize((int) entities.stream()
+    assertThat(result).isEqualTo(entities.stream()
         .filter(p -> p.getLastName().equals("Skywalker") || p.getLastName().equals("Kenobi"))
-        .count());
+        .collect(Collectors.toList()));
   }
 
   @Test
@@ -103,9 +105,9 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
             .build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).hasSize((int) entities.stream()
+    assertThat(result).isEqualTo(entities.stream()
         .filter(p -> p.getLastName().equals("Skywalker") && (p.getFirstName().equals("Anakin") || p.getFirstName().equals("Luke")))
-        .count());
+        .collect(Collectors.toList()));
   }
 
   @Test
@@ -114,7 +116,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .filter(SimpleCondition.builder().propertyName("address.city").operator(Operator.EQUALS).value("Tatooine").build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).hasSize((int) entities.stream().filter(p -> p.getAddress().getCity().equals("Tatooine")).count());
+    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getAddress().getCity().equals("Tatooine")).collect(Collectors.toList()));
   }
 
   @Test
@@ -123,7 +125,19 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .pagination(Pagination.builder().page(2).pageSize(3).build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).hasSize((int) entities.stream().skip(3).limit(3).count());
+    assertThat(result).isEqualTo(entities.stream().skip(3).limit(3).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenSort_whenFilterAll_thenReturnSortedElements() {
+    Query query = Query.builder()
+        .sort(Arrays.asList(Sort.builder().propertyName("lastName").build(), Sort.builder().propertyName("firstName").build()))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    Comparator<T> comparator = Comparator
+        .comparing((T p) -> p.getLastName())
+        .thenComparing((T p) -> p.getLastName());
+    assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
   }
 
   @SneakyThrows
