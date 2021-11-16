@@ -117,6 +117,15 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
     assertThat(result).hasSize((int) entities.stream().filter(p -> p.getAddress().getCity().equals("Tatooine")).count());
   }
 
+  @Test
+  void givenPagination_whenFilterAll_thenReturnThePageElements() {
+    Query query = Query.builder()
+        .pagination(Pagination.builder().page(2).pageSize(3).build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize((int) entities.stream().skip(3).limit(3).count());
+  }
+
   @SneakyThrows
   private List<T> getEntities() {
     List<T> entities = CsvUtils.readCsv("/querity/test-data.csv", getEntityClass());

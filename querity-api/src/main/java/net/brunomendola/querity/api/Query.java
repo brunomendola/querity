@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Query {
   private Condition filter;
+  private Pagination pagination;
 
   public boolean isFilterConditionsWrapper() {
     return filter instanceof ConditionsWrapper;
@@ -19,5 +20,9 @@ public class Query {
   public boolean isEmptyFilter() {
     return filter == null ||
         filter instanceof ConditionsWrapper && ((ConditionsWrapper) filter).getConditions().isEmpty();
+  }
+
+  public boolean isPaginationSet() {
+    return pagination != null;
   }
 }

@@ -9,9 +9,11 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QuerityApiTests {
+
+  private final Querity querity = new QuerityDummyImpl();
+
   @Test
   void givenEmptyQuery_whenFindAll_thenReturnListOfEntity() {
-    Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
             .build());
@@ -20,7 +22,6 @@ class QuerityApiTests {
 
   @Test
   void givenFilterWithOneEqualsCondition_whenFindAll_thenReturnListOfEntity() {
-    Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
             .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
@@ -30,7 +31,6 @@ class QuerityApiTests {
 
   @Test
   void givenFilterWithTwoEqualsConditions_whenFindAll_thenReturnListOfEntity() {
-    Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
             .filter(ConditionsWrapper.builder()
@@ -45,7 +45,6 @@ class QuerityApiTests {
 
   @Test
   void givenFilterWithTwoEqualsConditionsWithOrLogic_whenFindAll_thenReturnListOfEntity() {
-    Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
             .filter(ConditionsWrapper.builder()
@@ -61,7 +60,6 @@ class QuerityApiTests {
 
   @Test
   void givenFilterWithNestedConditions_whenFindAll_thenReturnListOfEntity() {
-    Querity querity = new QuerityDummyImpl();
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
             .filter(ConditionsWrapper.builder()
@@ -76,6 +74,15 @@ class QuerityApiTests {
                         .build()
                 ))
                 .build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenPagination_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .pagination(Pagination.builder().page(1).pageSize(5).build())
             .build());
     assertThat(people).isNotNull();
   }
