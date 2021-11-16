@@ -4,18 +4,16 @@ import lombok.*;
 import net.brunomendola.querity.test.domain.Pet;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Person extends AbstractPersistable<Long> implements net.brunomendola.querity.test.domain.Person {
+public class Person extends AbstractPersistable<Long> implements net.brunomendola.querity.test.domain.Person<Address> {
   @NonNull
   private String firstName;
   @NonNull
@@ -27,4 +25,7 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   @Enumerated(EnumType.STRING)
   @NonNull
   private Pet favouritePet;
+  @OneToOne(cascade = CascadeType.ALL)
+  @NonNull
+  private Address address;
 }

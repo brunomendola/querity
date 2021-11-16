@@ -3,10 +3,8 @@ package net.brunomendola.querity.spring.data.jpa;
 import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.SimpleCondition;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.Arrays;
 
 class JpaSimpleCondition implements JpaCondition {
   @Delegate
@@ -18,6 +16,18 @@ class JpaSimpleCondition implements JpaCondition {
 
   @Override
   public <T> Predicate toPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
-    return cb.equal(root.get(getPropertyName()), getValue());
+    String[] propertyPath = getPropertyName().split("\\.");
+    return cb.equal(getPath(root, propertyPath), getValue());
+  }
+
+  private Path<?> getPath(Path<?> rootPath, String[] propertyPath) {
+    String firstLevelProperty = propertyPath[0];
+    Path<Object> firstLevelPropertyPath = rootPath.get(firstLevelProperty);
+    if (propertyPath.length == 1)
+      return firstLevelPropertyPath;
+    else {
+      String[] remainingPath = Arrays.copyOfRange(propertyPath, 1, propertyPath.length);
+      return getPath(firstLevelPropertyPath, remainingPath);
+    }
   }
 }

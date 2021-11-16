@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Person implements net.brunomendola.querity.test.domain.Person {
+public class Person implements net.brunomendola.querity.test.domain.Person<Address> {
   @Id
   private String id;
   @NonNull
@@ -25,4 +25,6 @@ public class Person implements net.brunomendola.querity.test.domain.Person {
   private Integer children;
   @NonNull
   private Pet favouritePet;
+  @NonNull
+  private Address address;
 }

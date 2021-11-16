@@ -17,8 +17,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public abstract class QuerityGenericSpringTestSuite<T extends Person> {
-  public final List<T> PEOPLE = getEntities();
+public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
+  public final List<T> entities = getEntities();
 
   @Autowired
   PersonRepository<T, ?> repository;
@@ -28,7 +28,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
 
   @BeforeEach
   void setUp() {
-    repository.saveAll(PEOPLE);
+    repository.saveAll(entities);
   }
 
   @AfterEach
@@ -40,8 +40,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
   void givenEmptyFilter_whenFilterAll_thenReturnAllTheElements() {
     Query query = Query.builder()
         .build();
-    List<T> people = querity.findAll(getEntityClass(), query);
-    assertThat(people).hasSize(PEOPLE.size());
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(entities.size());
   }
 
   @Test
@@ -49,8 +49,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
     Query query = Query.builder()
         .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
         .build();
-    List<T> people = querity.findAll(getEntityClass(), query);
-    assertThat(people).hasSize((int) PEOPLE.stream().filter(p -> p.getLastName().equals("Skywalker")).count());
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize((int) entities.stream().filter(p -> p.getLastName().equals("Skywalker")).count());
   }
 
   @Test
@@ -63,8 +63,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
             ))
             .build())
         .build();
-    List<T> people = querity.findAll(getEntityClass(), query);
-    assertThat(people).hasSize((int) PEOPLE.stream()
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize((int) entities.stream()
         .filter(p -> p.getLastName().equals("Skywalker") && p.getFirstName().equals("Luke"))
         .count());
   }
@@ -80,8 +80,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
             ))
             .build())
         .build();
-    List<T> people = querity.findAll(getEntityClass(), query);
-    assertThat(people).hasSize((int) PEOPLE.stream()
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize((int) entities.stream()
         .filter(p -> p.getLastName().equals("Skywalker") || p.getLastName().equals("Kenobi"))
         .count());
   }
@@ -102,15 +102,30 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person> {
             ))
             .build())
         .build();
-    List<T> people = querity.findAll(getEntityClass(), query);
-    assertThat(people).hasSize((int) PEOPLE.stream()
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize((int) entities.stream()
         .filter(p -> p.getLastName().equals("Skywalker") && (p.getFirstName().equals("Anakin") || p.getFirstName().equals("Luke")))
         .count());
   }
 
+  @Test
+  void givenNestedFieldEqualsFilter_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("address.city").operator(Operator.EQUALS).value("Tatooine").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize((int) entities.stream().filter(p -> p.getAddress().getCity().equals("Tatooine")).count());
+  }
+
   @SneakyThrows
   private List<T> getEntities() {
-    return CsvUtils.readCsv("/querity/test-data.csv", getEntityClass());
+    List<T> entities = CsvUtils.readCsv("/querity/test-data.csv", getEntityClass());
+    postImportEntities(entities);
+    return entities;
+  }
+
+  protected void postImportEntities(List<T> entities) {
+    // do nothing by default
   }
 
   @SuppressWarnings("unchecked")
