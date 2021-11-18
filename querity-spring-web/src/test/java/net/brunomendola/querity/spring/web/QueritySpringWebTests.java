@@ -22,6 +22,7 @@ class QueritySpringWebTests {
    */
   @ParameterizedTest
   @ValueSource(strings = {
+      /* empty query */               "{}",
       /* single simple condition */   "{\"filter\":{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}}",
       /* no value condition */        "{\"filter\":{\"propertyName\":\"lastName\",\"operator\":\"IS_NULL\"}}",
       /* conditions wrapper */        "{\"filter\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}]}}",
