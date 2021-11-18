@@ -23,8 +23,7 @@ public class Query {
   }
 
   public boolean hasFilter() {
-    return filter != null &&
-        (isSimpleConditionFilter() || !((ConditionsWrapper) filter).isEmpty());
+    return filter != null && !filter.isEmpty();
   }
 
   public boolean hasPagination() {

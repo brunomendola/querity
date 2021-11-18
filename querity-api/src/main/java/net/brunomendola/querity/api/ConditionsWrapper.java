@@ -19,6 +19,7 @@ public class ConditionsWrapper implements Condition {
   @NonNull
   private List<Condition> conditions = new ArrayList<>();
 
+  @Override
   public boolean isEmpty() {
     return this.conditions.isEmpty();
   }
