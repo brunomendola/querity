@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class JpaPropertyUtils {
+  @SuppressWarnings("java:S1452") // we don't really know what type to expect
   static Path<?> getPath(Path<?> rootPath, String propertyName) {
     String[] propertyPath = propertyName.split("\\.");
     return getPath(rootPath, propertyPath);

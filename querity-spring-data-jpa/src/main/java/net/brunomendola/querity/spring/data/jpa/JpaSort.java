@@ -17,9 +17,9 @@ class JpaSort {
   }
 
   public <T> Order toOrder(Root<T> root, CriteriaBuilder cb) {
-    Path<?> path = JpaPropertyUtils.getPath(root, getPropertyName());
+    Path<?> propertyPath = JpaPropertyUtils.getPath(root, getPropertyName());
     return getDirection().equals(Sort.Direction.ASC) ?
-        cb.asc(path) :
-        cb.desc(path);
+        cb.asc(propertyPath) :
+        cb.desc(propertyPath);
   }
 }
