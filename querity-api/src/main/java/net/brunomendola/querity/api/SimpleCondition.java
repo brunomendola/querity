@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.jackson.Jacksonized;
 
-@Builder
-@Jacksonized
 @Getter
 public class SimpleCondition implements Condition {
   @NonNull
@@ -14,6 +12,24 @@ public class SimpleCondition implements Condition {
   @Builder.Default
   @NonNull
   private Operator operator = Operator.EQUALS;
-  @NonNull
   private String value;
+
+  @Builder
+  @Jacksonized
+  public SimpleCondition(@NonNull String propertyName, @NonNull Operator operator, String value) {
+    validate(operator, value);
+    this.propertyName = propertyName;
+    this.operator = operator;
+    this.value = value;
+  }
+
+  private void validate(@NonNull Operator operator, String value) {
+    if (operator.getRequiredValuesCount() != getValuesCount(value))
+      throw new IllegalArgumentException(
+          String.format("The operator %s requires %d value(s)", operator, operator.getRequiredValuesCount()));
+  }
+
+  private int getValuesCount(String value) {
+    return value == null ? 0 : 1;
+  }
 }

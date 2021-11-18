@@ -17,7 +17,11 @@ class JpaOperatorMapper {
     OPERATOR_PREDICATE_MAP.put(Operator.EQUALS,
         (path, condition, cb) -> cb.equal(path, condition.getValue()));
     OPERATOR_PREDICATE_MAP.put(Operator.NOT_EQUALS,
-        (path, condition, cb) -> cb.notEqual(path, condition.getValue()));
+        (path, condition, cb) -> cb.or(cb.notEqual(path, condition.getValue()), cb.isNull(path)));
+    OPERATOR_PREDICATE_MAP.put(Operator.IS_NULL,
+        (path, condition, cb) -> cb.isNull(path));
+    OPERATOR_PREDICATE_MAP.put(Operator.IS_NOT_NULL,
+        (path, condition, cb) -> cb.isNotNull(path));
   }
 
   @FunctionalInterface

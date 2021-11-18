@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CsvUtils {
   static <T> List<T> readCsv(String path, Class<T> entityClass) throws IOException {
-    CsvSchema csvSchema = CsvSchema.emptySchema().withHeader();
+    CsvSchema csvSchema = CsvSchema.emptySchema().withHeader().withNullValue("");
     CsvMapper csvMapper = new CsvMapper();
     csvMapper.addMixIn(Person.class, PersonMixin.class);
     csvMapper.registerModule(new JavaTimeModule());

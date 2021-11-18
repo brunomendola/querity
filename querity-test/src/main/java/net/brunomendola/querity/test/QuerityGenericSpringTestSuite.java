@@ -52,7 +52,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getLastName().equals("Skywalker")).collect(Collectors.toList()));
+    assertThat(result).isEqualTo(entities.stream().filter(p -> "Skywalker".equals(p.getLastName())).collect(Collectors.toList()));
   }
 
   @Test
@@ -61,7 +61,25 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.NOT_EQUALS).value("Skywalker").build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).isEqualTo(entities.stream().filter(p -> !p.getLastName().equals("Skywalker")).collect(Collectors.toList()));
+    assertThat(result).isEqualTo(entities.stream().filter(p -> !"Skywalker".equals(p.getLastName())).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenStringIsNullFilter_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getLastName() == null).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenStringIsNotNullFilter_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NOT_NULL).build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getLastName() != null).collect(Collectors.toList()));
   }
 
   @Test
@@ -76,7 +94,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> p.getLastName().equals("Skywalker") && p.getFirstName().equals("Luke"))
+        .filter(p -> "Skywalker".equals(p.getLastName()) && "Luke".equals(p.getFirstName()))
         .collect(Collectors.toList()));
   }
 
@@ -93,7 +111,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> p.getLastName().equals("Skywalker") || p.getLastName().equals("Kenobi"))
+        .filter(p -> "Skywalker".equals(p.getLastName()) || "Kenobi".equals(p.getLastName()))
         .collect(Collectors.toList()));
   }
 
@@ -115,7 +133,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> p.getLastName().equals("Skywalker") && (p.getFirstName().equals("Anakin") || p.getFirstName().equals("Luke")))
+        .filter(p -> "Skywalker".equals(p.getLastName()) && ("Anakin".equals(p.getFirstName()) || "Luke".equals(p.getFirstName())))
         .collect(Collectors.toList()));
   }
 
@@ -125,7 +143,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .filter(SimpleCondition.builder().propertyName("address.city").operator(Operator.EQUALS).value("Tatooine").build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getAddress().getCity().equals("Tatooine")).collect(Collectors.toList()));
+    assertThat(result).isEqualTo(entities.stream().filter(p -> "Tatooine".equals(p.getAddress().getCity())).collect(Collectors.toList()));
   }
 
   @Test
@@ -144,8 +162,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     Comparator<T> comparator = Comparator
-        .comparing((T p) -> p.getLastName())
-        .thenComparing((T p) -> p.getLastName());
+        .comparing((T p) -> p.getLastName(), Comparator.nullsFirst(Comparator.naturalOrder()))
+        .thenComparing((T p) -> p.getFirstName());
     assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
   }
 

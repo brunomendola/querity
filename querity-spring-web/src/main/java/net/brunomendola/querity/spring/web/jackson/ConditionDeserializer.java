@@ -61,7 +61,7 @@ public class ConditionDeserializer extends StdDeserializer<Condition> {
     return SimpleCondition.builder()
         .propertyName(jsonNode.get(FIELD_SIMPLE_CONDITION_PROPERTY_NAME).asText())
         .operator(Operator.valueOf(jsonNode.get(FIELD_SIMPLE_CONDITION_OPERATOR).asText()))
-        .value(jsonNode.get(FIELD_SIMPLE_CONDITION_VALUE).asText())
+        .value(jsonNode.hasNonNull(FIELD_SIMPLE_CONDITION_VALUE) ? jsonNode.get(FIELD_SIMPLE_CONDITION_VALUE).asText() : null)
         .build();
   }
 }

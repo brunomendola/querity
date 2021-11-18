@@ -17,13 +17,11 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Addre
   private String id;
   @NonNull
   private String firstName;
-  @NonNull
   private String lastName;
   @NonNull
   private LocalDate birthDate;
   @NonNull
   private Integer children;
-  @NonNull
   private Pet favouritePet;
   @NonNull
   private Address address;

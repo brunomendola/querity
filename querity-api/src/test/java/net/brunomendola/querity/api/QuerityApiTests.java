@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuerityApiTests {
 
@@ -36,6 +37,40 @@ class QuerityApiTests {
             .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.NOT_EQUALS).value("Skywalker").build())
             .build());
     assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithOneIsNullCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithOneIsNotNullCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NOT_NULL).build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithEqualsConditionAndWithoutValue_whenBuild_thenThrowIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).build())
+            .build(),
+        "The operator EQUALS requires 1 value(s)");
+  }
+
+  @Test
+  void givenFilterWithIsNullConditionAndValue_whenBuild_thenThrowIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).value("value").build())
+            .build(),
+        "The operator IS_NULL requires 0 value(s)");
   }
 
   @Test

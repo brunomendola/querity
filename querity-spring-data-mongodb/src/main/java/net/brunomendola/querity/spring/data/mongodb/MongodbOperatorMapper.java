@@ -15,6 +15,10 @@ class MongodbOperatorMapper {
         condition -> Criteria.where(condition.getPropertyName()).is(condition.getValue()));
     OPERATOR_CRITERIA_MAP.put(Operator.NOT_EQUALS,
         condition -> Criteria.where(condition.getPropertyName()).ne(condition.getValue()));
+    OPERATOR_CRITERIA_MAP.put(Operator.IS_NULL,
+        condition -> Criteria.where(condition.getPropertyName()).is(null));
+    OPERATOR_CRITERIA_MAP.put(Operator.IS_NOT_NULL,
+        condition -> Criteria.where(condition.getPropertyName()).ne(null));
   }
 
   @FunctionalInterface
