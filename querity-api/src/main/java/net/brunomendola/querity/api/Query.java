@@ -1,14 +1,16 @@
 package net.brunomendola.querity.api;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@Jacksonized
+@Getter
 public class Query {
   private Condition filter;
   private Pagination pagination;

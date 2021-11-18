@@ -1,11 +1,13 @@
 package net.brunomendola.querity.api;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.extern.jackson.Jacksonized;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@Jacksonized
+@Getter
 public class Pagination {
   @Builder.Default
   @NonNull

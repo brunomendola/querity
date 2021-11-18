@@ -1,17 +1,19 @@
 package net.brunomendola.querity.api;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.extern.jackson.Jacksonized;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@Jacksonized
+@Getter
 public class SimpleCondition implements Condition {
+  @NonNull
   private String propertyName;
   @Builder.Default
+  @NonNull
   private Operator operator = Operator.EQUALS;
+  @NonNull
   private String value;
 }

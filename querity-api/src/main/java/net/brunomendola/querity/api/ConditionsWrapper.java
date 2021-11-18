@@ -1,21 +1,22 @@
 package net.brunomendola.querity.api;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@Jacksonized
+@Getter
 public class ConditionsWrapper implements Condition {
   @Builder.Default
+  @NonNull
   private LogicOperator logic = LogicOperator.AND;
   @Builder.Default
+  @NonNull
   private List<Condition> conditions = new ArrayList<>();
 
   public boolean isEmpty() {
