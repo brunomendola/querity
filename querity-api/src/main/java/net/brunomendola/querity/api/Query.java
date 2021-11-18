@@ -18,10 +18,6 @@ public class Query {
   @NonNull
   private List<Sort> sort = new ArrayList<>();
 
-  public boolean isSimpleConditionFilter() {
-    return filter instanceof SimpleCondition;
-  }
-
   public boolean hasFilter() {
     return filter != null && !filter.isEmpty();
   }
