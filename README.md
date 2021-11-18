@@ -1,4 +1,4 @@
-Querity
+<img alt="Querity-logo" src="https://user-images.githubusercontent.com/1853562/142502086-2a352854-2315-4fe5-b1a3-d7730a47fe36.jpeg" width="80" height="80"/> Querity
 =======
 
 ![Build](https://github.com/brunomendola/querity/actions/workflows/maven.yml/badge.svg)
