@@ -11,7 +11,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 class JpaOperatorMapper {
-  public static final Map<Operator, JpaOperatorPredicateProvider> OPERATOR_PREDICATE_MAP = new EnumMap<>(Operator.class);
+  static final Map<Operator, JpaOperatorPredicateProvider> OPERATOR_PREDICATE_MAP = new EnumMap<>(Operator.class);
 
   static {
     OPERATOR_PREDICATE_MAP.put(Operator.EQUALS,

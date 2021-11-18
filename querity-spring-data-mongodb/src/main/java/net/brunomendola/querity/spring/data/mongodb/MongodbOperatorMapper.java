@@ -8,7 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 class MongodbOperatorMapper {
-  public static final Map<Operator, MongodbOperatorCriteriaProvider> OPERATOR_CRITERIA_MAP = new EnumMap<>(Operator.class);
+  static final Map<Operator, MongodbOperatorCriteriaProvider> OPERATOR_CRITERIA_MAP = new EnumMap<>(Operator.class);
 
   static {
     OPERATOR_CRITERIA_MAP.put(Operator.EQUALS,
