@@ -1,8 +1,6 @@
 package net.brunomendola.querity.spring.data.jpa;
 
-import net.brunomendola.querity.api.ConditionsWrapper;
 import net.brunomendola.querity.api.Query;
-import net.brunomendola.querity.api.SimpleCondition;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -42,9 +40,7 @@ class JpaQueryFactory<T> {
   }
 
   private Predicate getPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
-    return query.isSimpleConditionFilter() ?
-        new JpaSimpleCondition((SimpleCondition) query.getFilter()).toPredicate(root, cq, cb) :
-        new JpaConditionsWrapper((ConditionsWrapper) query.getFilter()).toPredicate(root, cq, cb);
+    return JpaCondition.of(query.getFilter()).toPredicate(root, cq, cb);
   }
 
   private List<Order> getOrder(Root<T> root, CriteriaBuilder cb) {
