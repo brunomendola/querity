@@ -1,8 +1,6 @@
 package net.brunomendola.querity.spring.data.mongodb;
 
-import net.brunomendola.querity.api.ConditionsWrapper;
 import net.brunomendola.querity.api.Query;
-import net.brunomendola.querity.api.SimpleCondition;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,9 +28,7 @@ class MongodbQueryFactory {
   }
 
   private Criteria getMongodbCriteria() {
-    return query.isSimpleConditionFilter() ?
-        new MongodbSimpleCondition((SimpleCondition) query.getFilter()).toCriteria() :
-        new MongodbConditionsWrapper((ConditionsWrapper) query.getFilter()).toCriteria();
+    return MongodbCondition.of(query.getFilter()).toCriteria();
   }
 
   private org.springframework.data.mongodb.core.query.Query applyPaginationAndSorting(org.springframework.data.mongodb.core.query.Query q) {
