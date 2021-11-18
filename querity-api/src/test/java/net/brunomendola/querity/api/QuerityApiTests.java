@@ -59,17 +59,15 @@ class QuerityApiTests {
 
   @Test
   void givenFilterWithEqualsConditionAndWithoutValue_whenBuild_thenThrowIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).build())
-            .build(),
+    SimpleCondition.SimpleConditionBuilder builder = SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS);
+    assertThrows(IllegalArgumentException.class, builder::build,
         "The operator EQUALS requires 1 value(s)");
   }
 
   @Test
   void givenFilterWithIsNullConditionAndValue_whenBuild_thenThrowIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).value("value").build())
-            .build(),
+    SimpleCondition.SimpleConditionBuilder builder = SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).value("value");
+    assertThrows(IllegalArgumentException.class, builder::build,
         "The operator IS_NULL requires 0 value(s)");
   }
 
