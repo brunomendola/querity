@@ -23,7 +23,7 @@ public class QuerityModule extends com.fasterxml.jackson.databind.Module {
       public JsonDeserializer<?> findBeanDeserializer(JavaType type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
         Class<?> raw = type.getRawClass();
         if (Condition.class.isAssignableFrom(raw)) {
-          return new FilterDeserializer(type);
+          return new ConditionDeserializer(type);
         }
         return super.findBeanDeserializer(type, config, beanDesc);
       }
