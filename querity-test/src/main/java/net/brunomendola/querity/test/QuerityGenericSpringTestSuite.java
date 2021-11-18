@@ -56,6 +56,15 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenStringNotEqualsFilter_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.NOT_EQUALS).value("Skywalker").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isEqualTo(entities.stream().filter(p -> !p.getLastName().equals("Skywalker")).collect(Collectors.toList()));
+  }
+
+  @Test
   void givenTwoStringEqualsFiltersWithAndLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
         .filter(ConditionsWrapper.builder()

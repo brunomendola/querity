@@ -14,7 +14,6 @@ class MongodbSimpleCondition implements MongodbCondition {
 
   @Override
   public Criteria toCriteria() {
-    Criteria criteria = Criteria.where(getPropertyName());
-    return criteria.is(getValue());
+    return MongodbOperatorMapper.getCriteria(condition);
   }
 }

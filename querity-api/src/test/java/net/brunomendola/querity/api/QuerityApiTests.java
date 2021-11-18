@@ -30,6 +30,15 @@ class QuerityApiTests {
   }
 
   @Test
+  void givenFilterWithOneNotEqualsCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.NOT_EQUALS).value("Skywalker").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
   void givenFilterWithTwoEqualsConditions_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()

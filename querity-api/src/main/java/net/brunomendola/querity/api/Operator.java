@@ -1,5 +1,5 @@
 package net.brunomendola.querity.api;
 
 public enum Operator {
-  EQUALS
+  EQUALS, NOT_EQUALS
 }
