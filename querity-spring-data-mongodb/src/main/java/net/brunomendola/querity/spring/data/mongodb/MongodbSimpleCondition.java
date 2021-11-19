@@ -4,7 +4,7 @@ import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.SimpleCondition;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-class MongodbSimpleCondition implements MongodbCondition {
+class MongodbSimpleCondition extends MongodbCondition {
   @Delegate
   private final SimpleCondition condition;
 
@@ -13,7 +13,7 @@ class MongodbSimpleCondition implements MongodbCondition {
   }
 
   @Override
-  public Criteria toCriteria() {
-    return MongodbOperatorMapper.getCriteria(condition);
+  public Criteria toCriteria(boolean negate) {
+    return MongodbOperatorMapper.getCriteria(condition, negate);
   }
 }

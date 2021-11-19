@@ -16,6 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <lombok.version>1.18.22</lombok.version>
+    <reflections.version>0.10.2</reflections.version>
 
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
@@ -33,6 +34,7 @@
     <module>querity-spring-data-mongodb</module>
     <module>querity-test</module>
     <module>querity-spring-web</module>
+    <module>querity-common</module>
   </modules>
 
   <dependencyManagement>
@@ -40,6 +42,11 @@
       <dependency>
         <groupId>net.brunomendola.querity</groupId>
         <artifactId>querity-api</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>net.brunomendola.querity</groupId>
+        <artifactId>querity-common</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -52,6 +59,11 @@
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.reflections</groupId>
+        <artifactId>reflections</artifactId>
+        <version>${reflections.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

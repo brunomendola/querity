@@ -16,6 +16,10 @@
       <groupId>net.brunomendola.querity</groupId>
       <artifactId>querity-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>net.brunomendola.querity</groupId>
+      <artifactId>querity-common</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.data</groupId>

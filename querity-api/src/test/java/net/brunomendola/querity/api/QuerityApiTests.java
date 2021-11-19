@@ -72,6 +72,35 @@ class QuerityApiTests {
   }
 
   @Test
+  void givenFilterWithNotConditionContainingSimpleCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(NotCondition.builder()
+                .condition(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
+                .build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithNotConditionContainingConditionsWrapper_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(
+                NotCondition.builder()
+                    .condition(ConditionsWrapper.builder()
+                        .logic(LogicOperator.OR)
+                        .conditions(Arrays.asList(
+                            SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build(),
+                            SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build()
+                        ))
+                        .build())
+                    .build()
+            ).build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
   void givenFilterWithTwoEqualsConditions_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()

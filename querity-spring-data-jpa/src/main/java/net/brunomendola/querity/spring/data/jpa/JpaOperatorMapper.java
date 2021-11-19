@@ -14,23 +14,36 @@ class JpaOperatorMapper {
   static final Map<Operator, JpaOperatorPredicateProvider> OPERATOR_PREDICATE_MAP = new EnumMap<>(Operator.class);
 
   static {
-    OPERATOR_PREDICATE_MAP.put(Operator.EQUALS,
-        (path, condition, cb) -> cb.equal(path, condition.getValue()));
-    OPERATOR_PREDICATE_MAP.put(Operator.NOT_EQUALS,
-        (path, condition, cb) -> cb.or(cb.notEqual(path, condition.getValue()), cb.isNull(path)));
-    OPERATOR_PREDICATE_MAP.put(Operator.IS_NULL,
-        (path, condition, cb) -> cb.isNull(path));
-    OPERATOR_PREDICATE_MAP.put(Operator.IS_NOT_NULL,
-        (path, condition, cb) -> cb.isNotNull(path));
+    OPERATOR_PREDICATE_MAP.put(Operator.EQUALS, JpaOperatorMapper::getEquals);
+    OPERATOR_PREDICATE_MAP.put(Operator.NOT_EQUALS, JpaOperatorMapper::getNotEquals);
+    OPERATOR_PREDICATE_MAP.put(Operator.IS_NULL, (path, value, cb) -> getIsNull(path, cb));
+    OPERATOR_PREDICATE_MAP.put(Operator.IS_NOT_NULL, (path, value, cb) -> getIsNotNull(path, cb));
+  }
+
+  private static Predicate getIsNotNull(Path<?> path, CriteriaBuilder cb) {
+    return cb.isNotNull(path);
+  }
+
+  private static Predicate getIsNull(Path<?> path, CriteriaBuilder cb) {
+    return cb.isNull(path);
+  }
+
+  private static Predicate getNotEquals(Path<?> path, String value, CriteriaBuilder cb) {
+    return cb.or(cb.notEqual(path, value), getIsNull(path, cb));
+  }
+
+  private static Predicate getEquals(Path<?> path, String value, CriteriaBuilder cb) {
+    return cb.and(cb.equal(path, value), getIsNotNull(path, cb));
   }
 
   @FunctionalInterface
-  interface JpaOperatorPredicateProvider {
-    Predicate getPredicate(Path<?> path, SimpleCondition condition, CriteriaBuilder cb);
+  private interface JpaOperatorPredicateProvider {
+    Predicate getPredicate(Path<?> path, String value, CriteriaBuilder cb);
   }
 
   public static Predicate getPredicate(SimpleCondition condition, Root<?> root, CriteriaBuilder cb) {
     Path<?> propertyPath = JpaPropertyUtils.getPath(root, condition.getPropertyName());
-    return OPERATOR_PREDICATE_MAP.get(condition.getOperator()).getPredicate(propertyPath, condition, cb);
+    return OPERATOR_PREDICATE_MAP.get(condition.getOperator())
+        .getPredicate(propertyPath, condition.getValue(), cb);
   }
 }

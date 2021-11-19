@@ -5,7 +5,7 @@ import net.brunomendola.querity.api.ConditionsWrapper;
 import net.brunomendola.querity.api.LogicOperator;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-class MongodbConditionsWrapper implements MongodbCondition {
+class MongodbConditionsWrapper extends MongodbCondition {
   @Delegate
   private final ConditionsWrapper conditionsWrapper;
 
@@ -14,20 +14,18 @@ class MongodbConditionsWrapper implements MongodbCondition {
   }
 
   @Override
-  public Criteria toCriteria() {
-    return buildLogicCriteria(buildConditionsCriteria());
+  public Criteria toCriteria(boolean negate) {
+    Criteria[] conditionsCriteria = buildConditionsCriteria(negate);
+    Criteria criteria = new Criteria();
+    return getLogic().equals(LogicOperator.AND) ^ negate ? // xor
+        criteria.andOperator(conditionsCriteria) :
+        criteria.orOperator(conditionsCriteria);
   }
 
-  private Criteria[] buildConditionsCriteria() {
+  private Criteria[] buildConditionsCriteria(boolean negate) {
     return getConditions().stream()
         .map(MongodbCondition::of)
-        .map(MongodbCondition::toCriteria)
+        .map(c -> c.toCriteria(negate))
         .toArray(Criteria[]::new);
-  }
-
-  private Criteria buildLogicCriteria(Criteria[] conditionsCriteria) {
-    return getLogic().equals(LogicOperator.AND) ?
-        new Criteria().andOperator(conditionsCriteria) :
-        new Criteria().orOperator(conditionsCriteria);
   }
 }

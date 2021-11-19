@@ -11,22 +11,36 @@ class MongodbOperatorMapper {
   static final Map<Operator, MongodbOperatorCriteriaProvider> OPERATOR_CRITERIA_MAP = new EnumMap<>(Operator.class);
 
   static {
-    OPERATOR_CRITERIA_MAP.put(Operator.EQUALS,
-        condition -> Criteria.where(condition.getPropertyName()).is(condition.getValue()));
-    OPERATOR_CRITERIA_MAP.put(Operator.NOT_EQUALS,
-        condition -> Criteria.where(condition.getPropertyName()).ne(condition.getValue()));
-    OPERATOR_CRITERIA_MAP.put(Operator.IS_NULL,
-        condition -> Criteria.where(condition.getPropertyName()).is(null));
-    OPERATOR_CRITERIA_MAP.put(Operator.IS_NOT_NULL,
-        condition -> Criteria.where(condition.getPropertyName()).ne(null));
+    OPERATOR_CRITERIA_MAP.put(Operator.EQUALS, MongodbOperatorMapper::getEquals);
+    OPERATOR_CRITERIA_MAP.put(Operator.NOT_EQUALS, MongodbOperatorMapper::getNotEquals);
+    OPERATOR_CRITERIA_MAP.put(Operator.IS_NULL, (where, value, negate) -> getEquals(where, null, negate));
+    OPERATOR_CRITERIA_MAP.put(Operator.IS_NOT_NULL, (where, value, negate) -> getNotEquals(where, null, negate));
+  }
+
+  private static Criteria getEquals(Criteria where, String value, boolean negate) {
+    return negate ? getNotEquals(where, value) : getEquals(where, value);
+  }
+
+  private static Criteria getEquals(Criteria where, String value) {
+    return where.is(value);
+  }
+
+  private static Criteria getNotEquals(Criteria where, String value, boolean negate) {
+    return negate ? getEquals(where, value) : getNotEquals(where, value);
+  }
+
+  private static Criteria getNotEquals(Criteria where, String value) {
+    return where.ne(value);
   }
 
   @FunctionalInterface
-  interface MongodbOperatorCriteriaProvider {
-    Criteria getCriteria(SimpleCondition condition);
+  private interface MongodbOperatorCriteriaProvider {
+    Criteria getCriteria(Criteria where, String value, boolean negate);
   }
 
-  public static Criteria getCriteria(SimpleCondition condition) {
-    return OPERATOR_CRITERIA_MAP.get(condition.getOperator()).getCriteria(condition);
+  public static Criteria getCriteria(SimpleCondition condition, boolean negate) {
+    Criteria where = Criteria.where(condition.getPropertyName());
+    return OPERATOR_CRITERIA_MAP.get(condition.getOperator())
+        .getCriteria(where, condition.getValue(), negate);
   }
 }

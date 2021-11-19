@@ -1,23 +1,23 @@
 package net.brunomendola.querity.spring.data.jpa;
 
 import lombok.experimental.Delegate;
-import net.brunomendola.querity.api.SimpleCondition;
+import net.brunomendola.querity.api.NotCondition;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-class JpaSimpleCondition extends JpaCondition {
+public class JpaNotCondition extends JpaCondition {
   @Delegate
-  private final SimpleCondition condition;
+  private final NotCondition notCondition;
 
-  JpaSimpleCondition(SimpleCondition condition) {
-    this.condition = condition;
+  public JpaNotCondition(NotCondition notCondition) {
+    this.notCondition = notCondition;
   }
 
   @Override
   public <T> Predicate toPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
-    return JpaOperatorMapper.getPredicate(condition, root, cb);
+    return cb.not(JpaCondition.of(getCondition()).toPredicate(root, cq, cb));
   }
 }

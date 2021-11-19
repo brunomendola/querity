@@ -29,6 +29,8 @@ class QueritySpringWebTests {
       /* nested conditions wrapper */ "{\"filter\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"},{\"logic\":\"OR\",\"conditions\":[{\"propertyName\":\"firstName\",\"operator\":\"EQUALS\",\"value\":\"Anakin\"},{\"propertyName\":\"firstName\",\"operator\":\"EQUALS\",\"value\":\"Luke\"}]}]}}",
       /* pagination */                "{\"pagination\":{\"page\":1,\"pageSize\":20}}",
       /* sort */                      "{\"sort\":[{\"propertyName\":\"lastName\"},{\"propertyName\":\"firstName\",\"direction\":\"DESC\"}]}",
+      /* not single condition */      "{\"filter\":{\"not\":{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}}}",
+      /* not conditions wrapper */    "{\"filter\":{\"not\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}]}}}",
   })
   void givenJsonQuery_whenGetQuery_thenReturnTheSameQueryAsResponse(String query) throws Exception {
     mockMvc.perform(get("/query")
