@@ -5,16 +5,16 @@ import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.Set;
 
-import static net.brunomendola.querity.common.util.ConditionUtils.findSubclasses;
 import static net.brunomendola.querity.common.util.ConditionUtils.getConditionImplementation;
+import static net.brunomendola.querity.common.util.ReflectionUtils.findSubclasses;
 
 abstract class MongodbCondition {
 
-  public Criteria toCriteria() {
-    return toCriteria(false);
+  public <T> Criteria toCriteria(Class<T> entityClass) {
+    return toCriteria(entityClass, false);
   }
 
-  public abstract Criteria toCriteria(boolean negate);
+  public abstract <T> Criteria toCriteria(Class<T> entityClass, boolean negate);
 
   private static final Set<Class<? extends MongodbCondition>> MONGODB_CONDITION_IMPLEMENTATIONS = findSubclasses(MongodbCondition.class);
 

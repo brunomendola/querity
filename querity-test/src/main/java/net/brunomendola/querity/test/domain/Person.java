@@ -1,5 +1,7 @@
 package net.brunomendola.querity.test.domain;
 
+import java.math.BigDecimal;
+
 public interface Person<A extends Address> {
   String getFirstName();
 
@@ -12,6 +14,10 @@ public interface Person<A extends Address> {
   java.time.LocalDate getBirthDate();
 
   void setBirthDate(java.time.LocalDate birthDate);
+
+  BigDecimal getHeight();
+
+  void setHeight(BigDecimal height);
 
   Integer getChildren();
 

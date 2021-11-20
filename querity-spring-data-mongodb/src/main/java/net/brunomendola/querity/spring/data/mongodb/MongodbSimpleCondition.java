@@ -13,7 +13,7 @@ class MongodbSimpleCondition extends MongodbCondition {
   }
 
   @Override
-  public Criteria toCriteria(boolean negate) {
-    return MongodbOperatorMapper.getCriteria(condition, negate);
+  public <T> Criteria toCriteria(Class<T> entityClass, boolean negate) {
+    return MongodbOperatorMapper.getCriteria(entityClass, condition, negate);
   }
 }

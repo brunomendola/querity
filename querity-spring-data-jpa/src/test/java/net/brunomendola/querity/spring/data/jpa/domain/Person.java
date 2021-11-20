@@ -5,6 +5,7 @@ import net.brunomendola.querity.test.domain.Pet;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -19,6 +20,8 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   private String lastName;
   @NonNull
   private LocalDate birthDate;
+  @NonNull
+  private BigDecimal height;
   @NonNull
   private Integer children;
   @Enumerated(EnumType.STRING)

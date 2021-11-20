@@ -2,6 +2,7 @@ package net.brunomendola.querity.spring.data.mongodb;
 
 import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.SimpleCondition;
+import net.brunomendola.querity.common.util.PropertyUtils;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.EnumMap;
@@ -20,40 +21,42 @@ class MongodbOperatorMapper {
     OPERATOR_CRITERIA_MAP.put(Operator.IS_NOT_NULL, (where, value, negate) -> getEquals(where, null, !negate));
   }
 
-  private static Criteria getEquals(Criteria where, String value, boolean negate) {
+  private static Criteria getEquals(Criteria where, Object value, boolean negate) {
     return negate ? getNotEquals(where, value) : getEquals(where, value);
   }
 
-  private static Criteria getEquals(Criteria where, String value) {
+  private static Criteria getEquals(Criteria where, Object value) {
     return where.is(value);
   }
 
-  private static Criteria getNotEquals(Criteria where, String value) {
+  private static Criteria getNotEquals(Criteria where, Object value) {
     return where.ne(value);
   }
 
-  private static Criteria getStartsWith(Criteria where, String value, boolean negate) {
+  private static Criteria getStartsWith(Criteria where, Object value, boolean negate) {
     return getRegex(where, "^" + value, negate);
   }
 
-  private static Criteria getEndsWith(Criteria where, String value, boolean negate) {
+  private static Criteria getEndsWith(Criteria where, Object value, boolean negate) {
     return getRegex(where, value + "$", negate);
   }
 
-  private static Criteria getRegex(Criteria where, String value, boolean negate) {
+  private static Criteria getRegex(Criteria where, Object value, boolean negate) {
     return negate ?
-        where.not().regex(value, "i") :
-        where.regex(value, "i");
+        where.not().regex(value.toString(), "i") :
+        where.regex(value.toString(), "i");
   }
 
   @FunctionalInterface
   private interface MongodbOperatorCriteriaProvider {
-    Criteria getCriteria(Criteria where, String value, boolean negate);
+    Criteria getCriteria(Criteria where, Object value, boolean negate);
   }
 
-  public static Criteria getCriteria(SimpleCondition condition, boolean negate) {
-    Criteria where = Criteria.where(condition.getPropertyName());
+  public static <T> Criteria getCriteria(Class<T> entityClass, SimpleCondition condition, boolean negate) {
+    String propertyPath = condition.getPropertyName();
+    Criteria where = Criteria.where(propertyPath);
+    Object value = PropertyUtils.getActualPropertyValue(entityClass, propertyPath, condition.getValue());
     return OPERATOR_CRITERIA_MAP.get(condition.getOperator())
-        .getCriteria(where, condition.getValue(), negate);
+        .getCriteria(where, value, negate);
   }
 }

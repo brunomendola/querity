@@ -14,18 +14,18 @@ class MongodbConditionsWrapper extends MongodbCondition {
   }
 
   @Override
-  public Criteria toCriteria(boolean negate) {
-    Criteria[] conditionsCriteria = buildConditionsCriteria(negate);
+  public <T> Criteria toCriteria(Class<T> entityClass, boolean negate) {
+    Criteria[] conditionsCriteria = buildConditionsCriteria(entityClass, negate);
     Criteria criteria = new Criteria();
     return getLogic().equals(LogicOperator.AND) ^ negate ? // xor
         criteria.andOperator(conditionsCriteria) :
         criteria.orOperator(conditionsCriteria);
   }
 
-  private Criteria[] buildConditionsCriteria(boolean negate) {
+  private <T> Criteria[] buildConditionsCriteria(Class<T> entityClass, boolean negate) {
     return getConditions().stream()
         .map(MongodbCondition::of)
-        .map(c -> c.toCriteria(negate))
+        .map(c -> c.toCriteria(entityClass, negate))
         .toArray(Criteria[]::new);
   }
 }

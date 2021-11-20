@@ -8,10 +8,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class MongodbQueryFactory {
+class MongodbQueryFactory<T> {
+  private final Class<T> entityClass;
   private final Query query;
 
-  MongodbQueryFactory(Query query) {
+  MongodbQueryFactory(Class<T> entityClass, Query query) {
+    this.entityClass = entityClass;
     this.query = query;
   }
 
@@ -28,7 +30,7 @@ class MongodbQueryFactory {
   }
 
   private Criteria getMongodbCriteria() {
-    return MongodbCondition.of(query.getFilter()).toCriteria();
+    return MongodbCondition.of(query.getFilter()).toCriteria(entityClass);
   }
 
   private org.springframework.data.mongodb.core.query.Query applyPaginationAndSorting(org.springframework.data.mongodb.core.query.Query q) {

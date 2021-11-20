@@ -5,6 +5,7 @@ import net.brunomendola.querity.test.domain.Pet;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Document
@@ -20,6 +21,8 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Addre
   private String lastName;
   @NonNull
   private LocalDate birthDate;
+  @NonNull
+  private BigDecimal height;
   @NonNull
   private Integer children;
   private Pet favouritePet;

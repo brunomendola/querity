@@ -13,7 +13,7 @@ public class MongodbNotCondition extends MongodbCondition {
   }
 
   @Override
-  public Criteria toCriteria(boolean negate) {
-    return MongodbCondition.of(getCondition()).toCriteria(!negate);
+  public <T> Criteria toCriteria(Class<T> entityClass, boolean negate) {
+    return MongodbCondition.of(getCondition()).toCriteria(entityClass, !negate);
   }
 }

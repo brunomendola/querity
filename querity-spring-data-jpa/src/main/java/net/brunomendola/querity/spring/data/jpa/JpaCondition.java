@@ -8,8 +8,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Set;
 
-import static net.brunomendola.querity.common.util.ConditionUtils.findSubclasses;
 import static net.brunomendola.querity.common.util.ConditionUtils.getConditionImplementation;
+import static net.brunomendola.querity.common.util.ReflectionUtils.findSubclasses;
 
 abstract class JpaCondition {
 

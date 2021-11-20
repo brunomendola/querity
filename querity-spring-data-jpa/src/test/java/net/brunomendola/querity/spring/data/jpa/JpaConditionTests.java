@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import java.util.Set;
 
-import static net.brunomendola.querity.common.util.ConditionUtils.findClassWithConstructorArgumentOfType;
-import static net.brunomendola.querity.common.util.ConditionUtils.findSubclasses;
+import static net.brunomendola.querity.common.util.ReflectionUtils.findClassWithConstructorArgumentOfType;
+import static net.brunomendola.querity.common.util.ReflectionUtils.findSubclasses;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JpaConditionTests {
