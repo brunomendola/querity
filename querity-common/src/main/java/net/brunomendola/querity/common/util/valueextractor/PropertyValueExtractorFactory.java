@@ -1,10 +1,14 @@
 package net.brunomendola.querity.common.util.valueextractor;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Arrays;
 import java.util.List;
 
 import static net.brunomendola.querity.common.util.PropertyUtils.getPropertyType;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PropertyValueExtractorFactory {
   public static final StringValueExtractor STRING_VALUE_EXTRACTOR = new StringValueExtractor();
 
@@ -12,6 +16,7 @@ public class PropertyValueExtractorFactory {
       STRING_VALUE_EXTRACTOR,
       new NumericValueExtractor());
 
+  @SuppressWarnings("java:S1452")
   public static <T> PropertyValueExtractor<?> getPropertyValueExtractor(Class<T> beanClass, String propertyPath) {
     Class<?> propertyType = getPropertyType(beanClass, propertyPath);
     return extractors.stream()
