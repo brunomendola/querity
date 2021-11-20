@@ -8,6 +8,10 @@ public enum Operator {
   STARTS_WITH(1),
   ENDS_WITH(1),
   CONTAINS(1),
+  GREATER_THAN(1),
+  GREATER_THAN_EQUALS(1),
+  LESSER_THAN(1),
+  LESSER_THAN_EQUALS(1),
   IS_NULL(0),
   IS_NOT_NULL(0);
 

@@ -17,6 +17,10 @@ class MongodbOperatorMapper {
     OPERATOR_CRITERIA_MAP.put(Operator.STARTS_WITH, MongodbOperatorMapper::getStartsWith);
     OPERATOR_CRITERIA_MAP.put(Operator.ENDS_WITH, MongodbOperatorMapper::getEndsWith);
     OPERATOR_CRITERIA_MAP.put(Operator.CONTAINS, MongodbOperatorMapper::getRegex);
+    OPERATOR_CRITERIA_MAP.put(Operator.GREATER_THAN, MongodbOperatorMapper::getGreaterThan);
+    OPERATOR_CRITERIA_MAP.put(Operator.GREATER_THAN_EQUALS, MongodbOperatorMapper::getGreaterThanEquals);
+    OPERATOR_CRITERIA_MAP.put(Operator.LESSER_THAN, MongodbOperatorMapper::getLesserThan);
+    OPERATOR_CRITERIA_MAP.put(Operator.LESSER_THAN_EQUALS, MongodbOperatorMapper::getLesserThanEquals);
     OPERATOR_CRITERIA_MAP.put(Operator.IS_NULL, (where, value, negate) -> getEquals(where, null, negate));
     OPERATOR_CRITERIA_MAP.put(Operator.IS_NOT_NULL, (where, value, negate) -> getEquals(where, null, !negate));
   }
@@ -45,6 +49,22 @@ class MongodbOperatorMapper {
     return negate ?
         where.not().regex(value.toString(), "i") :
         where.regex(value.toString(), "i");
+  }
+
+  private static Criteria getGreaterThan(Criteria where, Object value, boolean negate) {
+    return negate ? where.lte(value) : where.gt(value);
+  }
+
+  private static Criteria getGreaterThanEquals(Criteria where, Object value, boolean negate) {
+    return negate ? where.lt(value) : where.gte(value);
+  }
+
+  private static Criteria getLesserThan(Criteria where, Object value, boolean negate) {
+    return negate ? where.gte(value) : where.lt(value);
+  }
+
+  private static Criteria getLesserThanEquals(Criteria where, Object value, boolean negate) {
+    return negate ? where.gt(value) : where.lte(value);
   }
 
   @FunctionalInterface

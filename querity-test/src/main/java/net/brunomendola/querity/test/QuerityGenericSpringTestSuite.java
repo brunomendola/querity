@@ -83,6 +83,54 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithBigDecimalGreaterThanCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("height").operator(Operator.GREATER_THAN).value("1.72").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(4);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getHeight().compareTo(new BigDecimal("1.72")) > 0)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithBigDecimalGreaterThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("height").operator(Operator.GREATER_THAN_EQUALS).value("1.72").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(5);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getHeight().compareTo(new BigDecimal("1.72")) >= 0)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithBigDecimalLesserThanCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("height").operator(Operator.LESSER_THAN).value("1.72").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(1);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getHeight().compareTo(new BigDecimal("1.72")) < 0)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithBigDecimalLesserThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("height").operator(Operator.LESSER_THAN_EQUALS).value("1.72").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getHeight().compareTo(new BigDecimal("1.72")) <= 0)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithStringNotEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
         .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.NOT_EQUALS).value("Skywalker").build())

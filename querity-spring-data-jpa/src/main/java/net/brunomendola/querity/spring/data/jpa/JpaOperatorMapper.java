@@ -3,10 +3,7 @@ package net.brunomendola.querity.spring.data.jpa;
 import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.SimpleCondition;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -19,6 +16,10 @@ class JpaOperatorMapper {
     OPERATOR_PREDICATE_MAP.put(Operator.STARTS_WITH, JpaOperatorMapper::getStartsWith);
     OPERATOR_PREDICATE_MAP.put(Operator.ENDS_WITH, JpaOperatorMapper::getEndsWith);
     OPERATOR_PREDICATE_MAP.put(Operator.CONTAINS, JpaOperatorMapper::getContains);
+    OPERATOR_PREDICATE_MAP.put(Operator.GREATER_THAN, JpaOperatorMapper::getGreaterThan);
+    OPERATOR_PREDICATE_MAP.put(Operator.GREATER_THAN_EQUALS, JpaOperatorMapper::getGreaterThanEquals);
+    OPERATOR_PREDICATE_MAP.put(Operator.LESSER_THAN, JpaOperatorMapper::getLesserThan);
+    OPERATOR_PREDICATE_MAP.put(Operator.LESSER_THAN_EQUALS, JpaOperatorMapper::getLesserThanEquals);
     OPERATOR_PREDICATE_MAP.put(Operator.IS_NULL, (path, value, cb) -> getIsNull(path, cb));
     OPERATOR_PREDICATE_MAP.put(Operator.IS_NOT_NULL, (path, value, cb) -> getIsNotNull(path, cb));
   }
@@ -53,6 +54,26 @@ class JpaOperatorMapper {
 
   private static Predicate getLike(Path<?> path, String value, CriteriaBuilder cb) {
     return cb.like(cb.lower(path.as(String.class)), value.toLowerCase());
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static Predicate getGreaterThan(Path<?> path, String value, CriteriaBuilder cb) {
+    return cb.greaterThan((Expression) path, (Comparable) value);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static Predicate getGreaterThanEquals(Path<?> path, String value, CriteriaBuilder cb) {
+    return cb.greaterThanOrEqualTo((Expression) path, (Comparable) value);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static Predicate getLesserThan(Path<?> path, String value, CriteriaBuilder cb) {
+    return cb.lessThan((Expression) path, (Comparable) value);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static Predicate getLesserThanEquals(Path<?> path, String value, CriteriaBuilder cb) {
+    return cb.lessThanOrEqualTo((Expression) path, (Comparable) value);
   }
 
   @FunctionalInterface

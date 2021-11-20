@@ -67,6 +67,42 @@ class QuerityApiTests {
   }
 
   @Test
+  void givenFilterWithOneGreaterThanCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.GREATER_THAN).value("1.72").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithOneGreaterThanEqualsCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.GREATER_THAN_EQUALS).value("1.72").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithOneLesserThanCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.LESSER_THAN).value("1.72").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithOneLesserThanEqualsCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.LESSER_THAN_EQUALS).value("1.72").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
   void givenFilterWithOneIsNullCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
