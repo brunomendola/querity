@@ -32,53 +32,53 @@ class JpaOperatorMapper {
     return cb.isNull(path);
   }
 
-  private static Predicate getNotEquals(Path<?> path, String value, CriteriaBuilder cb) {
+  private static Predicate getNotEquals(Path<?> path, Object value, CriteriaBuilder cb) {
     return cb.or(cb.notEqual(path, value), getIsNull(path, cb));
   }
 
-  private static Predicate getEquals(Path<?> path, String value, CriteriaBuilder cb) {
+  private static Predicate getEquals(Path<?> path, Object value, CriteriaBuilder cb) {
     return cb.and(cb.equal(path, value), getIsNotNull(path, cb));
   }
 
-  private static Predicate getStartsWith(Path<?> path, String value, CriteriaBuilder cb) {
-    return getLike(path, value + "%", cb);
+  private static Predicate getStartsWith(Path<?> path, Object value, CriteriaBuilder cb) {
+    return getLike(path, value.toString() + "%", cb);
   }
 
-  private static Predicate getEndsWith(Path<?> path, String value, CriteriaBuilder cb) {
-    return getLike(path, "%" + value, cb);
+  private static Predicate getEndsWith(Path<?> path, Object value, CriteriaBuilder cb) {
+    return getLike(path, "%" + value.toString(), cb);
   }
 
-  private static Predicate getContains(Path<?> path, String value, CriteriaBuilder cb) {
-    return getLike(path, "%" + value + "%", cb);
+  private static Predicate getContains(Path<?> path, Object value, CriteriaBuilder cb) {
+    return getLike(path, "%" + value.toString() + "%", cb);
   }
 
-  private static Predicate getLike(Path<?> path, String value, CriteriaBuilder cb) {
-    return cb.like(cb.lower(path.as(String.class)), value.toLowerCase());
+  private static Predicate getLike(Path<?> path, Object value, CriteriaBuilder cb) {
+    return cb.like(cb.lower(path.as(String.class)), value.toString().toLowerCase());
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private static Predicate getGreaterThan(Path<?> path, String value, CriteriaBuilder cb) {
+  private static Predicate getGreaterThan(Path<?> path, Object value, CriteriaBuilder cb) {
     return cb.greaterThan((Expression) path, (Comparable) value);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private static Predicate getGreaterThanEquals(Path<?> path, String value, CriteriaBuilder cb) {
+  private static Predicate getGreaterThanEquals(Path<?> path, Object value, CriteriaBuilder cb) {
     return cb.greaterThanOrEqualTo((Expression) path, (Comparable) value);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private static Predicate getLesserThan(Path<?> path, String value, CriteriaBuilder cb) {
+  private static Predicate getLesserThan(Path<?> path, Object value, CriteriaBuilder cb) {
     return cb.lessThan((Expression) path, (Comparable) value);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private static Predicate getLesserThanEquals(Path<?> path, String value, CriteriaBuilder cb) {
+  private static Predicate getLesserThanEquals(Path<?> path, Object value, CriteriaBuilder cb) {
     return cb.lessThanOrEqualTo((Expression) path, (Comparable) value);
   }
 
   @FunctionalInterface
   private interface JpaOperatorPredicateProvider {
-    Predicate getPredicate(Path<?> path, String value, CriteriaBuilder cb);
+    Predicate getPredicate(Path<?> path, Object value, CriteriaBuilder cb);
   }
 
   public static Predicate getPredicate(SimpleCondition condition, Root<?> root, CriteriaBuilder cb) {

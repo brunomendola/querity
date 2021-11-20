@@ -34,7 +34,7 @@ public class PropertyUtils {
             String.format("Property %s not found in class %s", fieldName, beanClass.getSimpleName())));
   }
 
-  public static <T> Object getActualPropertyValue(Class<T> beanClass, String propertyPath, String value) {
+  public static <T> Object getActualPropertyValue(Class<T> beanClass, String propertyPath, Object value) {
     if (value == null) return null;
     return PropertyValueExtractorFactory.getPropertyValueExtractor(beanClass, propertyPath).extractValue(value);
   }

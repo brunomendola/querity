@@ -7,7 +7,7 @@ public class StringValueExtractor implements PropertyValueExtractor<String> {
   }
 
   @Override
-  public String extractValue(String value) {
-    return value;
+  public String extractValue(Object value) {
+    return value.toString();
   }
 }

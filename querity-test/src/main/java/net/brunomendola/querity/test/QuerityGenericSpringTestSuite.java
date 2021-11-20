@@ -61,6 +61,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   @Test
   void givenFilterWithIntegerEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("children").operator(Operator.EQUALS).value(2).build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(1);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getChildren() != null && p.getChildren().equals(2))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithIntegerEqualsConditionAsString_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
         .filter(SimpleCondition.builder().propertyName("children").operator(Operator.EQUALS).value("2").build())
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -72,6 +84,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithBigDecimalEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("height").operator(Operator.EQUALS).value(new BigDecimal("1.72")).build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(1);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getHeight().compareTo(new BigDecimal("1.72")) == 0)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithBigDecimalEqualsConditionAsString_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
         .filter(SimpleCondition.builder().propertyName("height").operator(Operator.EQUALS).value("1.72").build())
         .build();
