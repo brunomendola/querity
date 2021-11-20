@@ -40,6 +40,33 @@ class QuerityApiTests {
   }
 
   @Test
+  void givenFilterWithOneStartsWithCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.STARTS_WITH).value("Sky").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithOneEndsWithCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.ENDS_WITH).value("walker").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
+  void givenFilterWithOneContainsCondition_whenFindAll_thenReturnListOfEntity() {
+    List<Person> people = querity.findAll(Person.class,
+        Query.builder()
+            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.CONTAINS).value("walk").build())
+            .build());
+    assertThat(people).isNotNull();
+  }
+
+  @Test
   void givenFilterWithOneIsNullCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()

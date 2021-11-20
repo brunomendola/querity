@@ -65,6 +65,35 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithStringStartsWithCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.STARTS_WITH).value("Sky").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getLastName() != null && p.getLastName().startsWith("Sky")).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithStringEndsWithCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.ENDS_WITH).value("walker").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isEqualTo(entities.stream().filter(p -> p.getLastName() != null && p.getLastName().endsWith("walker")).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithStringContainsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Query.builder()
+        .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.CONTAINS).value("walk").build())
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getLastName() != null && p.getLastName().contains("walk"))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithStringIsNullCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Query.builder()
         .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).build())

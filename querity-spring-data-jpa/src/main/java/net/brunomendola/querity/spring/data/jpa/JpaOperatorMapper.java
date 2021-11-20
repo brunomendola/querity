@@ -16,6 +16,9 @@ class JpaOperatorMapper {
   static {
     OPERATOR_PREDICATE_MAP.put(Operator.EQUALS, JpaOperatorMapper::getEquals);
     OPERATOR_PREDICATE_MAP.put(Operator.NOT_EQUALS, JpaOperatorMapper::getNotEquals);
+    OPERATOR_PREDICATE_MAP.put(Operator.STARTS_WITH, JpaOperatorMapper::getStartsWith);
+    OPERATOR_PREDICATE_MAP.put(Operator.ENDS_WITH, JpaOperatorMapper::getEndsWith);
+    OPERATOR_PREDICATE_MAP.put(Operator.CONTAINS, JpaOperatorMapper::getContains);
     OPERATOR_PREDICATE_MAP.put(Operator.IS_NULL, (path, value, cb) -> getIsNull(path, cb));
     OPERATOR_PREDICATE_MAP.put(Operator.IS_NOT_NULL, (path, value, cb) -> getIsNotNull(path, cb));
   }
@@ -34,6 +37,22 @@ class JpaOperatorMapper {
 
   private static Predicate getEquals(Path<?> path, String value, CriteriaBuilder cb) {
     return cb.and(cb.equal(path, value), getIsNotNull(path, cb));
+  }
+
+  private static Predicate getStartsWith(Path<?> path, String value, CriteriaBuilder cb) {
+    return getLike(path, value + "%", cb);
+  }
+
+  private static Predicate getEndsWith(Path<?> path, String value, CriteriaBuilder cb) {
+    return getLike(path, "%" + value, cb);
+  }
+
+  private static Predicate getContains(Path<?> path, String value, CriteriaBuilder cb) {
+    return getLike(path, "%" + value + "%", cb);
+  }
+
+  private static Predicate getLike(Path<?> path, String value, CriteriaBuilder cb) {
+    return cb.like(cb.lower(path.as(String.class)), value.toLowerCase());
   }
 
   @FunctionalInterface

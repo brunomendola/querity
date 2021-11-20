@@ -12,9 +12,12 @@ class MongodbOperatorMapper {
 
   static {
     OPERATOR_CRITERIA_MAP.put(Operator.EQUALS, MongodbOperatorMapper::getEquals);
-    OPERATOR_CRITERIA_MAP.put(Operator.NOT_EQUALS, MongodbOperatorMapper::getNotEquals);
+    OPERATOR_CRITERIA_MAP.put(Operator.NOT_EQUALS, (where, value, negate) -> getEquals(where, value, !negate));
+    OPERATOR_CRITERIA_MAP.put(Operator.STARTS_WITH, MongodbOperatorMapper::getStartsWith);
+    OPERATOR_CRITERIA_MAP.put(Operator.ENDS_WITH, MongodbOperatorMapper::getEndsWith);
+    OPERATOR_CRITERIA_MAP.put(Operator.CONTAINS, MongodbOperatorMapper::getRegex);
     OPERATOR_CRITERIA_MAP.put(Operator.IS_NULL, (where, value, negate) -> getEquals(where, null, negate));
-    OPERATOR_CRITERIA_MAP.put(Operator.IS_NOT_NULL, (where, value, negate) -> getNotEquals(where, null, negate));
+    OPERATOR_CRITERIA_MAP.put(Operator.IS_NOT_NULL, (where, value, negate) -> getEquals(where, null, !negate));
   }
 
   private static Criteria getEquals(Criteria where, String value, boolean negate) {
@@ -25,12 +28,22 @@ class MongodbOperatorMapper {
     return where.is(value);
   }
 
-  private static Criteria getNotEquals(Criteria where, String value, boolean negate) {
-    return negate ? getEquals(where, value) : getNotEquals(where, value);
-  }
-
   private static Criteria getNotEquals(Criteria where, String value) {
     return where.ne(value);
+  }
+
+  private static Criteria getStartsWith(Criteria where, String value, boolean negate) {
+    return getRegex(where, "^" + value, negate);
+  }
+
+  private static Criteria getEndsWith(Criteria where, String value, boolean negate) {
+    return getRegex(where, value + "$", negate);
+  }
+
+  private static Criteria getRegex(Criteria where, String value, boolean negate) {
+    return negate ?
+        where.not().regex(value, "i") :
+        where.regex(value, "i");
   }
 
   @FunctionalInterface
