@@ -9,14 +9,26 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.util.Comparator;
+
 @Testcontainers
 class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person> {
 
+  public static final String MONGO_DB_DOCKER_IMAGE = "mongo:5.0.4";
+
   @Container
-  private static final MongoDBContainer MONGO_DB_CONTAINER = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
+  private static final MongoDBContainer MONGO_DB_CONTAINER = new MongoDBContainer(DockerImageName.parse(MONGO_DB_DOCKER_IMAGE));
 
   @DynamicPropertySource
   static void setProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.mongodb.uri", MONGO_DB_CONTAINER::getReplicaSetUrl);
+  }
+
+  /**
+   * Overridden because sort with nulls last is not supported in MongoDB
+   */
+  @Override
+  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator() {
+    return Comparator.nullsFirst(Comparator.naturalOrder());
   }
 }

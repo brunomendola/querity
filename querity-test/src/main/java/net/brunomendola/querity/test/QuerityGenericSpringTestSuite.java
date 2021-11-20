@@ -277,10 +277,17 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     Comparator<T> comparator = Comparator
-        .comparing((T p) -> p.getLastName(), Comparator.nullsFirst(Comparator.naturalOrder()))
+        .comparing((T p) -> p.getLastName(), getSortComparator())
         .thenComparing((T p) -> p.getFirstName());
     assertThat(result).hasSize(6);
     assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+  }
+
+  /**
+   * Override this method if the database doesn't support handling null values in sorting
+   */
+  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator() {
+    return Comparator.nullsLast(Comparator.naturalOrder());
   }
 
   @Test

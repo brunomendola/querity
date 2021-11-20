@@ -16,7 +16,8 @@ public class MongodbSort {
         getDirection().equals(Sort.Direction.ASC) ?
             org.springframework.data.domain.Sort.Direction.ASC :
             org.springframework.data.domain.Sort.Direction.DESC,
-        getPropertyName()
+        getPropertyName(),
+        org.springframework.data.domain.Sort.NullHandling.NULLS_LAST // looks like this is not supported in MongoDB
     );
   }
 }
