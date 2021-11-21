@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static net.brunomendola.querity.api.Operator.*;
 import static net.brunomendola.querity.api.Querity.*;
+import static net.brunomendola.querity.api.Sort.Direction.DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -287,7 +288,31 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
-  void givenSort_whenFilterAll_thenReturnSortedElements() {
+  void givenSortByFieldAscending_whenFilterAll_thenReturnSortedElements() {
+    Query query = Querity.query()
+        .sort(sortBy("lastName"))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    Comparator<T> comparator = Comparator
+        .comparing((T p) -> p.getLastName(), getSortComparator());
+    assertThat(result).hasSize(6);
+    assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenSortByFieldDescending_whenFilterAll_thenReturnSortedElements() {
+    Query query = Querity.query()
+        .sort(sortBy("lastName", DESC))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    Comparator<T> comparator = Comparator
+        .comparing((T p) -> p.getLastName(), getSortComparator()).reversed();
+    assertThat(result).hasSize(6);
+    assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenSortByMultipleFields_whenFilterAll_thenReturnSortedElements() {
     Query query = Querity.query()
         .sort(sortBy("lastName"), sortBy("firstName"))
         .build();
