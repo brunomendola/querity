@@ -43,6 +43,13 @@ class QueritySpringWebTests {
   }
 
   @Test
+  void givenInvalidJsonQuery_whenGetQuery_thenReturnsBadRequest() throws Exception {
+    mockMvc.perform(get("/query")
+            .queryParam("q", "{"))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
   void givenNoQuery_whenGetQuery_thenReturnsEmptyResponse() throws Exception {
     mockMvc.perform(get("/query"))
         .andExpect(status().isOk())
