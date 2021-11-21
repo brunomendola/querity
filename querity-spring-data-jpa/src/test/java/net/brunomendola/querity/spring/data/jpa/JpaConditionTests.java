@@ -9,6 +9,7 @@ import java.util.Set;
 import static net.brunomendola.querity.common.util.ReflectionUtils.findClassWithConstructorArgumentOfType;
 import static net.brunomendola.querity.common.util.ReflectionUtils.findSubclasses;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JpaConditionTests {
   @Test
@@ -20,5 +21,14 @@ class JpaConditionTests {
     assertThat(conditionClasses)
         .map(clazz -> findClassWithConstructorArgumentOfType(implementationClasses, clazz))
         .allMatch(Optional::isPresent);
+  }
+
+  @Test
+  void givenNotSupportedCondition_whenOf_theThrowIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> JpaCondition.of(new MyCondition()),
+        "Condition class MyCondition is not supported by the JPA module");
+  }
+
+  private static class MyCondition implements Condition {
   }
 }
