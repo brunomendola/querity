@@ -3,9 +3,11 @@ package net.brunomendola.querity.api;
 import net.brunomendola.querity.api.domain.Person;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
+import static net.brunomendola.querity.api.Operator.*;
+import static net.brunomendola.querity.api.Querity.*;
+import static net.brunomendola.querity.api.Sort.Direction.DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -25,7 +27,7 @@ class QuerityApiTests {
   void givenFilterWithOneEqualsCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
+            .filter(filterBy("lastName", EQUALS, "Skywalker"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -34,7 +36,7 @@ class QuerityApiTests {
   void givenFilterWithOneNotEqualsCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.NOT_EQUALS).value("Skywalker").build())
+            .filter(filterBy("lastName", NOT_EQUALS, "Skywalker"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -43,7 +45,7 @@ class QuerityApiTests {
   void givenFilterWithOneStartsWithCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.STARTS_WITH).value("Sky").build())
+            .filter(filterBy("lastName", STARTS_WITH, "Sky"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -52,7 +54,7 @@ class QuerityApiTests {
   void givenFilterWithOneEndsWithCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.ENDS_WITH).value("walker").build())
+            .filter(filterBy("lastName", ENDS_WITH, "walker"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -61,7 +63,7 @@ class QuerityApiTests {
   void givenFilterWithOneContainsCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.CONTAINS).value("walk").build())
+            .filter(filterBy("lastName", CONTAINS, "walk"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -70,7 +72,7 @@ class QuerityApiTests {
   void givenFilterWithOneGreaterThanCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.GREATER_THAN).value("1.72").build())
+            .filter(filterBy("height", GREATER_THAN, "1.72"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -79,7 +81,7 @@ class QuerityApiTests {
   void givenFilterWithOneGreaterThanEqualsCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.GREATER_THAN_EQUALS).value("1.72").build())
+            .filter(filterBy("height", GREATER_THAN_EQUALS, "1.72"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -88,7 +90,7 @@ class QuerityApiTests {
   void givenFilterWithOneLesserThanCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.LESSER_THAN).value("1.72").build())
+            .filter(filterBy("height", LESSER_THAN, "1.72"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -97,7 +99,7 @@ class QuerityApiTests {
   void givenFilterWithOneLesserThanEqualsCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("height").operator(Operator.LESSER_THAN_EQUALS).value("1.72").build())
+            .filter(filterBy("height", LESSER_THAN_EQUALS, "1.72"))
             .build());
     assertThat(people).isNotNull();
   }
@@ -106,7 +108,7 @@ class QuerityApiTests {
   void givenFilterWithOneIsNullCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).build())
+            .filter(filterBy("lastName", IS_NULL))
             .build());
     assertThat(people).isNotNull();
   }
@@ -115,22 +117,20 @@ class QuerityApiTests {
   void givenFilterWithOneIsNotNullCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NOT_NULL).build())
+            .filter(filterBy("lastName", IS_NOT_NULL))
             .build());
     assertThat(people).isNotNull();
   }
 
   @Test
   void givenFilterWithEqualsConditionAndWithoutValue_whenBuild_thenThrowIllegalArgumentException() {
-    SimpleCondition.SimpleConditionBuilder builder = SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS);
-    assertThrows(IllegalArgumentException.class, builder::build,
+    assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", EQUALS),
         "The operator EQUALS requires 1 value(s)");
   }
 
   @Test
   void givenFilterWithIsNullConditionAndValue_whenBuild_thenThrowIllegalArgumentException() {
-    SimpleCondition.SimpleConditionBuilder builder = SimpleCondition.builder().propertyName("lastName").operator(Operator.IS_NULL).value("value");
-    assertThrows(IllegalArgumentException.class, builder::build,
+    assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", IS_NULL, "value"),
         "The operator IS_NULL requires 0 value(s)");
   }
 
@@ -138,9 +138,7 @@ class QuerityApiTests {
   void givenFilterWithNotConditionContainingSimpleCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(NotCondition.builder()
-                .condition(SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build())
-                .build())
+            .filter(not(filterBy("lastName", EQUALS, "Skywalker")))
             .build());
     assertThat(people).isNotNull();
   }
@@ -150,15 +148,10 @@ class QuerityApiTests {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
             .filter(
-                NotCondition.builder()
-                    .condition(ConditionsWrapper.builder()
-                        .logic(LogicOperator.OR)
-                        .conditions(Arrays.asList(
-                            SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build(),
-                            SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build()
-                        ))
-                        .build())
-                    .build()
+                not(or(
+                    filterBy("firstName", EQUALS, "Luke"),
+                    filterBy("lastName", EQUALS, "Skywalker")
+                ))
             ).build());
     assertThat(people).isNotNull();
   }
@@ -167,12 +160,10 @@ class QuerityApiTests {
   void givenFilterWithTwoEqualsConditions_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(ConditionsWrapper.builder()
-                .conditions(Arrays.asList(
-                    SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build(),
-                    SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build()
-                ))
-                .build())
+            .filter(and(
+                filterBy("firstName", EQUALS, "Luke"),
+                filterBy("lastName", EQUALS, "Skywalker")
+            ))
             .build());
     assertThat(people).isNotNull();
   }
@@ -181,13 +172,10 @@ class QuerityApiTests {
   void givenFilterWithTwoEqualsConditionsWithOrLogic_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(ConditionsWrapper.builder()
-                .logic(LogicOperator.OR)
-                .conditions(Arrays.asList(
-                    SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build(),
-                    SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build()
-                ))
-                .build())
+            .filter(or(
+                filterBy("firstName", EQUALS, "Luke"),
+                filterBy("lastName", EQUALS, "Skywalker")
+            ))
             .build());
     assertThat(people).isNotNull();
   }
@@ -196,18 +184,13 @@ class QuerityApiTests {
   void givenFilterWithNestedConditions_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .filter(ConditionsWrapper.builder()
-                .conditions(Arrays.asList(
-                    SimpleCondition.builder().propertyName("lastName").operator(Operator.EQUALS).value("Skywalker").build(),
-                    ConditionsWrapper.builder()
-                        .logic(LogicOperator.OR)
-                        .conditions(Arrays.asList(
-                            SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Anakin").build(),
-                            SimpleCondition.builder().propertyName("firstName").operator(Operator.EQUALS).value("Luke").build()
-                        ))
-                        .build()
+            .filter(and(
+                filterBy("lastName", EQUALS, "Skywalker"),
+                or(
+                    filterBy("firstName", EQUALS, "Anakin"),
+                    filterBy("firstName", EQUALS, "Luke")
                 ))
-                .build())
+            )
             .build());
     assertThat(people).isNotNull();
   }
@@ -216,7 +199,7 @@ class QuerityApiTests {
   void givenPagination_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .pagination(Pagination.builder().page(1).pageSize(5).build())
+            .pagination(paged(1, 5))
             .build());
     assertThat(people).isNotNull();
   }
@@ -225,9 +208,7 @@ class QuerityApiTests {
   void givenSort_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Query.builder()
-            .sort(Arrays.asList(
-                Sort.builder().propertyName("lastName").build(),
-                Sort.builder().propertyName("firstName").direction(Sort.Direction.DESC).build()))
+            .sort(sortBy("lastName"), sortBy("firstName", DESC))
             .build());
     assertThat(people).isNotNull();
   }
