@@ -1,7 +1,5 @@
 package net.brunomendola.querity.common.util.valueextractor;
 
-import lombok.SneakyThrows;
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
@@ -19,16 +17,8 @@ public class NumericValueExtractor implements PropertyValueExtractor<Number> {
   @Override
   public Number extractValue(Object value) {
     if (isNumericType(value.getClass()))
-      return getNumber(value);
+      return (Number) value;  // at this point we're sure it's not primitive anymore because it's been auto-boxed
     return getNumericValue(value.toString());
-  }
-
-  @SneakyThrows
-  private Number getNumber(Object numericTypeValue) {
-    Class<?> valueClass = numericTypeValue.getClass();
-    if (!valueClass.isPrimitive()) return (Number) numericTypeValue;
-    Class<?> wrapperClass = ClassUtils.primitiveToWrapper(valueClass);
-    return (Number) wrapperClass.getConstructor(valueClass).newInstance(numericTypeValue);
   }
 
   private static final Set<Class<?>> PRIMITIVE_NUMBERS = Stream

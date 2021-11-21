@@ -28,7 +28,7 @@ class NumericValueExtractorTests {
     assertThat(valueExtractor.canHandle(clazz)).isEqualTo(expectedCanHandle);
   }
 
-  public static Stream<Arguments> provideStringAndNumericValue() {
+  public static Stream<Arguments> provideGivenNumericInputAndExpectedNumber() {
     return Stream.of(
         Arguments.of("11", 11L),
         Arguments.of("0.12", new BigDecimal("0.12")),
@@ -41,8 +41,8 @@ class NumericValueExtractorTests {
   }
 
   @ParameterizedTest
-  @MethodSource("provideStringAndNumericValue")
-  void givenNumericString_whenExtractValue_thenReturnTheNumber(Object value, Number expectedNumber) {
+  @MethodSource("provideGivenNumericInputAndExpectedNumber")
+  void givenNumericInput_whenExtractValue_thenReturnTheNumber(Object value, Object expectedNumber) {
     assertThat(valueExtractor.extractValue(value)).isEqualTo(expectedNumber);
   }
 }
