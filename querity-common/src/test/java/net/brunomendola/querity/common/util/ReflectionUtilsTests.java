@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ReflectionUtilsTests {
 
@@ -36,6 +37,11 @@ class ReflectionUtilsTests {
     assertThat(ReflectionUtils.constructInstanceWithArgument(MyClass1.class, "test"))
         .isInstanceOf(MyClass1.class)
         .matches(c -> c.stringValue.equals("test"));
+  }
+
+  @Test
+  void givenClassWithoutSingleArgumentConstructor_whenConstructInstanceWithArgument_thenThrowsException() {
+    assertThrows(NoSuchMethodException.class, () -> ReflectionUtils.constructInstanceWithArgument(MyClass2.class, "test"));
   }
 
   public interface MyInterface {
