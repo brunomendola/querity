@@ -33,13 +33,16 @@ class NumericValueExtractorTests {
         Arguments.of("11", 11L),
         Arguments.of("0.12", new BigDecimal("0.12")),
         Arguments.of("0", 0L),
-        Arguments.of("42.00", new BigDecimal("42.00"))
+        Arguments.of("42.00", new BigDecimal("42.00")),
+        Arguments.of(new BigDecimal("420.00"), new BigDecimal("420.00")),
+        Arguments.of(420, 420),
+        Arguments.of((short) 1, (short) 1)
     );
   }
 
   @ParameterizedTest
   @MethodSource("provideStringAndNumericValue")
-  void givenNumericString_whenExtractValue_thenReturnTheNumber(String string, Number expectedNumber) {
-    assertThat(valueExtractor.extractValue(string)).isEqualTo(expectedNumber);
+  void givenNumericString_whenExtractValue_thenReturnTheNumber(Object value, Number expectedNumber) {
+    assertThat(valueExtractor.extractValue(value)).isEqualTo(expectedNumber);
   }
 }
