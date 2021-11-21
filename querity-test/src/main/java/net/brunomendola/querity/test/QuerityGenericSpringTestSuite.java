@@ -354,6 +354,16 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithTwoNestedNotConditionsWithStringEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(not(not(filterBy("lastName", EQUALS, "Skywalker"))))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream().filter(p -> "Skywalker".equals(p.getLastName())).collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithNotConditionWithTwoStringEqualsConditionsWithAndLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Querity.query()
         .filter(not(and(
