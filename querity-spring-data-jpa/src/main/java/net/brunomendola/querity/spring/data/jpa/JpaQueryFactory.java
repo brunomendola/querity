@@ -24,16 +24,16 @@ class JpaQueryFactory<T> {
     CriteriaQuery<T> cq = cb.createQuery(entityClass);
     Root<T> root = cq.from(entityClass);
 
-    if (query.hasFilter())
+    if (query != null && query.hasFilter())
       cq.where(getPredicate(root, cq, cb));
 
-    if (query.hasSort()) {
+    if (query != null && query.hasSort()) {
       cq.orderBy(getOrder(root, cb));
     }
 
     TypedQuery<T> tq = entityManager.createQuery(cq);
 
-    if (query.hasPagination())
+    if (query != null && query.hasPagination())
       tq = applyPagination(tq);
 
     return tq;

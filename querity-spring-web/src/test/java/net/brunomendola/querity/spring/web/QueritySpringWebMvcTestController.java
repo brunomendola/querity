@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class QueritySpringWebMvcTestController {
   @GetMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE)
-  Query getQuery(@RequestParam Query q) {
+  Query getQuery(@RequestParam(required = false) Query q) {
     return q;
   }
 }

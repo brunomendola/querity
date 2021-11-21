@@ -1,5 +1,6 @@
 package net.brunomendola.querity.spring.web;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = QueritySpringWebMvcTestController.class)
 @Import(QueritySpringWebAutoConfiguration.class)
@@ -32,10 +34,18 @@ class QueritySpringWebTests {
       /* not single condition */      "{\"filter\":{\"not\":{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}}}",
       /* not conditions wrapper */    "{\"filter\":{\"not\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}]}}}",
   })
-  void givenJsonQuery_whenGetQuery_thenReturnTheSameQueryAsResponse(String query) throws Exception {
+  void givenJsonQuery_whenGetQuery_thenReturnsTheSameQueryAsResponse(String query) throws Exception {
     mockMvc.perform(get("/query")
             .queryParam("q", query))
+        .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().json(query, false));
+  }
+
+  @Test
+  void givenNoQuery_whenGetQuery_thenReturnsEmptyResponse() throws Exception {
+    mockMvc.perform(get("/query"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(""));
   }
 }

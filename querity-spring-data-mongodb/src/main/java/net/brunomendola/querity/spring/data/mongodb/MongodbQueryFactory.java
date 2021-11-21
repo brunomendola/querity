@@ -1,5 +1,6 @@
 package net.brunomendola.querity.spring.data.mongodb;
 
+import net.brunomendola.querity.api.Pagination;
 import net.brunomendola.querity.api.Query;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,7 +25,7 @@ class MongodbQueryFactory<T> {
   }
 
   private org.springframework.data.mongodb.core.query.Query initMongodbQuery() {
-    return !query.hasFilter() ?
+    return query == null || !query.hasFilter() ?
         new org.springframework.data.mongodb.core.query.Query() :
         new org.springframework.data.mongodb.core.query.Query(getMongodbCriteria());
   }
@@ -34,20 +35,21 @@ class MongodbQueryFactory<T> {
   }
 
   private org.springframework.data.mongodb.core.query.Query applyPaginationAndSorting(org.springframework.data.mongodb.core.query.Query q) {
-    return query.hasPagination() ?
+    return query != null && query.hasPagination() ?
         q.with(getMongodbPageRequest()) :
         q.with(getMongodbSort());
   }
 
   private PageRequest getMongodbPageRequest() {
+    Pagination pagination = query.getPagination();
     return PageRequest.of(
-        query.getPagination().getPage() - 1,
-        query.getPagination().getPageSize(),
+        pagination.getPage() - 1,
+        pagination.getPageSize(),
         getMongodbSort());
   }
 
   private org.springframework.data.domain.Sort getMongodbSort() {
-    return !query.hasSort() ?
+    return query == null || !query.hasSort() ?
         org.springframework.data.domain.Sort.unsorted() :
         org.springframework.data.domain.Sort.by(getMongoDbSortOrder());
   }

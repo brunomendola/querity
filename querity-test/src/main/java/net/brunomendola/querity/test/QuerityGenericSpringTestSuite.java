@@ -43,6 +43,13 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenNullQuery_whenFilterAll_thenReturnAllTheElements() {
+    List<T> result = querity.findAll(getEntityClass(), null);
+    assertThat(result).hasSize(6);
+    assertThat(result).isEqualTo(entities);
+  }
+
+  @Test
   void givenEmptyFilter_whenFilterAll_thenReturnAllTheElements() {
     Query query = Querity.query()
         .build();
