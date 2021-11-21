@@ -200,6 +200,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithStringNotContainsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(not(filterBy("lastName", CONTAINS, "walk")))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(4);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getLastName() == null || !p.getLastName().contains("walk"))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithStringIsNullCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Querity.query()
         .filter(filterBy("lastName", IS_NULL))

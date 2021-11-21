@@ -24,12 +24,12 @@ class JpaOperatorMapper {
     OPERATOR_PREDICATE_MAP.put(Operator.IS_NOT_NULL, (path, value, cb) -> getIsNotNull(path, cb));
   }
 
-  private static Predicate getIsNotNull(Path<?> path, CriteriaBuilder cb) {
-    return cb.isNotNull(path);
-  }
-
   private static Predicate getIsNull(Path<?> path, CriteriaBuilder cb) {
     return cb.isNull(path);
+  }
+
+  private static Predicate getIsNotNull(Path<?> path, CriteriaBuilder cb) {
+    return cb.isNotNull(path);
   }
 
   private static Predicate getNotEquals(Path<?> path, Object value, CriteriaBuilder cb) {
@@ -53,7 +53,7 @@ class JpaOperatorMapper {
   }
 
   private static Predicate getLike(Path<?> path, Object value, CriteriaBuilder cb) {
-    return cb.like(cb.lower(path.as(String.class)), value.toString().toLowerCase());
+    return cb.and(cb.like(cb.lower(path.as(String.class)), value.toString().toLowerCase()), getIsNotNull(path, cb));
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
