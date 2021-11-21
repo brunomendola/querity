@@ -13,7 +13,7 @@ import org.testcontainers.utility.DockerImageName;
     "spring.datasource.driver-class-name=org.postgresql.Driver",
     "spring.jpa.hibernate.ddl-auto=create-drop"
 })
-class QuerityPostgresqlJpaImplTests extends QuerityJpaImplTests {
+class PostgresqlQuerityJpaImplTests extends QuerityJpaImplTests {
 
   public static final String POSTGRES_DOCKER_IMAGE = "postgres:14.1";
 

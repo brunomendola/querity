@@ -7,7 +7,7 @@ import java.util.Comparator;
 @TestPropertySource(properties = {
     "spring.datasource.driver-class-name=org.h2.Driver"
 })
-class QuerityH2JpaImplTests extends QuerityJpaImplTests {
+class H2QuerityJpaImplTests extends QuerityJpaImplTests {
 
   /**
    * Overridden because sort behaves differently in H2 regarding null values
