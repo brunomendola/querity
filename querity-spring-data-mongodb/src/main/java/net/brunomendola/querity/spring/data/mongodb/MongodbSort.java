@@ -3,7 +3,7 @@ package net.brunomendola.querity.spring.data.mongodb;
 import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.Sort;
 
-public class MongodbSort {
+class MongodbSort {
   @Delegate
   private final Sort sort;
 

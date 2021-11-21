@@ -8,7 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class JpaNotCondition extends JpaCondition {
+class JpaNotCondition extends JpaCondition {
   @Delegate
   private final NotCondition notCondition;
 

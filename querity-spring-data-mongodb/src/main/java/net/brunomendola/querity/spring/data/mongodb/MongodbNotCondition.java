@@ -4,7 +4,7 @@ import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.NotCondition;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-public class MongodbNotCondition extends MongodbCondition {
+class MongodbNotCondition extends MongodbCondition {
   @Delegate
   private final NotCondition notCondition;
 
