@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import lombok.SneakyThrows;
 import net.brunomendola.querity.api.*;
 
 import java.io.IOException;
@@ -33,7 +32,6 @@ public class ConditionDeserializer extends StdDeserializer<Condition> {
     return parseCondition(root, jsonParser);
   }
 
-  @SneakyThrows
   private static Condition parseCondition(JsonNode jsonNode, JsonParser jsonParser) {
     JsonParser jp = jsonNode.traverse();
     jp.setCodec(jsonParser.getCodec());
