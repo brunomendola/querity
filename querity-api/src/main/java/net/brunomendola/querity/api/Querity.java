@@ -6,6 +6,10 @@ import java.util.List;
 public interface Querity {
   <T> List<T> findAll(Class<T> entityClass, Query query);
 
+  static Query.QueryBuilder query() {
+    return Query.builder();
+  }
+
   static SimpleCondition filterBy(String propertyName, Operator operator, Object value) {
     return SimpleCondition.builder()
         .propertyName(propertyName).operator(operator).value(value).build();

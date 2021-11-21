@@ -31,10 +31,21 @@ public class Query {
   }
 
   public static class QueryBuilder {
+    private Pagination pagination;
     private List<Sort> sort = new ArrayList<>();
 
     public QueryBuilder sort(Sort... sort) {
       this.sort = Arrays.asList(sort);
+      return this;
+    }
+
+    public QueryBuilder pagination(Pagination pagination) {
+      this.pagination = pagination;
+      return this;
+    }
+
+    public QueryBuilder pagination(Integer page, Integer pageSize) {
+      this.pagination = Querity.paged(page, pageSize);
       return this;
     }
   }

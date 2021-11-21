@@ -43,7 +43,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenEmptyFilter_whenFilterAll_thenReturnAllTheElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).hasSize(6);
@@ -52,7 +52,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("lastName", EQUALS, "Skywalker"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -62,7 +62,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithIntegerEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("children", EQUALS, 2))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -74,7 +74,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithIntegerEqualsConditionAsString_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("children", EQUALS, "2"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -86,7 +86,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithBigDecimalEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("height", EQUALS, new BigDecimal("1.72")))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -98,7 +98,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithBigDecimalEqualsConditionAsString_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("height", EQUALS, "1.72"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -110,7 +110,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithBigDecimalGreaterThanCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("height", GREATER_THAN, "1.72"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -122,7 +122,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithBigDecimalGreaterThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("height", GREATER_THAN_EQUALS, "1.72"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -134,7 +134,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithBigDecimalLesserThanCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("height", LESSER_THAN, "1.72"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -146,7 +146,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithBigDecimalLesserThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("height", LESSER_THAN_EQUALS, "1.72"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -158,7 +158,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringNotEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("lastName", NOT_EQUALS, "Skywalker"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -168,7 +168,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringStartsWithCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("lastName", STARTS_WITH, "Sky"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -178,7 +178,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringEndsWithCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("lastName", ENDS_WITH, "walker"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -188,7 +188,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringContainsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("lastName", CONTAINS, "walk"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -200,7 +200,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringIsNullCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("lastName", IS_NULL))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -210,7 +210,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringIsNotNullCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("lastName", IS_NOT_NULL))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -220,7 +220,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithTwoStringEqualsConditionsWithAndLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(and(
             filterBy("lastName", EQUALS, "Skywalker"),
             filterBy("firstName", EQUALS, "Luke")
@@ -235,7 +235,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithTwoStringEqualsConditionsWithOrLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(or(
             filterBy("lastName", EQUALS, "Skywalker"),
             filterBy("lastName", EQUALS, "Kenobi")
@@ -250,7 +250,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithNestedConditions_whenFindAll_thenReturnListOfEntity() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(and(
             filterBy("lastName", EQUALS, "Skywalker"),
             or(
@@ -268,7 +268,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithStringEqualsConditionOnNestedField_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(filterBy("address.city", EQUALS, "Tatooine"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -278,8 +278,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenPagination_whenFilterAll_thenReturnThePageElements() {
-    Query query = Query.builder()
-        .pagination(paged(2, 3))
+    Query query = Querity.query()
+        .pagination(2, 3)
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).hasSize(3);
@@ -288,7 +288,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenSort_whenFilterAll_thenReturnSortedElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .sort(sortBy("lastName"), sortBy("firstName"))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -308,7 +308,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithNotConditionWithStringEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(not(filterBy("lastName", EQUALS, "Skywalker")))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
@@ -318,7 +318,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithNotConditionWithTwoStringEqualsConditionsWithAndLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(not(and(
             filterBy("lastName", EQUALS, "Skywalker"),
             filterBy("firstName", EQUALS, "Luke")
@@ -333,7 +333,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithNotConditionWithTwoStringEqualsConditionsWithOrLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(not(or(
             filterBy("lastName", EQUALS, "Skywalker"),
             filterBy("lastName", EQUALS, "Kenobi")
@@ -348,7 +348,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
 
   @Test
   void givenFilterWithNotConditionWithNestedConditions_whenFindAll_thenReturnListOfEntity() {
-    Query query = Query.builder()
+    Query query = Querity.query()
         .filter(not(and(
             filterBy("lastName", EQUALS, "Skywalker"),
             or(

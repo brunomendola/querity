@@ -50,17 +50,38 @@ implementation "net.brunomendola.querity:querity-spring-data-jpa:${querity.versi
 
 ### Usage
 
-```
-@Autowired
-Querity querity;
+```java
+import static net.brunomendola.querity.api.Querity.*;
+import static net.brunomendola.querity.api.Operator.*;
+import static net.brunomendola.querity.api.Sort.Direction.*;
 
-public List<Person> getPeople() {
-    Query query = Query.builder()
-        // add filters, sorting, etc.
+@Service
+public class MyService {
+
+  @Autowired
+  Querity querity;
+
+  public List<Person> getPeople() {
+    Query query = Querity.query()
+        // customize filters, sorting, etc.
+        .filters(
+            not(and(
+                filterBy("lastName", EQUALS, "Skywalker"),
+                filterBy("firstName", EQUALS, "Luke")
+            ))
+        )
+        .pagination(1, 10)
+        .sort(sortBy("lastName"), sortBy("birthDate", DESC))
         .build();
     return querity.findAll(Person.class, query);
+  }
 }
 ```
+
+The query above returns the first of pages with max 10 elements, of all people NOT named Luke Skywalker, sorted by last
+name and then birthdate descending.
+
+> Note the static imports to improve the readability.
 
 ## Authors
 
