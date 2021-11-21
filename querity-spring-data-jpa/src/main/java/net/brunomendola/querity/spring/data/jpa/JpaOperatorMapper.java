@@ -1,5 +1,7 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.SimpleCondition;
 
@@ -7,6 +9,7 @@ import javax.persistence.criteria.*;
 import java.util.EnumMap;
 import java.util.Map;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class JpaOperatorMapper {
   static final Map<Operator, JpaOperatorPredicateProvider> OPERATOR_PREDICATE_MAP = new EnumMap<>(Operator.class);
 

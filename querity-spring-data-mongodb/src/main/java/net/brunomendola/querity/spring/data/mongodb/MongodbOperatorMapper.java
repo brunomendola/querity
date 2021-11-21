@@ -1,5 +1,7 @@
 package net.brunomendola.querity.spring.data.mongodb;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.SimpleCondition;
 import net.brunomendola.querity.common.util.PropertyUtils;
@@ -8,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import java.util.EnumMap;
 import java.util.Map;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MongodbOperatorMapper {
   static final Map<Operator, MongodbOperatorCriteriaProvider> OPERATOR_CRITERIA_MAP = new EnumMap<>(Operator.class);
 
