@@ -25,7 +25,8 @@ class MongodbConditionTests {
 
   @Test
   void givenNotSupportedCondition_whenOf_theThrowIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> MongodbCondition.of(new MyCondition()),
+    Condition condition = new MyCondition();
+    assertThrows(IllegalArgumentException.class, () -> MongodbCondition.of(condition),
         "Condition class MyCondition is not supported by the MongoDB module");
   }
 

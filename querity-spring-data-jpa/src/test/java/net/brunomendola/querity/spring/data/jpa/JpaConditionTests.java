@@ -25,7 +25,8 @@ class JpaConditionTests {
 
   @Test
   void givenNotSupportedCondition_whenOf_theThrowIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> JpaCondition.of(new MyCondition()),
+    Condition condition = new MyCondition();
+    assertThrows(IllegalArgumentException.class, () -> JpaCondition.of(condition),
         "Condition class MyCondition is not supported by the JPA module");
   }
 
