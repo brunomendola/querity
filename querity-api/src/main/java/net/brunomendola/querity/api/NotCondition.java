@@ -13,4 +13,9 @@ public class NotCondition implements Condition {
   @NonNull
   @JsonProperty("not")
   private Condition condition;
+
+  @Override
+  public boolean isEmpty() {
+    return this.condition.isEmpty();
+  }
 }
