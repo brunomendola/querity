@@ -418,6 +418,24 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
         .collect(Collectors.toList()));
   }
 
+  @Test
+  void givenNullQuery_whenCount_thenReturnAllTheElementsCount() {
+    Long count = querity.count(getEntityClass(), null);
+    assertThat(count).isEqualTo(6);
+  }
+
+  @Test
+  void givenEmptyFilter_whenCount_thenReturnAllTheElementsCount() {
+    Long count = querity.count(getEntityClass(), and());
+    assertThat(count).isEqualTo(6);
+  }
+
+  @Test
+  void givenFilterWithStringEqualsCondition_whenCount_thenReturnOnlyFilteredElementsCount() {
+    Long count = querity.count(getEntityClass(), filterBy("lastName", EQUALS, "Skywalker"));
+    assertThat(count).isEqualTo(2);
+  }
+
   @SneakyThrows
   private List<T> getEntities() {
     List<T> entities = CsvUtils.readCsv("/querity/test-data.csv", getEntityClass());

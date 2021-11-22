@@ -61,25 +61,32 @@ public class MyService {
   @Autowired
   Querity querity;
 
-  public List<Person> getPeople() {
+  public Result<Person> getPeople() {
     Query query = Querity.query()
-        // customize filters, sorting, etc.
-        .filters(
+        // customize filters, pagination, sorting...
+        .filter(
             not(and(
                 filterBy("lastName", EQUALS, "Skywalker"),
                 filterBy("firstName", EQUALS, "Luke")
             ))
         )
-        .pagination(1, 10)
         .sort(sortBy("lastName"), sortBy("birthDate", DESC))
+        .pagination(1, 10)
         .build();
-    return querity.findAll(Person.class, query);
+    List<Person> items = querity.findAll(Person.class, query);
+    Long totalCount = querity.count(Person.class, query.getFilter());
+    return new Result<>(items, totalCount);
+  }
+
+  record Result<T>(List<T> items, Long totalCount) {
   }
 }
 ```
 
-The query above returns the first of pages with max 10 elements, of all people NOT named Luke Skywalker, sorted by last
-name and then birthdate descending.
+In the above example, the `findAll` method returns the first of n pages with max 10 elements of all people NOT named
+Luke Skywalker, sorted by last name and then birthdate descending.<br />
+The `count` method returns the total filtered items count excluding pagination (the record keyword is implemented from
+Java 14).
 
 > Note the static imports to improve the readability.
 

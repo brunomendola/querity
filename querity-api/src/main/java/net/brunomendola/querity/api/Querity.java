@@ -6,6 +6,8 @@ import java.util.List;
 public interface Querity {
   <T> List<T> findAll(Class<T> entityClass, Query query);
 
+  <T> Long count(Class<T> entityClass, Condition condition);
+
   static Query.QueryBuilder query() {
     return Query.builder();
   }

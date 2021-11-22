@@ -1,7 +1,10 @@
 package net.brunomendola.querity.spring.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.brunomendola.querity.api.Condition;
 import net.brunomendola.querity.api.Query;
+import net.brunomendola.querity.spring.web.propertyeditor.ConditionJsonPropertyEditor;
+import net.brunomendola.querity.spring.web.propertyeditor.QueryJsonPropertyEditor;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.Validator;
@@ -20,8 +23,10 @@ public class QuerityWebMvcSupport extends WebMvcConfigurationSupport {
   @NonNull
   protected ConfigurableWebBindingInitializer getConfigurableWebBindingInitializer(@NonNull FormattingConversionService mvcConversionService, @NonNull Validator mvcValidator) {
     ConfigurableWebBindingInitializer initializer = super.getConfigurableWebBindingInitializer(mvcConversionService, mvcValidator);
-    initializer.setPropertyEditorRegistrar(propertyEditorRegistry ->
-        propertyEditorRegistry.registerCustomEditor(Query.class, new QueryPropertyEditor(objectMapper)));
+    initializer.setPropertyEditorRegistrar(propertyEditorRegistry -> {
+      propertyEditorRegistry.registerCustomEditor(Query.class, new QueryJsonPropertyEditor(objectMapper));
+      propertyEditorRegistry.registerCustomEditor(Condition.class, new ConditionJsonPropertyEditor(objectMapper));
+    });
     return initializer;
   }
 }

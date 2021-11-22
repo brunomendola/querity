@@ -1,16 +1,16 @@
-package net.brunomendola.querity.spring.web;
+package net.brunomendola.querity.spring.web.propertyeditor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.brunomendola.querity.api.Query;
+import org.springframework.core.GenericTypeResolver;
 import org.springframework.util.StringUtils;
 
 import java.beans.PropertyEditorSupport;
 
-public class QueryPropertyEditor extends PropertyEditorSupport {
+public abstract class AbstractJsonPropertyEditor<T> extends PropertyEditorSupport {
   private final ObjectMapper objectMapper;
 
-  public QueryPropertyEditor(ObjectMapper objectMapper) {
+  public AbstractJsonPropertyEditor(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 
@@ -19,14 +19,18 @@ public class QueryPropertyEditor extends PropertyEditorSupport {
     if (!StringUtils.hasText(text)) {
       setValue(null);
     } else {
-      Query query;
+      T value;
       try {
-        query = objectMapper.readValue(text, Query.class);
+        value = objectMapper.readValue(text, getPropertyClass());
       } catch (JsonProcessingException e) {
         throw new IllegalArgumentException(e);
       }
-      setValue(query);
+      setValue(value);
     }
   }
 
+  @SuppressWarnings("unchecked")
+  private Class<T> getPropertyClass() {
+    return (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), AbstractJsonPropertyEditor.class);
+  }
 }

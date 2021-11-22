@@ -1,6 +1,10 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import lombok.NonNull;
+import net.brunomendola.querity.api.Condition;
+import net.brunomendola.querity.api.Pagination;
 import net.brunomendola.querity.api.Query;
+import net.brunomendola.querity.api.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -24,35 +28,63 @@ class JpaQueryFactory<T> {
     CriteriaQuery<T> cq = cb.createQuery(entityClass);
     Root<T> root = cq.from(entityClass);
 
-    if (query != null && query.hasFilter())
-      cq.where(getPredicate(root, cq, cb));
+    applyFilters(root, cq, cb);
+    applySorting(root, cq, cb);
 
-    if (query != null && query.hasSort()) {
-      cq.orderBy(getOrder(root, cb));
-    }
+    TypedQuery<T> tq = createTypedQuery(cq);
 
-    TypedQuery<T> tq = entityManager.createQuery(cq);
-
-    if (query != null && query.hasPagination())
-      tq = applyPagination(tq);
+    applyPagination(tq);
 
     return tq;
   }
 
-  private Predicate getPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
-    return JpaCondition.of(query.getFilter()).toPredicate(root, cq, cb);
+  public TypedQuery<Long> getJpaCountQuery() {
+    CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+    Root<T> root = cq.from(entityClass);
+
+    applySelectCount(root, cq, cb);
+    applyFilters(root, cq, cb);
+
+    return createTypedQuery(cq);
   }
 
-  private List<Order> getOrder(Root<T> root, CriteriaBuilder cb) {
-    return query.getSort().stream()
+  private void applySelectCount(Root<T> root, CriteriaQuery<Long> cq, CriteriaBuilder cb) {
+    cq.select(cb.count(root));
+  }
+
+  private void applyFilters(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+    if (query != null && query.hasFilter())
+      cq.where(getPredicate(query.getFilter(), root, cq, cb));
+  }
+
+  private static <T> Predicate getPredicate(@NonNull Condition filter, Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+    return JpaCondition.of(filter).toPredicate(root, cq, cb);
+  }
+
+  private void applySorting(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
+    if (query != null && query.hasSort())
+      cq.orderBy(getOrders(query.getSort(), root, cb));
+  }
+
+  private static <T> List<Order> getOrders(@NonNull List<Sort> sort, Root<T> root, CriteriaBuilder cb) {
+    return sort.stream()
         .map(JpaSort::new)
         .map(jpaSort -> jpaSort.toOrder(root, cb))
         .collect(Collectors.toList());
   }
 
-  private TypedQuery<T> applyPagination(TypedQuery<T> tq) {
-    return tq
-        .setMaxResults(query.getPagination().getPageSize())
-        .setFirstResult(query.getPagination().getPageSize() * (query.getPagination().getPage() - 1));
+  private void applyPagination(TypedQuery<T> tq) {
+    if (query != null && query.hasPagination())
+      applyPagination(query.getPagination(), tq);
+  }
+
+  private static <T> void applyPagination(@NonNull Pagination pagination, TypedQuery<T> tq) {
+    tq.setMaxResults(pagination.getPageSize())
+        .setFirstResult(pagination.getPageSize() * (pagination.getPage() - 1));
+  }
+
+  private <R> TypedQuery<R> createTypedQuery(CriteriaQuery<R> cq) {
+    return entityManager.createQuery(cq);
   }
 }

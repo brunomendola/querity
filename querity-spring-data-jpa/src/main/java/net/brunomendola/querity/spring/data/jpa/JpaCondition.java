@@ -13,7 +13,7 @@ import static net.brunomendola.querity.common.util.ReflectionUtils.findSubclasse
 
 abstract class JpaCondition {
 
-  public abstract <T> Predicate toPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb);
+  public abstract <T> Predicate toPredicate(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb);
 
   private static final Set<Class<? extends JpaCondition>> JPA_CONDITION_IMPLEMENTATIONS = findSubclasses(JpaCondition.class);
 

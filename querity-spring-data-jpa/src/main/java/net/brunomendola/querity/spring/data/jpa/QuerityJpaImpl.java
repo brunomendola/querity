@@ -1,5 +1,6 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import net.brunomendola.querity.api.Condition;
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
 
@@ -17,7 +18,18 @@ public class QuerityJpaImpl implements Querity {
 
   @Override
   public <T> List<T> findAll(Class<T> entityClass, Query query) {
-    TypedQuery<T> jpaQuery = new JpaQueryFactory<>(entityClass, query, entityManager).getJpaQuery();
+    TypedQuery<T> jpaQuery = getJpaQueryFactory(entityClass, query).getJpaQuery();
     return jpaQuery.getResultList();
+  }
+
+  @Override
+  public <T> Long count(Class<T> entityClass, Condition condition) {
+    Query query = Querity.query().filter(condition).build();
+    TypedQuery<Long> jpaQuery = getJpaQueryFactory(entityClass, query).getJpaCountQuery();
+    return jpaQuery.getSingleResult();
+  }
+
+  private <T> JpaQueryFactory<T> getJpaQueryFactory(Class<T> entityClass, Query query) {
+    return new JpaQueryFactory<>(entityClass, query, entityManager);
   }
 }

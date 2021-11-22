@@ -18,11 +18,11 @@ class JpaConditionsWrapper extends JpaCondition {
   }
 
   @Override
-  public <T> Predicate toPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
+  public <T> Predicate toPredicate(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
     return getLogicPredicate(getConditionPredicates(root, cq, cb), cb);
   }
 
-  private <T> Predicate[] getConditionPredicates(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
+  private <T> Predicate[] getConditionPredicates(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
     return getConditions().stream()
         .map(JpaCondition::of)
         .map(c -> c.toPredicate(root, cq, cb))

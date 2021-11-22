@@ -9,11 +9,17 @@ import static net.brunomendola.querity.api.Operator.*;
 import static net.brunomendola.querity.api.Querity.*;
 import static net.brunomendola.querity.api.Sort.Direction.DESC;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuerityApiTests {
 
   private final Querity querity = new QuerityDummyImpl();
+
+  @Test
+  void givenSimpleCondition_whenCount_thenReturnALong() {
+    Long count = querity.count(Person.class,
+        filterBy("lastName", EQUALS, "Skywalker"));
+    assertThat(count).isNotNull();
+  }
 
   @Test
   void givenEmptyQuery_whenFindAll_thenReturnListOfEntity() {

@@ -55,4 +55,45 @@ class QueritySpringWebTests {
         .andExpect(status().isOk())
         .andExpect(content().string(""));
   }
+
+  /**
+   * Tests JSON deserialization and serialization of a Condition object given as a REST endpoint query parameter
+   */
+  @ParameterizedTest
+  @ValueSource(strings = {
+      /* single simple condition */   "{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}",
+      /* no value condition */        "{\"propertyName\":\"lastName\",\"operator\":\"IS_NULL\"}",
+      /* conditions wrapper */        "{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}]}",
+      /* nested conditions wrapper */ "{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"},{\"logic\":\"OR\",\"conditions\":[{\"propertyName\":\"firstName\",\"operator\":\"EQUALS\",\"value\":\"Anakin\"},{\"propertyName\":\"firstName\",\"operator\":\"EQUALS\",\"value\":\"Luke\"}]}]}",
+      /* not single condition */      "{\"not\":{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}}",
+      /* not conditions wrapper */    "{\"not\":{\"logic\":\"AND\",\"conditions\":[{\"propertyName\":\"lastName\",\"operator\":\"EQUALS\",\"value\":\"Skywalker\"}]}}",
+  })
+  void givenJsonFilter_whenGetCount_thenReturnsTheSameFilterAsResponse(String filter) throws Exception {
+    mockMvc.perform(get("/count")
+            .queryParam("filter", filter))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json(filter, false));
+  }
+
+  @Test
+  void givenInvalidJsonFilter_whenGetCount_thenReturnsBadRequest() throws Exception {
+    mockMvc.perform(get("/count")
+            .queryParam("filter", "{"))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void givenEmptyJsonFilter_whenGetCount_thenReturnsBadRequest() throws Exception {
+    mockMvc.perform(get("/count")
+            .queryParam("filter", "{}"))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void givenNoFilter_whenGetCount_thenReturnsEmptyResponse() throws Exception {
+    mockMvc.perform(get("/count"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(""));
+  }
 }

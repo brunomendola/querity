@@ -10,6 +10,7 @@ import net.brunomendola.querity.api.*;
 import java.io.IOException;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -67,10 +68,20 @@ public class ConditionDeserializer extends StdDeserializer<Condition> {
   }
 
   private static SimpleCondition parseSimpleCondition(JsonNode jsonNode) {
-    return SimpleCondition.builder()
-        .propertyName(jsonNode.get(FIELD_SIMPLE_CONDITION_PROPERTY_NAME).asText())
-        .operator(Operator.valueOf(jsonNode.get(FIELD_SIMPLE_CONDITION_OPERATOR).asText()))
-        .value(jsonNode.hasNonNull(FIELD_SIMPLE_CONDITION_VALUE) ? jsonNode.get(FIELD_SIMPLE_CONDITION_VALUE).asText() : null)
-        .build();
+    SimpleCondition.SimpleConditionBuilder builder = SimpleCondition.builder();
+    builder = setIfNotNull(jsonNode, builder, FIELD_SIMPLE_CONDITION_PROPERTY_NAME, JsonNode::asText, builder::propertyName);
+    builder = setIfNotNull(jsonNode, builder, FIELD_SIMPLE_CONDITION_OPERATOR, node -> Operator.valueOf(node.asText()), builder::operator);
+    builder = setIfNotNull(jsonNode, builder, FIELD_SIMPLE_CONDITION_VALUE, JsonNode::asText, builder::value);
+    try {
+      return builder.build();
+    } catch (Exception ex) {
+      throw new IllegalArgumentException(ex.getMessage(), ex);
+    }
+  }
+
+  private static <T> SimpleCondition.SimpleConditionBuilder setIfNotNull(JsonNode jsonNode, SimpleCondition.SimpleConditionBuilder builder, String fieldName, Function<JsonNode, T> valueProvider, Function<T, SimpleCondition.SimpleConditionBuilder> setValueFunction) {
+    if (jsonNode.hasNonNull(fieldName))
+      builder = setValueFunction.apply(valueProvider.apply(jsonNode.get(fieldName)));
+    return builder;
   }
 }

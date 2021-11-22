@@ -9,18 +9,18 @@ import lombok.extern.jackson.Jacksonized;
 public class SimpleCondition implements Condition {
   @NonNull
   private final String propertyName;
-  @Builder.Default
   @NonNull
   private Operator operator = Operator.EQUALS;
   private final Object value;
 
   @Builder
   @Jacksonized
-  public SimpleCondition(@NonNull String propertyName, @NonNull Operator operator, Object value) {
-    validate(operator, value);
+  public SimpleCondition(@NonNull String propertyName, Operator operator, Object value) {
     this.propertyName = propertyName;
-    this.operator = operator;
+    if (operator != null)
+      this.operator = operator;
     this.value = value;
+    validate(this.operator, this.value);
   }
 
   private void validate(@NonNull Operator operator, Object value) {

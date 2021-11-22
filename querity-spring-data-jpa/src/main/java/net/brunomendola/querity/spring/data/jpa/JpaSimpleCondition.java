@@ -17,7 +17,7 @@ class JpaSimpleCondition extends JpaCondition {
   }
 
   @Override
-  public <T> Predicate toPredicate(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {
+  public <T> Predicate toPredicate(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
     return JpaOperatorMapper.getPredicate(condition, root, cb);
   }
 }
