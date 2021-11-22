@@ -56,6 +56,14 @@ class QueritySpringWebTests {
         .andExpect(content().string(""));
   }
 
+  @Test
+  void givenEmptyStringAsQuery_whenGetQuery_thenReturnsEmptyResponse() throws Exception {
+    mockMvc.perform(get("/query")
+            .queryParam("q", ""))
+        .andExpect(status().isOk())
+        .andExpect(content().string(""));
+  }
+
   /**
    * Tests JSON deserialization and serialization of a Condition object given as a REST endpoint query parameter
    */
