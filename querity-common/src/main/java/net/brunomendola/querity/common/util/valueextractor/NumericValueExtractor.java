@@ -16,7 +16,7 @@ public class NumericValueExtractor implements PropertyValueExtractor<Number> {
 
   @Override
   public Number extractValue(Object value) {
-    if (isNumericType(value.getClass()))
+    if (value == null || isNumericType(value.getClass()))
       return (Number) value;  // at this point we're sure it's not primitive anymore because it's been auto-boxed
     return getNumericValue(value.toString());
   }
@@ -35,7 +35,6 @@ public class NumericValueExtractor implements PropertyValueExtractor<Number> {
   }
 
   private static Number getNumericValue(String value) {
-    if (value == null) return null;
     if (!NumberUtils.isParsable(value)) throw new IllegalArgumentException(String.format("Not a number: %s", value));
     return isFloatingPointNumber(value) ?
         new BigDecimal(value) :

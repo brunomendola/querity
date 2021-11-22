@@ -23,7 +23,7 @@ public class SimpleCondition implements Condition {
     validate(this.operator, this.value);
   }
 
-  private void validate(@NonNull Operator operator, Object value) {
+  private void validate(Operator operator, Object value) {
     if (operator.getRequiredValuesCount() != getValuesCount(value))
       throw new IllegalArgumentException(
           String.format("The operator %s requires %d value(s)", operator, operator.getRequiredValuesCount()));

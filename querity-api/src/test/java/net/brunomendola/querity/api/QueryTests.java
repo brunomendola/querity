@@ -14,6 +14,12 @@ class QueryTests {
   }
 
   @Test
+  void givenFilterWithEmptyCondition_whenHasFilter_thenReturnsFalse() {
+    Query query = Querity.query().filter(and()).build();
+    assertThat(query.hasFilter()).isFalse();
+  }
+
+  @Test
   void givenFilter_whenHasFilter_thenReturnsTrue() {
     Query query = Querity.query().filter(filterBy("lastName", EQUALS, "Skywalker")).build();
     assertThat(query.hasFilter()).isTrue();

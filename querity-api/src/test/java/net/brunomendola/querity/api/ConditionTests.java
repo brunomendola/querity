@@ -10,6 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ConditionTests {
   @Test
+  void givenNoPropertyName_whenBuildSimpleCondition_thenThrowNullPointerException() {
+    assertThrows(NullPointerException.class,
+        () -> SimpleCondition.builder().build(),
+        "propertyName is marked non-null but is null");
+  }
+
+  @Test
   void givenNoOperator_whenBuildSimpleCondition_thenReturnEqualsCondition() {
     SimpleCondition condition = filterBy("lastName", "Skywalker");
     assertThat(condition.getPropertyName()).isEqualTo("lastName");
@@ -18,7 +25,7 @@ class ConditionTests {
   }
 
   @Test
-  void givenIsNullCondition_whenBuild_thenReturnIsNullConditionWithoutValue() {
+  void givenIsNullCondition_whenBuildSimpleCondition_thenReturnIsNullConditionWithoutValue() {
     SimpleCondition condition = getIsNullCondition();
     assertThat(condition.getPropertyName()).isEqualTo("lastName");
     assertThat(condition.getOperator()).isEqualTo(IS_NULL);
@@ -26,13 +33,13 @@ class ConditionTests {
   }
 
   @Test
-  void givenEqualsConditionWithoutValue_whenBuild_thenThrowIllegalArgumentException() {
+  void givenEqualsConditionWithoutValue_whenBuildSimpleCondition_thenThrowIllegalArgumentException() {
     assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", EQUALS),
         "The operator EQUALS requires 1 value(s)");
   }
 
   @Test
-  void givenIsNullConditionWithValue_whenBuild_thenThrowIllegalArgumentException() {
+  void givenIsNullConditionWithValue_whenBuildSimpleCondition_thenThrowIllegalArgumentException() {
     assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", IS_NULL, "value"),
         "The operator IS_NULL requires 0 value(s)");
   }

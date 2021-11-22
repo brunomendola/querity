@@ -1,6 +1,5 @@
 package net.brunomendola.querity.spring.data.jpa;
 
-import lombok.NonNull;
 import net.brunomendola.querity.api.Condition;
 import net.brunomendola.querity.api.Pagination;
 import net.brunomendola.querity.api.Query;
@@ -58,7 +57,7 @@ class JpaQueryFactory<T> {
       cq.where(getPredicate(query.getFilter(), root, cq, cb));
   }
 
-  private static <T> Predicate getPredicate(@NonNull Condition filter, Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+  private static <T> Predicate getPredicate(Condition filter, Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
     return JpaCondition.of(filter).toPredicate(root, cq, cb);
   }
 
@@ -67,7 +66,7 @@ class JpaQueryFactory<T> {
       cq.orderBy(getOrders(query.getSort(), root, cb));
   }
 
-  private static <T> List<Order> getOrders(@NonNull List<Sort> sort, Root<T> root, CriteriaBuilder cb) {
+  private static <T> List<Order> getOrders(List<Sort> sort, Root<T> root, CriteriaBuilder cb) {
     return sort.stream()
         .map(JpaSort::new)
         .map(jpaSort -> jpaSort.toOrder(root, cb))
@@ -79,7 +78,7 @@ class JpaQueryFactory<T> {
       applyPagination(query.getPagination(), tq);
   }
 
-  private static <T> void applyPagination(@NonNull Pagination pagination, TypedQuery<T> tq) {
+  private static <T> void applyPagination(Pagination pagination, TypedQuery<T> tq) {
     tq.setMaxResults(pagination.getPageSize())
         .setFirstResult(pagination.getPageSize() * (pagination.getPage() - 1));
   }

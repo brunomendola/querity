@@ -1,5 +1,6 @@
 package net.brunomendola.querity.common.util.valueextractor;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NumericValueExtractorTests {
 
@@ -30,6 +32,7 @@ class NumericValueExtractorTests {
 
   public static Stream<Arguments> provideGivenNumericInputAndExpectedNumber() {
     return Stream.of(
+        Arguments.of(null, null),
         Arguments.of("11", 11L),
         Arguments.of("0.12", new BigDecimal("0.12")),
         Arguments.of("0", 0L),
@@ -44,5 +47,13 @@ class NumericValueExtractorTests {
   @MethodSource("provideGivenNumericInputAndExpectedNumber")
   void givenNumericInput_whenExtractValue_thenReturnTheNumber(Object value, Object expectedNumber) {
     assertThat(valueExtractor.extractValue(value)).isEqualTo(expectedNumber);
+  }
+
+  @Test
+  void givenInvalidNumber_whenExtractValue_thenThrowIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class,
+        () -> valueExtractor.extractValue("notANumber"),
+        "Not a number: notANumber");
+
   }
 }
