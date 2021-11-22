@@ -10,7 +10,7 @@ import java.beans.PropertyEditorSupport;
 public abstract class AbstractJsonPropertyEditor<T> extends PropertyEditorSupport {
   private final ObjectMapper objectMapper;
 
-  public AbstractJsonPropertyEditor(ObjectMapper objectMapper) {
+  protected AbstractJsonPropertyEditor(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 
