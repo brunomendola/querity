@@ -12,6 +12,18 @@ public interface Querity {
     return Query.builder();
   }
 
+  /**
+   * Filter by propertyName EQUALS value
+   *
+   * @param propertyName the property name
+   * @param value        the value
+   * @return a SimpleCondition with {@link Operator#EQUALS}
+   */
+  static SimpleCondition filterBy(String propertyName, Object value) {
+    return SimpleCondition.builder()
+        .propertyName(propertyName).value(value).build();
+  }
+
   static SimpleCondition filterBy(String propertyName, Operator operator, Object value) {
     return SimpleCondition.builder()
         .propertyName(propertyName).operator(operator).value(value).build();

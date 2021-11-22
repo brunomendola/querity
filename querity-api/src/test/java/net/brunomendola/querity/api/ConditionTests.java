@@ -3,19 +3,49 @@ package net.brunomendola.querity.api;
 import org.junit.jupiter.api.Test;
 
 import static net.brunomendola.querity.api.Operator.EQUALS;
+import static net.brunomendola.querity.api.Operator.IS_NULL;
 import static net.brunomendola.querity.api.Querity.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ConditionTests {
   @Test
+  void givenNoOperator_whenBuildSimpleCondition_thenReturnEqualsCondition() {
+    SimpleCondition condition = filterBy("lastName", "Skywalker");
+    assertThat(condition.getPropertyName()).isEqualTo("lastName");
+    assertThat(condition.getOperator()).isEqualTo(EQUALS);
+    assertThat(condition.getValue()).isEqualTo("Skywalker");
+  }
+
+  @Test
+  void givenIsNullCondition_whenBuild_thenReturnIsNullConditionWithoutValue() {
+    SimpleCondition condition = getIsNullCondition();
+    assertThat(condition.getPropertyName()).isEqualTo("lastName");
+    assertThat(condition.getOperator()).isEqualTo(IS_NULL);
+    assertThat(condition.getValue()).isNull();
+  }
+
+  @Test
+  void givenEqualsConditionWithoutValue_whenBuild_thenThrowIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", EQUALS),
+        "The operator EQUALS requires 1 value(s)");
+  }
+
+  @Test
+  void givenIsNullConditionWithValue_whenBuild_thenThrowIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", IS_NULL, "value"),
+        "The operator IS_NULL requires 0 value(s)");
+  }
+
+  @Test
   void givenSimpleCondition_whenIsEmpty_thenReturnFalse() {
-    Condition condition = getSimpleCondition();
+    Condition condition = getEqualsCondition();
     assertThat(condition.isEmpty()).isFalse();
   }
 
   @Test
   void givenNotEmptyConditionsWrapper_whenIsEmpty_thenReturnFalse() {
-    Condition condition = and(getSimpleCondition());
+    Condition condition = and(getEqualsCondition());
     assertThat(condition.isEmpty()).isFalse();
   }
 
@@ -27,13 +57,13 @@ class ConditionTests {
 
   @Test
   void givenNotConditionWithSimpleCondition_whenIsEmpty_thenReturnFalse() {
-    Condition condition = not(getSimpleCondition());
+    Condition condition = not(getEqualsCondition());
     assertThat(condition.isEmpty()).isFalse();
   }
 
   @Test
   void givenNotConditionWithNotEmptyConditionsWrapper_whenIsEmpty_thenReturnFalse() {
-    Condition condition = not(and(getSimpleCondition()));
+    Condition condition = not(and(getEqualsCondition()));
     assertThat(condition.isEmpty()).isFalse();
   }
 
@@ -43,8 +73,11 @@ class ConditionTests {
     assertThat(condition.isEmpty()).isTrue();
   }
 
-  private static SimpleCondition getSimpleCondition() {
+  private static SimpleCondition getEqualsCondition() {
     return filterBy("lastName", EQUALS, "Skywalker");
   }
 
+  private static SimpleCondition getIsNullCondition() {
+    return filterBy("lastName", IS_NULL);
+  }
 }

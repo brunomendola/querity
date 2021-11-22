@@ -129,18 +129,6 @@ class QuerityApiTests {
   }
 
   @Test
-  void givenFilterWithEqualsConditionAndWithoutValue_whenBuild_thenThrowIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", EQUALS),
-        "The operator EQUALS requires 1 value(s)");
-  }
-
-  @Test
-  void givenFilterWithIsNullConditionAndValue_whenBuild_thenThrowIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> filterBy("lastName", IS_NULL, "value"),
-        "The operator IS_NULL requires 0 value(s)");
-  }
-
-  @Test
   void givenFilterWithNotConditionContainingSimpleCondition_whenFindAll_thenReturnListOfEntity() {
     List<Person> people = querity.findAll(Person.class,
         Querity.query()
