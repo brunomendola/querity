@@ -129,6 +129,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithNotBigDecimalGreaterThanCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(not(filterBy("height", GREATER_THAN, "1.72")))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> !(p.getHeight().compareTo(new BigDecimal("1.72")) > 0))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithBigDecimalGreaterThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Querity.query()
         .filter(filterBy("height", GREATER_THAN_EQUALS, "1.72"))
@@ -137,6 +149,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
     assertThat(result).hasSize(5);
     assertThat(result).isEqualTo(entities.stream()
         .filter(p -> p.getHeight().compareTo(new BigDecimal("1.72")) >= 0)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithNotBigDecimalGreaterThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(not(filterBy("height", GREATER_THAN_EQUALS, "1.72")))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(1);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> !(p.getHeight().compareTo(new BigDecimal("1.72")) >= 0))
         .collect(Collectors.toList()));
   }
 
@@ -153,6 +177,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithNotBigDecimalLesserThanCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(not(filterBy("height", LESSER_THAN, "1.72")))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(5);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> !(p.getHeight().compareTo(new BigDecimal("1.72")) < 0))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithBigDecimalLesserThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Querity.query()
         .filter(filterBy("height", LESSER_THAN_EQUALS, "1.72"))
@@ -165,6 +201,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithNotBigDecimalLesserThanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(not(filterBy("height", LESSER_THAN_EQUALS, "1.72")))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(4);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> !(p.getHeight().compareTo(new BigDecimal("1.72")) <= 0))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithStringNotEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Querity.query()
         .filter(filterBy("lastName", NOT_EQUALS, "Skywalker"))
@@ -172,6 +220,16 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).hasSize(4);
     assertThat(result).isEqualTo(entities.stream().filter(p -> !"Skywalker".equals(p.getLastName())).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithNotStringNotEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(not(filterBy("lastName", NOT_EQUALS, "Skywalker")))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream().filter(p -> "Skywalker".equals(p.getLastName())).collect(Collectors.toList()));
   }
 
   @Test
