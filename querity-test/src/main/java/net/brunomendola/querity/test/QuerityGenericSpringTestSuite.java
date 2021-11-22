@@ -331,6 +331,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenSortByNestedField_whenFilterAll_thenReturnSortedElements() {
+    Query query = Querity.query()
+        .sort(sortBy("address.city"))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    Comparator<T> comparator = Comparator
+        .comparing((T p) -> p.getAddress().getCity(), getSortComparator());
+    assertThat(result).hasSize(6);
+    assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+  }
+
+  @Test
   void givenSortByMultipleFields_whenFilterAll_thenReturnSortedElements() {
     Query query = Querity.query()
         .sort(sortBy("lastName"), sortBy("firstName"))
