@@ -11,8 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ConditionTests {
   @Test
   void givenNoPropertyName_whenBuildSimpleCondition_thenThrowNullPointerException() {
+    SimpleCondition.SimpleConditionBuilder builder = SimpleCondition.builder();
     assertThrows(NullPointerException.class,
-        () -> SimpleCondition.builder().build(),
+        builder::build,
         "propertyName is marked non-null but is null");
   }
 
