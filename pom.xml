@@ -11,6 +11,41 @@
 
   <name>querity-parent</name>
 
+  <inceptionYear>2021</inceptionYear>
+  <url>https://github.com/brunomendola/querity</url>
+
+  <developers>
+    <developer>
+      <name>Bruno Mendola</name>
+      <url>http://www.brunomendola.net</url>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://github.com/brunomendola/querity/blob/main/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/brunomendola/querity/issues</url>
+  </issueManagement>
+
+  <scm>
+    <url>https://github.com/brunomendola/querity</url>
+    <connection>scm:git:https://github.com/brunomendola/querity.git</connection>
+    <developerConnection>scm:git:https://github.com/brunomendola/querity.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <ciManagement>
+    <system>GitHub Actions</system>
+    <url>https://github.com/brunomendola/querity/actions</url>
+  </ciManagement>
+
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
