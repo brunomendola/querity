@@ -57,6 +57,8 @@
     <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>
     <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 
     <sonar.projectName>Querity</sonar.projectName>
@@ -147,6 +149,32 @@
             <phase>prepare-package</phase>
             <goals>
               <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven-source-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${maven-javadoc-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
             </goals>
           </execution>
         </executions>
