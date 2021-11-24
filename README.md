@@ -11,9 +11,22 @@ Generic interface to query a database.
 
 ## Description
 
-The aim of this project is to provide a simple fluent generic interface to query databases in Java applications.
+The aim of this project is to provide a simple generic interface, with fluent Java and REST APIs, to query databases in
+Java applications.
 
 The modules implement the support for different databases and frameworks.
+
+Why you should use Querity?
+
+✔ learn once, use everywhere
+
+✔ zero logic needed apart building a generic Query object
+
+✔ switch database without rewriting the logic of your application
+
+✔ ready to use REST API which implements filtering, sorting and pagination, to be consumed by your UI components
+
+✔ expose the same REST API in all your projects
 
 ## Getting Started
 
@@ -99,8 +112,8 @@ Contributors names and contact info
 
 ## Version History
 
-* No release yet
+See [Releases](https://github.com/brunomendola/querity/releases).
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the LICENSE file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
