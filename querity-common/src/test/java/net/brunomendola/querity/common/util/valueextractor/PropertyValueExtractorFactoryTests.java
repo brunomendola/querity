@@ -5,6 +5,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +23,11 @@ class PropertyValueExtractorFactoryTests {
         Arguments.of(MyClass.class, "bigDecimalValue", NumericValueExtractor.class),
         Arguments.of(MyClass.class, "doubleValue", NumericValueExtractor.class),
         Arguments.of(MyClass.class, "primitiveBooleanValue", BooleanValueExtractor.class),
-        Arguments.of(MyClass.class, "booleanValue", BooleanValueExtractor.class)
+        Arguments.of(MyClass.class, "booleanValue", BooleanValueExtractor.class),
+        Arguments.of(MyClass.class, "dateValue", DateValueExtractor.class),
+        Arguments.of(MyClass.class, "localDateValue", LocalDateValueExtractor.class),
+        Arguments.of(MyClass.class, "localDateTimeValue", LocalDateTimeValueExtractor.class),
+        Arguments.of(MyClass.class, "zonedDateTimeValue", ZonedDateTimeValueExtractor.class)
     );
   }
 
@@ -38,5 +46,9 @@ class PropertyValueExtractorFactoryTests {
     private double doubleValue;
     private boolean primitiveBooleanValue;
     private Boolean booleanValue;
+    private Date dateValue;
+    private LocalDate localDateValue;
+    private LocalDateTime localDateTimeValue;
+    private ZonedDateTime zonedDateTimeValue;
   }
 }

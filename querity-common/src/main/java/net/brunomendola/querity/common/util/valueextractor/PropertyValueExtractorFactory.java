@@ -15,7 +15,11 @@ public class PropertyValueExtractorFactory {
   private static final List<PropertyValueExtractor<?>> extractors = Arrays.asList(
       STRING_VALUE_EXTRACTOR,
       new NumericValueExtractor(),
-      new BooleanValueExtractor());
+      new BooleanValueExtractor(),
+      new DateValueExtractor(),
+      new LocalDateValueExtractor(),
+      new LocalDateTimeValueExtractor(),
+      new ZonedDateTimeValueExtractor());
 
   @SuppressWarnings("java:S1452")
   public static <T> PropertyValueExtractor<?> getPropertyValueExtractor(Class<T> beanClass, String propertyPath) {

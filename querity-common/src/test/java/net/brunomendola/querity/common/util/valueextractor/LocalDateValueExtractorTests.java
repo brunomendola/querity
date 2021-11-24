@@ -3,13 +3,16 @@ package net.brunomendola.querity.common.util.valueextractor;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
-class BooleanValueExtractorTests extends AbstractPropertyValueExtractorTests {
+class LocalDateValueExtractorTests extends AbstractPropertyValueExtractorTests {
 
   @Override
   protected PropertyValueExtractor<?> getValueExtractor() {
-    return new BooleanValueExtractor();
+    return new LocalDateValueExtractor();
   }
 
   public static Stream<Arguments> provideTypesAndCanHandle() {
@@ -17,20 +20,19 @@ class BooleanValueExtractorTests extends AbstractPropertyValueExtractorTests {
         Arguments.of(BigDecimal.class, false),
         Arguments.of(Integer.class, false),
         Arguments.of(String.class, false),
-        Arguments.of(Boolean.class, true)
+        Arguments.of(Boolean.class, false),
+        Arguments.of(LocalDate.class, true),
+        Arguments.of(LocalDateTime.class, false),
+        Arguments.of(ZonedDateTime.class, false)
     );
   }
 
   public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
+    LocalDate testValue = LocalDate.of(2021, 4, 17);
     return Stream.of(
         Arguments.of(null, null),
-        Arguments.of("true", Boolean.TRUE),
-        Arguments.of("false", Boolean.FALSE),
-        Arguments.of(true, Boolean.TRUE),
-        Arguments.of(false, Boolean.FALSE),
-        Arguments.of(Boolean.TRUE, Boolean.TRUE),
-        Arguments.of(Boolean.FALSE, Boolean.FALSE),
-        Arguments.of("notABoolean", Boolean.FALSE)
+        Arguments.of("2021-06-09", LocalDate.of(2021, 6, 9)),
+        Arguments.of(testValue, testValue)
     );
   }
 }

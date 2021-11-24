@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class NumericValueExtractorTests extends PropertyValueExtractorTests {
+class NumericValueExtractorTests extends AbstractPropertyValueExtractorTests {
 
   @Override
   protected PropertyValueExtractor<?> getValueExtractor() {

@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.GenericTypeResolver;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,6 +90,30 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
     assertThat(result).hasSize(1);
     assertThat(result).isEqualTo(entities.stream()
         .filter(p -> p.getChildren() != null && p.getChildren().equals(2))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithDateEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(filterBy("birthDate", EQUALS, LocalDate.of(1982, 7, 8)))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getBirthDate().isEqual(LocalDate.of(1982, 7, 8)))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithDateAsStringEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(filterBy("birthDate", EQUALS, "1982-07-08"))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getBirthDate().isEqual(LocalDate.of(1982, 7, 8)))
         .collect(Collectors.toList()));
   }
 
@@ -418,6 +443,18 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
     List<T> result = querity.findAll(getEntityClass(), query);
     Comparator<T> comparator = Comparator
         .comparing((T p) -> p.getLastName(), getSortComparator());
+    assertThat(result).hasSize(6);
+    assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenSortByDateField_whenFilterAll_thenReturnSortedElements() {
+    Query query = Querity.query()
+        .sort(sortBy("birthDate"))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    Comparator<T> comparator = Comparator
+        .comparing((T p) -> p.getBirthDate(), getSortComparator());
     assertThat(result).hasSize(6);
     assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
   }
