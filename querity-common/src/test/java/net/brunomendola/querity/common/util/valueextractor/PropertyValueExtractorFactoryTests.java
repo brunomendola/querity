@@ -17,7 +17,9 @@ class PropertyValueExtractorFactoryTests {
         Arguments.of(MyClass.class, "intValue", NumericValueExtractor.class),
         Arguments.of(MyClass.class, "integerValue", NumericValueExtractor.class),
         Arguments.of(MyClass.class, "bigDecimalValue", NumericValueExtractor.class),
-        Arguments.of(MyClass.class, "doubleValue", NumericValueExtractor.class)
+        Arguments.of(MyClass.class, "doubleValue", NumericValueExtractor.class),
+        Arguments.of(MyClass.class, "primitiveBooleanValue", BooleanValueExtractor.class),
+        Arguments.of(MyClass.class, "booleanValue", BooleanValueExtractor.class)
     );
   }
 
@@ -34,5 +36,7 @@ class PropertyValueExtractorFactoryTests {
     private Integer integerValue;
     private BigDecimal bigDecimalValue;
     private double doubleValue;
+    private boolean primitiveBooleanValue;
+    private Boolean booleanValue;
   }
 }

@@ -17,7 +17,7 @@ class JpaNotCondition extends JpaCondition {
   }
 
   @Override
-  public <T> Predicate toPredicate(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-    return cb.not(JpaCondition.of(getCondition()).toPredicate(root, cq, cb));
+  public <T> Predicate toPredicate(Class<T> entityClass, Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+    return cb.not(JpaCondition.of(getCondition()).toPredicate(entityClass, root, cq, cb));
   }
 }

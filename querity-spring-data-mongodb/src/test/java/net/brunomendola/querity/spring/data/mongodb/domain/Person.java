@@ -28,4 +28,5 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Addre
   private Pet favouritePet;
   @NonNull
   private Address address;
+  private boolean jediMaster;
 }

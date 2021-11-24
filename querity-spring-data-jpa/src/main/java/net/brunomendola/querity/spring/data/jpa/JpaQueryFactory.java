@@ -54,11 +54,11 @@ class JpaQueryFactory<T> {
 
   private void applyFilters(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
     if (query != null && query.hasFilter())
-      cq.where(getPredicate(query.getFilter(), root, cq, cb));
+      cq.where(getPredicate(entityClass, query.getFilter(), root, cq, cb));
   }
 
-  private static <T> Predicate getPredicate(Condition filter, Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-    return JpaCondition.of(filter).toPredicate(root, cq, cb);
+  private static <T> Predicate getPredicate(Class<T> entityClass, Condition filter, Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+    return JpaCondition.of(filter).toPredicate(entityClass, root, cq, cb);
   }
 
   private void applySorting(Root<T> root, CriteriaQuery<T> cq, CriteriaBuilder cb) {

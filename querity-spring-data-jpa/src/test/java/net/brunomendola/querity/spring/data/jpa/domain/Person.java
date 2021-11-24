@@ -29,4 +29,5 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   @OneToOne(cascade = CascadeType.ALL)
   @NonNull
   private Address address;
+  private boolean jediMaster;
 }

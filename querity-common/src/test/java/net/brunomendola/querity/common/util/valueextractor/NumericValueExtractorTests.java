@@ -1,21 +1,21 @@
 package net.brunomendola.querity.common.util.valueextractor;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class NumericValueExtractorTests {
+class NumericValueExtractorTests extends PropertyValueExtractorTests {
 
-  private final NumericValueExtractor valueExtractor = new NumericValueExtractor();
+  @Override
+  protected PropertyValueExtractor<?> getValueExtractor() {
+    return new NumericValueExtractor();
+  }
 
-  public static Stream<Arguments> provideClassesAndCanHandle() {
+  public static Stream<Arguments> provideTypesAndCanHandle() {
     return Stream.of(
         Arguments.of(BigDecimal.class, true),
         Arguments.of(Integer.class, true),
@@ -24,13 +24,7 @@ class NumericValueExtractorTests {
     );
   }
 
-  @ParameterizedTest
-  @MethodSource("provideClassesAndCanHandle")
-  void givenClass_whenCanHandle_thenReturnTrueIfNumeric(Class<?> clazz, boolean expectedCanHandle) {
-    assertThat(valueExtractor.canHandle(clazz)).isEqualTo(expectedCanHandle);
-  }
-
-  public static Stream<Arguments> provideGivenNumericInputAndExpectedNumber() {
+  public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
     return Stream.of(
         Arguments.of(null, null),
         Arguments.of("11", 11L),
@@ -41,12 +35,6 @@ class NumericValueExtractorTests {
         Arguments.of(420, 420),
         Arguments.of((short) 1, (short) 1)
     );
-  }
-
-  @ParameterizedTest
-  @MethodSource("provideGivenNumericInputAndExpectedNumber")
-  void givenNumericInput_whenExtractValue_thenReturnTheNumber(Object value, Object expectedNumber) {
-    assertThat(valueExtractor.extractValue(value)).isEqualTo(expectedNumber);
   }
 
   @Test

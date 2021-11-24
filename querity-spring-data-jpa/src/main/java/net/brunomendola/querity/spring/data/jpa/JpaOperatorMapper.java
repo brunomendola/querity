@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.SimpleCondition;
+import net.brunomendola.querity.common.util.PropertyUtils;
 
 import javax.persistence.criteria.*;
 import java.util.EnumMap;
@@ -84,9 +85,10 @@ class JpaOperatorMapper {
     Predicate getPredicate(Path<?> path, Object value, CriteriaBuilder cb);
   }
 
-  public static Predicate getPredicate(SimpleCondition condition, Root<?> root, CriteriaBuilder cb) {
-    Path<?> propertyPath = JpaPropertyUtils.getPath(root, condition.getPropertyName());
+  public static <T> Predicate getPredicate(Class<T> entityClass, SimpleCondition condition, Root<?> root, CriteriaBuilder cb) {
+    String propertyPath = condition.getPropertyName();
+    Object value = PropertyUtils.getActualPropertyValue(entityClass, propertyPath, condition.getValue());
     return OPERATOR_PREDICATE_MAP.get(condition.getOperator())
-        .getPredicate(propertyPath, condition.getValue(), cb);
+        .getPredicate(JpaPropertyUtils.getPath(root, propertyPath), value, cb);
   }
 }

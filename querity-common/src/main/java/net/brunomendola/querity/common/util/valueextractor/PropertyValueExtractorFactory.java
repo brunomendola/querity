@@ -14,7 +14,8 @@ public class PropertyValueExtractorFactory {
 
   private static final List<PropertyValueExtractor<?>> extractors = Arrays.asList(
       STRING_VALUE_EXTRACTOR,
-      new NumericValueExtractor());
+      new NumericValueExtractor(),
+      new BooleanValueExtractor());
 
   @SuppressWarnings("java:S1452")
   public static <T> PropertyValueExtractor<?> getPropertyValueExtractor(Class<T> beanClass, String propertyPath) {

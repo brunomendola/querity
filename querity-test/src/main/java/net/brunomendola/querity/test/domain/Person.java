@@ -30,4 +30,8 @@ public interface Person<A extends Address> {
   A getAddress();
 
   void setAddress(A address);
+
+  boolean isJediMaster();
+
+  void setJediMaster(boolean isJediMaster);
 }

@@ -81,6 +81,42 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<?>> {
   }
 
   @Test
+  void givenFilterWithIntegerAsStringEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(filterBy("children", EQUALS, "2"))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(1);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getChildren() != null && p.getChildren().equals(2))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithBooleanEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(filterBy("jediMaster", EQUALS, true))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(Person::isJediMaster)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithBooleanAsStringEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    Query query = Querity.query()
+        .filter(filterBy("jediMaster", EQUALS, "true"))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).hasSize(2);
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(Person::isJediMaster)
+        .collect(Collectors.toList()));
+  }
+
+  @Test
   void givenFilterWithIntegerEqualsConditionAsString_whenFilterAll_thenReturnOnlyFilteredElements() {
     Query query = Querity.query()
         .filter(filterBy("children", EQUALS, "2"))
