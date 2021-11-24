@@ -23,10 +23,6 @@ public interface Person<A extends Address> {
 
   void setChildren(Integer children);
 
-  Pet getFavouritePet();
-
-  void setFavouritePet(Pet favouritePet);
-
   A getAddress();
 
   void setAddress(A address);

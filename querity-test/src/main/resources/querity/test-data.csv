@@ -1,7 +1,7 @@
-firstName,lastName,birthDate,height,children,favouritePet,address_city,jediMaster
-Obi-wan,Kenobi,1940-12-25,1.82,0,RABBIT,Stewjon,true
-Anakin,Skywalker,1962-01-08,1.88,2,DOG,Tatooine,false
-Luke,Skywalker,1982-07-08,1.72,0,DOG,Polis Massa,true
-Leia,Organa,1982-07-08,1.55,1,CAT,Alderaan,false
-Han,Solo,1980-02-01,1.80,1,CAT,Corellia,false
-Chewbacca,,1960-05-01,2.30,42,,Kashyyyk,false
+firstName,lastName,birthDate,height,children,address_city,jediMaster
+Obi-wan,Kenobi,1940-12-25,1.82,0,Stewjon,true
+Anakin,Skywalker,1962-01-08,1.88,2,Tatooine,false
+Luke,Skywalker,1982-07-08,1.72,0,Polis Massa,true
+Leia,Organa,1982-07-08,1.55,1,Alderaan,false
+Han,Solo,1980-02-01,1.80,1,Corellia,false
+Chewbacca,,1960-05-01,2.30,42,Kashyyyk,false

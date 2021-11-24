@@ -1,10 +1,11 @@
 package net.brunomendola.querity.spring.data.jpa.domain;
 
 import lombok.*;
-import net.brunomendola.querity.test.domain.Pet;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -24,8 +25,6 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   private BigDecimal height;
   @NonNull
   private Integer children;
-  @Enumerated(EnumType.STRING)
-  private Pet favouritePet;
   @OneToOne(cascade = CascadeType.ALL)
   @NonNull
   private Address address;

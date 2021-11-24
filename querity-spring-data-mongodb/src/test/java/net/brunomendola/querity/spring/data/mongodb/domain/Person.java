@@ -1,7 +1,6 @@
 package net.brunomendola.querity.spring.data.mongodb.domain;
 
 import lombok.*;
-import net.brunomendola.querity.test.domain.Pet;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,7 +24,6 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Addre
   private BigDecimal height;
   @NonNull
   private Integer children;
-  private Pet favouritePet;
   @NonNull
   private Address address;
   private boolean jediMaster;
