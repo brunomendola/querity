@@ -11,8 +11,8 @@ Generic interface to query a database.
 
 ## Description
 
-The aim of this project is to provide a simple generic interface, with fluent Java and REST APIs, to query databases in
-Java applications.
+The aim of this project is to provide a simple generic interface, supporting fluent Java and REST APIs, to query
+databases in Java applications.
 
 The modules implement the support for different databases and frameworks.
 
@@ -36,6 +36,9 @@ Why you should use Querity?
 
 ### Installing
 
+All releases are published to the Maven Central repository (
+see [here](https://search.maven.org/search?q=net.brunomendola.querity)).
+
 Available modules:
 
 * **querity-spring-data-jpa**: supports Spring Data JPA
@@ -48,7 +51,6 @@ it, no other configuration needed.
 Maven:
 
 ```xml
-
 <dependency>
   <groupId>net.brunomendola.querity</groupId>
   <artifactId>querity-spring-data-jpa</artifactId>
@@ -59,7 +61,7 @@ Maven:
 Gradle:
 
 ```groovy
-implementation "net.brunomendola.querity:querity-spring-data-jpa:${querity.version}"
+implementation "net.brunomendola.querity:querity-spring-data-jpa:${querityVersion}"
 ```
 
 ### Usage
@@ -103,6 +105,42 @@ The `count` method returns the total filtered items count excluding pagination (
 Java 14).
 
 > Note the static imports to improve the readability.
+
+### Access to SNAPSHOT builds
+
+Commits to the `main` branch are automatically built and deployed to OSSRH SNAPSHOTs Maven repository.
+
+To use the SNAPSHOTs in your project, add the SNAPSHOTs repository as follows.
+
+> Of course using SNAPSHOTs is not recommended, but if you feel brave you can do it to test new not-yet-released features.
+
+Maven:
+
+```xml
+<repositories>
+    <repository>
+      <id>ossrh-snapshots-repo</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+</repositories>
+```
+
+Gradle:
+
+```groovy
+repositories {
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots"
+        mavenContent { snapshotsOnly() }
+    }
+}
+```
+
+Browse the
+repository [here](https://s01.oss.sonatype.org/content/repositories/snapshots/net/brunomendola/querity/querity-parent/)
+to find the lastest SNAPSHOT version.
 
 ## Authors
 
