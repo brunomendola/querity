@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
@@ -12,20 +12,19 @@ import javax.persistence.OneToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Address extends AbstractPersistable<Long> implements net.brunomendola.querity.test.domain.Address {
-  @OneToOne
+public class Location extends AbstractPersistable<Long> implements net.brunomendola.querity.test.domain.Location {
+  @ManyToOne
   @NonNull
   private Person person;
-  @NonNull
-  private String streetAddress;
-  @NonNull
   private String city;
+  @NonNull
+  private String country;
 
   @Override
   public @NonNull String toString() {
-    return "Address{" +
-        "streetAddress='" + streetAddress + '\'' +
-        ", city='" + city + '\'' +
+    return "Location{" +
+        "city='" + city + '\'' +
+        ", country='" + country + '\'' +
         '}';
   }
 }

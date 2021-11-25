@@ -6,15 +6,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Address implements net.brunomendola.querity.test.domain.Address {
-  private String streetAddress;
+public class Location implements net.brunomendola.querity.test.domain.Location {
   private String city;
+  @NonNull
+  private String country;
 
   @Override
   public @NonNull String toString() {
-    return "Address{" +
-        "streetAddress='" + streetAddress + '\'' +
-        ", city='" + city + '\'' +
+    return "Location{" +
+        "city='" + city + '\'' +
+        ", country='" + country + '\'' +
         '}';
   }
 }

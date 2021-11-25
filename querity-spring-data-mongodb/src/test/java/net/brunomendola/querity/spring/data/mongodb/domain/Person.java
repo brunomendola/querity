@@ -6,25 +6,43 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Person implements net.brunomendola.querity.test.domain.Person<Address> {
+public class Person implements net.brunomendola.querity.test.domain.Person<String, Address, Location> {
   @Id
   private String id;
   @NonNull
   private String firstName;
   private String lastName;
   @NonNull
+  private String email;
+  @NonNull
+  private Gender gender;
+  @NonNull
   private LocalDate birthDate;
   @NonNull
   private BigDecimal height;
   @NonNull
   private Integer children;
+  private boolean married;
   @NonNull
   private Address address;
-  private boolean jediMaster;
+  @NonNull
+  @Builder.Default
+  private List<Location> visitedLocations = new ArrayList<>();
+
+  @Override
+  public @NonNull String toString() {
+    return "Person{" +
+        "id='" + id + '\'' +
+        ", firstName='" + firstName + '\'' +
+        ", lastName='" + lastName + '\'' +
+        '}';
+  }
 }

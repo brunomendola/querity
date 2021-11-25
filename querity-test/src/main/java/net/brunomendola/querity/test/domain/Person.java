@@ -1,8 +1,11 @@
 package net.brunomendola.querity.test.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-public interface Person<A extends Address> {
+public interface Person<K extends Comparable<K>, A extends Address, L extends Location> {
+  K getId();
+
   String getFirstName();
 
   void setFirstName(String firstName);
@@ -10,6 +13,14 @@ public interface Person<A extends Address> {
   String getLastName();
 
   void setLastName(String lastName);
+
+  String getEmail();
+
+  void setEmail(String email);
+
+  Gender getGender();
+
+  void setGender(Gender gender);
 
   java.time.LocalDate getBirthDate();
 
@@ -23,11 +34,19 @@ public interface Person<A extends Address> {
 
   void setChildren(Integer children);
 
+  boolean isMarried();
+
+  void setMarried(boolean married);
+
   A getAddress();
 
   void setAddress(A address);
 
-  boolean isJediMaster();
+  List<L> getVisitedLocations();
 
-  void setJediMaster(boolean isJediMaster);
+  void setVisitedLocations(List<L> visitedLocations);
+
+  enum Gender {
+    M, F
+  }
 }

@@ -12,7 +12,7 @@ import org.testcontainers.utility.DockerImageName;
 import java.util.Comparator;
 
 @Testcontainers
-class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person> {
+class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, String> {
 
   public static final String MONGO_DB_DOCKER_IMAGE = "mongo:5.0.4";
 
@@ -22,6 +22,11 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person> {
   @DynamicPropertySource
   static void setProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.mongodb.uri", MONGO_DB_CONTAINER::getReplicaSetUrl);
+  }
+
+  @Override
+  protected Class<Person> getEntityClass() {
+    return Person.class;
   }
 
   /**
