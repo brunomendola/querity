@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Person implements net.brunomendola.querity.test.domain.Person<String, Address, Location> {
+public class Person implements net.brunomendola.querity.test.domain.Person<String, Address, Location, Order> {
   @Id
   private String id;
   @NonNull
@@ -24,7 +24,6 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Strin
   private String email;
   @NonNull
   private Gender gender;
-  @NonNull
   private LocalDate birthDate;
   @NonNull
   private BigDecimal height;
@@ -36,6 +35,9 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Strin
   @NonNull
   @Builder.Default
   private List<Location> visitedLocations = new ArrayList<>();
+  @NonNull
+  @Builder.Default
+  private List<Order> orders = new ArrayList<>();
 
   @Override
   public @NonNull String toString() {

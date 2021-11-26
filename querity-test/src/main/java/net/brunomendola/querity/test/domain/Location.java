@@ -1,9 +1,11 @@
 package net.brunomendola.querity.test.domain;
 
-public interface Location {
-  String getCity();
+import java.util.List;
 
-  void setCity(String city);
+public interface Location {
+  List<String> getCities();
+
+  void setCities(List<String> city);
 
   String getCountry();
 

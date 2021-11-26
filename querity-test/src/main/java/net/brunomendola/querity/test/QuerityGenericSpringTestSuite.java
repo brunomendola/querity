@@ -2,6 +2,7 @@ package net.brunomendola.querity.test;
 
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
+import net.brunomendola.querity.test.domain.Location;
 import net.brunomendola.querity.test.domain.Person;
 import net.brunomendola.querity.test.domain.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static net.brunomendola.querity.api.Operator.*;
@@ -23,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?>, K extends Comparable<K>> {
+public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ?>, K extends Comparable<K>> {
 
   public static final String PROPERTY_ID = "id";
   public static final String PROPERTY_LAST_NAME = "lastName";
@@ -115,7 +117,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?>, K
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).isNotEmpty();
     assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> p.getBirthDate().isEqual(entity1.getBirthDate()))
+        .filter(p -> p.getBirthDate() != null && p.getBirthDate().isEqual(entity1.getBirthDate()))
         .collect(Collectors.toList()));
   }
 
@@ -127,7 +129,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?>, K
     List<T> result = querity.findAll(getEntityClass(), query);
     assertThat(result).isNotEmpty();
     assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> p.getBirthDate().isEqual(entity1.getBirthDate()))
+        .filter(p -> p.getBirthDate() != null && p.getBirthDate().isEqual(entity1.getBirthDate()))
         .collect(Collectors.toList()));
   }
 
@@ -483,7 +485,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?>, K
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
     Comparator<T> comparator = Comparator
-        .comparing((T p) -> p.getBirthDate())
+        .comparing((T p) -> p.getBirthDate(), getSortComparator())
         .thenComparing((T p) -> p.getId());
     assertThat(result).isNotEmpty();
     assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
@@ -509,8 +511,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?>, K
         .sort(sortBy(PROPERTY_ADDRESS_CITY), sortBy(PROPERTY_ID))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    Comparator<T> comparator = Comparator
-        .comparing((T p) -> p.getAddress().getCity())
+    Comparator<T> comparator = getStringComparator((T p) -> p.getAddress().getCity())
         .thenComparing((T p) -> p.getId());
     assertThat(result).isNotEmpty();
     assertThat(result).hasSize(entities.size());
@@ -528,13 +529,6 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?>, K
         .thenComparing((T p) -> p.getFirstName());
     assertThat(result).isNotEmpty();
     assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
-  }
-
-  /**
-   * Override this method if the database doesn't support handling null values in sorting
-   */
-  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator() {
-    return Comparator.nullsLast(Comparator.naturalOrder());
   }
 
   @Test
@@ -628,13 +622,31 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?>, K
   private T getEntityFromList(int skip) {
     return entities.stream()
         .filter(e -> e.getLastName() != null)
-        .filter(e -> e.getLastName().length() >= 5)
+        .filter(e -> e.getLastName().length() >= 5) // needed to test startsWith/endsWith/contains operators
+        .filter(e -> e.getBirthDate() != null)
         .filter(e -> e.getChildren() > 0)
+        .filter(e -> !e.getVisitedLocations().isEmpty())
+        .filter(e -> !e.getVisitedLocations().get(0).getCities().isEmpty())
+        .filter(e -> !e.getOrders().isEmpty())
         .skip(skip).limit(1).findAny()
         .orElseThrow(() -> new IllegalStateException("No entities found"));
   }
 
   private static String formatDate(LocalDate birthDate) {
     return birthDate.format(DateTimeFormatter.ISO_DATE);
+  }
+
+  /**
+   * Override this method if the database sorts the strings differently
+   */
+  protected <C> Comparator<C> getStringComparator(Function<C, String> extractValueFunction) {
+    return Comparator.comparing(extractValueFunction);
+  }
+
+  /**
+   * Override this method if the database doesn't support handling null values in sorting
+   */
+  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator() {
+    return Comparator.nullsLast(Comparator.naturalOrder());
   }
 }

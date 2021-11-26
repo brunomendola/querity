@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Person extends AbstractPersistable<Long> implements net.brunomendola.querity.test.domain.Person<Long, Address, Location> {
+public class Person extends AbstractPersistable<Long> implements net.brunomendola.querity.test.domain.Person<Long, Address, Location, Order> {
   @NonNull
   private String firstName;
   private String lastName;
@@ -26,7 +26,6 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   private String email;
   @NonNull
   private Gender gender;
-  @NonNull
   private LocalDate birthDate;
   @NonNull
   private BigDecimal height;
@@ -40,6 +39,10 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
   @Builder.Default
   private List<Location> visitedLocations = new ArrayList<>();
+  @NonNull
+  @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+  @Builder.Default
+  private List<Order> orders = new ArrayList<>();
 
   @Override
   public @NonNull String toString() {

@@ -1,5 +1,6 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
@@ -7,6 +8,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+
+import java.util.Comparator;
+import java.util.function.Function;
 
 @Testcontainers
 @TestPropertySource(properties = {
@@ -25,5 +29,13 @@ class PostgresqlQuerityJpaImplTests extends QuerityJpaImplTests {
     registry.add("spring.datasource.url", POSTGRESQL_CONTAINER::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRESQL_CONTAINER::getUsername);
     registry.add("spring.datasource.password", POSTGRESQL_CONTAINER::getPassword);
+  }
+
+  /**
+   * Overridden because sort behaves differently in PostgreSQL regarding accented strings
+   */
+  @Override
+  protected <C> Comparator<C> getStringComparator(Function<C, String> extractValueFunction) {
+    return Comparator.comparing((C c) -> StringUtils.stripAccents(extractValueFunction.apply(c)));
   }
 }

@@ -2,20 +2,24 @@ package net.brunomendola.querity.spring.data.mongodb.domain;
 
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Location implements net.brunomendola.querity.test.domain.Location {
-  private String city;
   @NonNull
   private String country;
+  @NonNull
+  @Builder.Default
+  private List<String> cities = new ArrayList<>();
 
   @Override
   public @NonNull String toString() {
     return "Location{" +
-        "city='" + city + '\'' +
-        ", country='" + country + '\'' +
+        "country='" + country + '\'' +
         '}';
   }
 }
