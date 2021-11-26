@@ -1,12 +1,10 @@
 package net.brunomendola.querity.spring.data.jpa.domain;
 
 import lombok.*;
+import net.brunomendola.querity.test.domain.ProductCategory;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,6 +37,9 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
   @Builder.Default
   private List<Location> visitedLocations = new ArrayList<>();
+  @NonNull
+  @Enumerated
+  private ProductCategory favouriteProductCategory;
   @NonNull
   @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
   @Builder.Default

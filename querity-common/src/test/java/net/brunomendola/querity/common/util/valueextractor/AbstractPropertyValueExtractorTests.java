@@ -18,7 +18,7 @@ public abstract class AbstractPropertyValueExtractorTests {
 
   @ParameterizedTest
   @MethodSource("provideInputAndExpectedExtractedValue")
-  void givenInput_whenExtractValue_thenReturnTheExtractedValue(Object input, Object expectedExtractedValue) {
-    Assertions.assertThat(valueExtractor.extractValue(input)).isEqualTo(expectedExtractedValue);
+  void givenInput_whenExtractValue_thenReturnTheExtractedValue(Class<?> propertyType, Object input, Object expectedExtractedValue) {
+    Assertions.assertThat(valueExtractor.extractValue(propertyType, input)).isEqualTo(expectedExtractedValue);
   }
 }

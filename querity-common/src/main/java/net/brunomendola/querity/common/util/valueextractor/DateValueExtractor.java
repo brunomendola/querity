@@ -6,12 +6,12 @@ import java.util.Date;
 public class DateValueExtractor implements PropertyValueExtractor<Date> {
 
   @Override
-  public boolean canHandle(Class<?> propertyClass) {
-    return isDateType(propertyClass);
+  public boolean canHandle(Class<?> propertyType) {
+    return isDateType(propertyType);
   }
 
   @Override
-  public Date extractValue(Object value) {
+  public Date extractValue(Class<?> propertyType, Object value) {
     if (value == null || isDateType(value.getClass()))
       return (Date) value;
     return getDateValue(value.toString());

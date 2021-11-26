@@ -3,12 +3,12 @@ package net.brunomendola.querity.common.util.valueextractor;
 public class BooleanValueExtractor implements PropertyValueExtractor<Boolean> {
 
   @Override
-  public boolean canHandle(Class<?> propertyClass) {
-    return isBooleanType(propertyClass);
+  public boolean canHandle(Class<?> propertyType) {
+    return isBooleanType(propertyType);
   }
 
   @Override
-  public Boolean extractValue(Object value) {
+  public Boolean extractValue(Class<?> propertyType, Object value) {
     if (value == null || isBooleanType(value.getClass()))
       return (Boolean) value;  // at this point we're sure it's not primitive anymore because it's been auto-boxed
     return getBooleanValue(value.toString());

@@ -31,9 +31,9 @@ class ZonedDateTimeValueExtractorTests extends AbstractPropertyValueExtractorTes
   public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
     ZonedDateTime testValue = ZonedDateTime.of(2021, 4, 17, 4, 30, 0, 0, ZoneOffset.ofHours(2));
     return Stream.of(
-        Arguments.of(null, null),
-        Arguments.of("2021-06-09T13:45:15.000+01:00", ZonedDateTime.of(2021, 6, 9, 13, 45, 15, 0, ZoneOffset.ofHours(1))),
-        Arguments.of(testValue, testValue)
+        Arguments.of(ZonedDateTime.class, null, null),
+        Arguments.of(ZonedDateTime.class, "2021-06-09T13:45:15.000+01:00", ZonedDateTime.of(2021, 6, 9, 13, 45, 15, 0, ZoneOffset.ofHours(1))),
+        Arguments.of(ZonedDateTime.class, testValue, testValue)
     );
   }
 }

@@ -3,16 +3,13 @@ package net.brunomendola.querity.common.util.valueextractor;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
-class LocalDateValueExtractorTests extends AbstractPropertyValueExtractorTests {
+class EnumValueExtractorTests extends AbstractPropertyValueExtractorTests {
 
   @Override
   protected PropertyValueExtractor<?> getValueExtractor() {
-    return new LocalDateValueExtractor();
+    return new EnumValueExtractor();
   }
 
   public static Stream<Arguments> provideTypesAndCanHandle() {
@@ -21,18 +18,21 @@ class LocalDateValueExtractorTests extends AbstractPropertyValueExtractorTests {
         Arguments.of(Integer.class, false),
         Arguments.of(String.class, false),
         Arguments.of(Boolean.class, false),
-        Arguments.of(LocalDate.class, true),
-        Arguments.of(LocalDateTime.class, false),
-        Arguments.of(ZonedDateTime.class, false)
+        Arguments.of(MyEnum.class, true)
     );
   }
 
   public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
-    LocalDate testValue = LocalDate.of(2021, 4, 17);
     return Stream.of(
-        Arguments.of(LocalDate.class, null, null),
-        Arguments.of(LocalDate.class, "2021-06-09", LocalDate.of(2021, 6, 9)),
-        Arguments.of(LocalDate.class, testValue, testValue)
+        Arguments.of(MyEnum.class, null, null),
+        Arguments.of(MyEnum.class, "ONE", MyEnum.ONE),
+        Arguments.of(MyEnum.class, "TWO", MyEnum.TWO),
+        Arguments.of(MyEnum.class, MyEnum.ONE, MyEnum.ONE),
+        Arguments.of(MyEnum.class, MyEnum.TWO, MyEnum.TWO)
     );
+  }
+
+  public enum MyEnum {
+    ONE, TWO
   }
 }

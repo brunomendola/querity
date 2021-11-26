@@ -36,6 +36,10 @@ class PostgresqlQuerityJpaImplTests extends QuerityJpaImplTests {
    */
   @Override
   protected <C> Comparator<C> getStringComparator(Function<C, String> extractValueFunction) {
-    return Comparator.comparing((C c) -> StringUtils.stripAccents(extractValueFunction.apply(c)));
+    return Comparator.comparing(
+        (C c) -> StringUtils.lowerCase(
+            StringUtils.stripAccents(
+                extractValueFunction.apply(c))),
+        getSortComparator());
   }
 }

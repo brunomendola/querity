@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 public class LocalDateTimeValueExtractor implements PropertyValueExtractor<LocalDateTime> {
 
   @Override
-  public boolean canHandle(Class<?> propertyClass) {
-    return isLocalDateTimeType(propertyClass);
+  public boolean canHandle(Class<?> propertyType) {
+    return isLocalDateTimeType(propertyType);
   }
 
   @Override
-  public LocalDateTime extractValue(Object value) {
+  public LocalDateTime extractValue(Class<?> propertyType, Object value) {
     if (value == null || isLocalDateTimeType(value.getClass()))
       return (LocalDateTime) value;
     return getLocalDateTimeValue(value.toString());

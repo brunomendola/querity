@@ -31,6 +31,6 @@ class StringValueExtractorTests {
 
   @Test
   void givenString_whenExtractValue_theReturnTheSameString() {
-    assertThat(valueExtractor.extractValue("test")).isEqualTo("test");
+    assertThat(valueExtractor.extractValue(String.class, "test")).isEqualTo("test");
   }
 }

@@ -15,40 +15,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class PropertyValueExtractorFactoryTests {
 
-  public static Stream<Arguments> provideBeanPropertyAndValueExtractor() {
+  public static Stream<Arguments> providePropertyTypeAndValueExtractor() {
     return Stream.of(
-        Arguments.of(MyClass.class, "stringValue", StringValueExtractor.class),
-        Arguments.of(MyClass.class, "intValue", NumericValueExtractor.class),
-        Arguments.of(MyClass.class, "integerValue", NumericValueExtractor.class),
-        Arguments.of(MyClass.class, "bigDecimalValue", NumericValueExtractor.class),
-        Arguments.of(MyClass.class, "doubleValue", NumericValueExtractor.class),
-        Arguments.of(MyClass.class, "primitiveBooleanValue", BooleanValueExtractor.class),
-        Arguments.of(MyClass.class, "booleanValue", BooleanValueExtractor.class),
-        Arguments.of(MyClass.class, "dateValue", DateValueExtractor.class),
-        Arguments.of(MyClass.class, "localDateValue", LocalDateValueExtractor.class),
-        Arguments.of(MyClass.class, "localDateTimeValue", LocalDateTimeValueExtractor.class),
-        Arguments.of(MyClass.class, "zonedDateTimeValue", ZonedDateTimeValueExtractor.class)
+        Arguments.of(String.class, StringValueExtractor.class),
+        Arguments.of(int.class, NumericValueExtractor.class),
+        Arguments.of(Integer.class, NumericValueExtractor.class),
+        Arguments.of(BigDecimal.class, NumericValueExtractor.class),
+        Arguments.of(double.class, NumericValueExtractor.class),
+        Arguments.of(boolean.class, BooleanValueExtractor.class),
+        Arguments.of(Boolean.class, BooleanValueExtractor.class),
+        Arguments.of(Date.class, DateValueExtractor.class),
+        Arguments.of(LocalDate.class, LocalDateValueExtractor.class),
+        Arguments.of(LocalDateTime.class, LocalDateTimeValueExtractor.class),
+        Arguments.of(ZonedDateTime.class, ZonedDateTimeValueExtractor.class)
     );
   }
 
   @ParameterizedTest
-  @MethodSource("provideBeanPropertyAndValueExtractor")
-  void givenBeanProperty_whenGetPropertyValueExtractor_thenReturnsCorrectValueExtractor(Class<?> beanClass, String propertyPath, Class<? extends PropertyValueExtractor<?>> expectedValueExtractorClass) {
-    PropertyValueExtractor<?> valueExtractor = PropertyValueExtractorFactory.getPropertyValueExtractor(beanClass, propertyPath);
+  @MethodSource("providePropertyTypeAndValueExtractor")
+  void givenBeanProperty_whenGetPropertyValueExtractor_thenReturnsCorrectValueExtractor(Class<?> propertyType, Class<? extends PropertyValueExtractor<?>> expectedValueExtractorClass) {
+    PropertyValueExtractor<?> valueExtractor = PropertyValueExtractorFactory.getPropertyValueExtractor(propertyType);
     assertThat(valueExtractor.getClass()).isEqualTo(expectedValueExtractorClass);
-  }
-
-  public static class MyClass {
-    private String stringValue;
-    private int intValue;
-    private Integer integerValue;
-    private BigDecimal bigDecimalValue;
-    private double doubleValue;
-    private boolean primitiveBooleanValue;
-    private Boolean booleanValue;
-    private Date dateValue;
-    private LocalDate localDateValue;
-    private LocalDateTime localDateTimeValue;
-    private ZonedDateTime zonedDateTimeValue;
   }
 }

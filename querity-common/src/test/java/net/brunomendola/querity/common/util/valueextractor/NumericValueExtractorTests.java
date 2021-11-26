@@ -26,21 +26,21 @@ class NumericValueExtractorTests extends AbstractPropertyValueExtractorTests {
 
   public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
     return Stream.of(
-        Arguments.of(null, null),
-        Arguments.of("11", 11L),
-        Arguments.of("0.12", new BigDecimal("0.12")),
-        Arguments.of("0", 0L),
-        Arguments.of("42.00", new BigDecimal("42.00")),
-        Arguments.of(new BigDecimal("420.00"), new BigDecimal("420.00")),
-        Arguments.of(420, 420),
-        Arguments.of((short) 1, (short) 1)
+        Arguments.of(Integer.class, null, null),
+        Arguments.of(long.class, "11", 11L),
+        Arguments.of(BigDecimal.class, "0.12", new BigDecimal("0.12")),
+        Arguments.of(Long.class, "0", 0L),
+        Arguments.of(BigDecimal.class, "42.00", new BigDecimal("42.00")),
+        Arguments.of(BigDecimal.class, new BigDecimal("420.00"), new BigDecimal("420.00")),
+        Arguments.of(int.class, 420, 420),
+        Arguments.of(short.class, (short) 1, (short) 1)
     );
   }
 
   @Test
   void givenInvalidNumber_whenExtractValue_thenThrowIllegalArgumentException() {
     assertThrows(IllegalArgumentException.class,
-        () -> valueExtractor.extractValue("notANumber"),
+        () -> valueExtractor.extractValue(Number.class, "notANumber"),
         "Not a number: notANumber");
 
   }

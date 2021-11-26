@@ -1,6 +1,7 @@
 package net.brunomendola.querity.spring.data.mongodb.domain;
 
 import lombok.*;
+import net.brunomendola.querity.test.domain.ProductCategory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -35,6 +36,8 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Strin
   @NonNull
   @Builder.Default
   private List<Location> visitedLocations = new ArrayList<>();
+  @NonNull
+  private ProductCategory favouriteProductCategory;
   @NonNull
   @Builder.Default
   private List<Order> orders = new ArrayList<>();

@@ -30,9 +30,9 @@ class LocalDateTimeValueExtractorTests extends AbstractPropertyValueExtractorTes
   public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
     LocalDateTime testValue = LocalDateTime.of(2021, 4, 17, 4, 30, 0);
     return Stream.of(
-        Arguments.of(null, null),
-        Arguments.of("2021-06-09T13:45:15", LocalDateTime.of(2021, 6, 9, 13, 45, 15)),
-        Arguments.of(testValue, testValue)
+        Arguments.of(LocalDateTime.class, null, null),
+        Arguments.of(LocalDateTime.class, "2021-06-09T13:45:15", LocalDateTime.of(2021, 6, 9, 13, 45, 15)),
+        Arguments.of(LocalDateTime.class, testValue, testValue)
     );
   }
 }

@@ -37,6 +37,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
   public static final String PROPERTY_ADDRESS_CITY = "address.city";
   public static final String PROPERTY_VISITED_LOCATIONS_COUNTRY = "visitedLocations.country";
   public static final String PROPERTY_VISITED_LOCATIONS_CITIES = "visitedLocations.cities";
+  public static final String PROPERTY_FAVOURITE_PRODUCT_CATEGORY = "favouriteProductCategory";
 
   @Autowired
   private DatabaseSeeder<T> databaseSeeder;
@@ -515,6 +516,17 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     assertThat(result).isEqualTo(findByOrderContainingItemMatching(i -> i.getSku().equals(sku)));
   }
 
+  @Test
+  void givenFilterWithEnumEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+    ProductCategory category = entity1.getFavouriteProductCategory();
+    Query query = Querity.query()
+        .filter(filterBy(PROPERTY_FAVOURITE_PRODUCT_CATEGORY, EQUALS, category.name()))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isNotEmpty();
+    assertThat(result).isEqualTo(entities.stream().filter(e -> e.getFavouriteProductCategory().equals(category)).collect(Collectors.toList()));
+  }
+
   private List<T> findByOrderContainingItemMatching(Predicate<OrderItem> matchPredicate) {
     return entities.stream()
         .filter(p -> p.getOrders().stream()
@@ -540,8 +552,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
         .sort(sortBy(PROPERTY_LAST_NAME), sortBy(PROPERTY_ID))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    Comparator<T> comparator = Comparator
-        .comparing((T p) -> p.getLastName(), getSortComparator())
+    Comparator<T> comparator = getStringComparator((T p) -> p.getLastName())
         .thenComparing((T p) -> p.getId());
     assertThat(result).isNotEmpty();
     assertThat(result).hasSize(entities.size());
@@ -567,8 +578,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
         .sort(sortBy(PROPERTY_LAST_NAME, DESC), sortBy(PROPERTY_ID))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    Comparator<T> comparator = Comparator
-        .comparing((T p) -> p.getLastName(), getSortComparator()).reversed()
+    Comparator<T> comparator = getStringComparator((T p) -> p.getLastName()).reversed()
         .thenComparing((T p) -> p.getId());
     assertThat(result).isNotEmpty();
     assertThat(result).hasSize(entities.size());
@@ -594,8 +604,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
         .sort(sortBy(PROPERTY_LAST_NAME), sortBy(PROPERTY_FIRST_NAME))
         .build();
     List<T> result = querity.findAll(getEntityClass(), query);
-    Comparator<T> comparator = Comparator
-        .comparing((T p) -> p.getLastName(), getSortComparator())
+    Comparator<T> comparator = getStringComparator((T p) -> p.getLastName())
         .thenComparing((T p) -> p.getFirstName());
     assertThat(result).isNotEmpty();
     assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
@@ -710,7 +719,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
    * Override this method if the database sorts the strings differently
    */
   protected <C> Comparator<C> getStringComparator(Function<C, String> extractValueFunction) {
-    return Comparator.comparing(extractValueFunction);
+    return Comparator.comparing(extractValueFunction, getSortComparator());
   }
 
   /**

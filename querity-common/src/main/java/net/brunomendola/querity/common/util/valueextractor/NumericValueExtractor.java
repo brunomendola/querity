@@ -10,15 +10,15 @@ import java.util.stream.Stream;
 public class NumericValueExtractor implements PropertyValueExtractor<Number> {
 
   @Override
-  public boolean canHandle(Class<?> propertyClass) {
-    return isNumericType(propertyClass);
+  public boolean canHandle(Class<?> propertyType) {
+    return isNumericType(propertyType);
   }
 
   @Override
-  public Number extractValue(Object value) {
+  public Number extractValue(Class<?> propertyType, Object value) {
     if (value == null || isNumericType(value.getClass()))
       return (Number) value;  // at this point we're sure it's not primitive anymore because it's been auto-boxed
-    return getNumericValue(value.toString());
+    return getNumericValue(propertyType, value.toString());
   }
 
   private static final Set<Class<?>> PRIMITIVE_NUMBERS = Stream
@@ -34,14 +34,18 @@ public class NumericValueExtractor implements PropertyValueExtractor<Number> {
     }
   }
 
-  private static Number getNumericValue(String value) {
+  private static Number getNumericValue(Class<?> propertyType, String value) {
     if (!NumberUtils.isParsable(value)) throw new IllegalArgumentException(String.format("Not a number: %s", value));
-    return isFloatingPointNumber(value) ?
+    return isFloatingPointNumber(propertyType) ?
         new BigDecimal(value) :
         Long.valueOf(value);
   }
 
-  private static boolean isFloatingPointNumber(String value) {
-    return value.contains(".");
+  private static final Set<Class<?>> FLOATING_POINT_NUMBERS = Stream
+      .of(float.class, double.class, BigDecimal.class)
+      .collect(Collectors.toSet());
+
+  private static boolean isFloatingPointNumber(Class<?> cls) {
+    return FLOATING_POINT_NUMBERS.contains(cls);
   }
 }

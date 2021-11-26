@@ -35,11 +35,11 @@ class DateValueExtractorTests extends AbstractPropertyValueExtractorTests {
         LocalDateTime.of(2021, 4, 17, 4, 30, 0)
             .toInstant(ZoneOffset.UTC));
     return Stream.of(
-        Arguments.of(null, null),
-        Arguments.of("2021-06-09T13:45:15Z", Date.from(
+        Arguments.of(Date.class, null, null),
+        Arguments.of(Date.class, "2021-06-09T13:45:15Z", Date.from(
             LocalDateTime.of(2021, 6, 9, 13, 45, 15)
                 .toInstant(ZoneOffset.UTC))),
-        Arguments.of(testValue, testValue)
+        Arguments.of(Date.class, testValue, testValue)
     );
   }
 }

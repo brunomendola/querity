@@ -5,12 +5,12 @@ import java.time.ZonedDateTime;
 public class ZonedDateTimeValueExtractor implements PropertyValueExtractor<ZonedDateTime> {
 
   @Override
-  public boolean canHandle(Class<?> propertyClass) {
-    return isZonedDateTimeType(propertyClass);
+  public boolean canHandle(Class<?> propertyType) {
+    return isZonedDateTimeType(propertyType);
   }
 
   @Override
-  public ZonedDateTime extractValue(Object value) {
+  public ZonedDateTime extractValue(Class<?> propertyType, Object value) {
     if (value == null || isZonedDateTimeType(value.getClass()))
       return (ZonedDateTime) value;
     return getZonedDateTimeValue(value.toString());

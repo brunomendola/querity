@@ -23,14 +23,14 @@ class BooleanValueExtractorTests extends AbstractPropertyValueExtractorTests {
 
   public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
     return Stream.of(
-        Arguments.of(null, null),
-        Arguments.of("true", Boolean.TRUE),
-        Arguments.of("false", Boolean.FALSE),
-        Arguments.of(true, Boolean.TRUE),
-        Arguments.of(false, Boolean.FALSE),
-        Arguments.of(Boolean.TRUE, Boolean.TRUE),
-        Arguments.of(Boolean.FALSE, Boolean.FALSE),
-        Arguments.of("notABoolean", Boolean.FALSE)
+        Arguments.of(boolean.class, null, null),
+        Arguments.of(boolean.class, "true", Boolean.TRUE),
+        Arguments.of(boolean.class, "false", Boolean.FALSE),
+        Arguments.of(Boolean.class, true, Boolean.TRUE),
+        Arguments.of(Boolean.class, false, Boolean.FALSE),
+        Arguments.of(Boolean.class, Boolean.TRUE, Boolean.TRUE),
+        Arguments.of(Boolean.class, Boolean.FALSE, Boolean.FALSE),
+        Arguments.of(Boolean.class, "notABoolean", Boolean.FALSE)
     );
   }
 }

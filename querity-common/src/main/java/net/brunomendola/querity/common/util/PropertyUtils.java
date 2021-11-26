@@ -48,6 +48,7 @@ public class PropertyUtils {
 
   public static <T> Object getActualPropertyValue(Class<T> beanClass, String propertyPath, Object value) {
     if (value == null) return null;
-    return PropertyValueExtractorFactory.getPropertyValueExtractor(beanClass, propertyPath).extractValue(value);
+    Class<?> propertyType = getPropertyType(beanClass, propertyPath);
+    return PropertyValueExtractorFactory.getPropertyValueExtractor(propertyType).extractValue(propertyType, value);
   }
 }
