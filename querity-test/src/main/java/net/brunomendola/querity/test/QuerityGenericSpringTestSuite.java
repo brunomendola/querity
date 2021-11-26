@@ -2,9 +2,7 @@ package net.brunomendola.querity.test;
 
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
-import net.brunomendola.querity.test.domain.Location;
-import net.brunomendola.querity.test.domain.Person;
-import net.brunomendola.querity.test.domain.PersonRepository;
+import net.brunomendola.querity.test.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +11,11 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static net.brunomendola.querity.api.Operator.*;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ?>, K extends Comparable<K>> {
+public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? extends Order<? extends OrderItem>>, K extends Comparable<K>> {
 
   public static final String PROPERTY_ID = "id";
   public static final String PROPERTY_LAST_NAME = "lastName";
@@ -35,6 +35,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ?>
   public static final String PROPERTY_CHILDREN = "children";
   public static final String PROPERTY_MARRIED = "married";
   public static final String PROPERTY_ADDRESS_CITY = "address.city";
+  public static final String PROPERTY_VISITED_LOCATIONS_COUNTRY = "visitedLocations.country";
+  public static final String PROPERTY_VISITED_LOCATIONS_CITIES = "visitedLocations.cities";
 
   @Autowired
   private DatabaseSeeder<T> databaseSeeder;
@@ -452,6 +454,74 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ?>
     assertThat(result).isEqualTo(entities.stream()
         .filter(p -> entity1.getAddress().getCity().equals(p.getAddress().getCity()))
         .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithStringEqualsConditionOnNestedCollectionItemField_whenFilterAll_thenReturnOnlyFilteredElements() {
+    String visitedCountry = entity1.getVisitedLocations().get(0).getCountry();
+    Query query = Querity.query()
+        .filter(filterBy(PROPERTY_VISITED_LOCATIONS_COUNTRY, EQUALS, visitedCountry))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isNotEmpty();
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getVisitedLocations().stream()
+            .map(Location::getCountry)
+            .anyMatch(visitedCountry::equals))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithStringEqualsConditionOnNestedCollectionItemStringListField_whenFilterAll_thenReturnOnlyFilteredElements() {
+    String visitedCity = entity1.getVisitedLocations().get(0).getCities().get(0);
+    Query query = Querity.query()
+        .filter(filterBy(PROPERTY_VISITED_LOCATIONS_CITIES, EQUALS, visitedCity))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isNotEmpty();
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getVisitedLocations().stream()
+            .anyMatch(l -> l.getCities().contains(visitedCity)))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithTwoStringEqualsConditionOnNestedCollectionItemFieldsWithAndLogic_whenFilterAll_thenReturnOnlyFilteredElements() {
+    String visitedCountry = entity1.getVisitedLocations().get(0).getCountry();
+    String visitedCity = entity1.getVisitedLocations().get(0).getCities().get(0);
+    Query query = Querity.query()
+        .filter(and(
+            filterBy(PROPERTY_VISITED_LOCATIONS_COUNTRY, EQUALS, visitedCountry),
+            filterBy(PROPERTY_VISITED_LOCATIONS_CITIES, EQUALS, visitedCity))
+        )
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isNotEmpty();
+    assertThat(result).isEqualTo(entities.stream()
+        .filter(p -> p.getVisitedLocations().stream()
+            .anyMatch(l -> visitedCountry.equals(l.getCountry()) &&
+                l.getCities().contains(visitedCity)))
+        .collect(Collectors.toList()));
+  }
+
+  @Test
+  void givenFilterWithStringEqualsConditionOnDoubleNestedCollectionItemField_whenFilterAll_thenReturnOnlyFilteredElements() {
+    String sku = entity1.getOrders().get(0).getItems().get(0).getSku();
+    Query query = Querity.query()
+        .filter(filterBy("orders.items.sku", EQUALS, sku))
+        .build();
+    List<T> result = querity.findAll(getEntityClass(), query);
+    assertThat(result).isNotEmpty();
+    assertThat(result).isEqualTo(findByOrderContainingItemMatching(i -> i.getSku().equals(sku)));
+  }
+
+  private List<T> findByOrderContainingItemMatching(Predicate<OrderItem> matchPredicate) {
+    return entities.stream()
+        .filter(p -> p.getOrders().stream()
+            .map(Order::getItems)
+            .flatMap(Collection::stream)
+            .anyMatch(matchPredicate))
+        .collect(Collectors.toList());
   }
 
   @Test

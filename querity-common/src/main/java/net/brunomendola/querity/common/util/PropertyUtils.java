@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 import net.brunomendola.querity.common.util.valueextractor.PropertyValueExtractorFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static net.brunomendola.querity.common.util.ReflectionUtils.getAccessibleField;
@@ -28,10 +30,20 @@ public class PropertyUtils {
   }
 
   private static <T> Class<?> getFieldType(Class<T> beanClass, String fieldName) {
-    return getAccessibleField(beanClass, fieldName)
-        .map(Field::getType)
+    Field field = getAccessibleField(beanClass, fieldName)
         .orElseThrow(() -> new IllegalArgumentException(
             String.format("Property %s not found in class %s", fieldName, beanClass.getSimpleName())));
+    Class<?> fieldType = field.getType();
+    if (isCollectionType(fieldType)) fieldType = getGenericType(field, 0);
+    return fieldType;
+  }
+
+  private static boolean isCollectionType(Class<?> fieldType) {
+    return Collection.class.isAssignableFrom(fieldType);
+  }
+
+  private static Class<?> getGenericType(Field field, int index) {
+    return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[index];
   }
 
   public static <T> Object getActualPropertyValue(Class<T> beanClass, String propertyPath, Object value) {

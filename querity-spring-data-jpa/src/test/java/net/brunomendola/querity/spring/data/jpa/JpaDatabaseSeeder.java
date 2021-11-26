@@ -26,6 +26,10 @@ public class JpaDatabaseSeeder extends DatabaseSeeder<Person> {
     entities.forEach(p -> {
       p.getAddress().setPerson(p);
       p.getVisitedLocations().forEach(l -> l.setPerson(p));
+      p.getOrders().forEach(o -> {
+        o.setPerson(p);
+        o.getItems().forEach(i -> i.setOrder(o));
+      });
     });
     personRepository.saveAll(entities);
     personRepository.flush();
