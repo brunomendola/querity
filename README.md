@@ -131,10 +131,10 @@ Gradle:
 
 ```groovy
 repositories {
-    maven {
-        url "https://s01.oss.sonatype.org/content/repositories/snapshots"
-        mavenContent { snapshotsOnly() }
-    }
+  maven {
+    url "https://s01.oss.sonatype.org/content/repositories/snapshots"
+    mavenContent { snapshotsOnly() }
+  }
 }
 ```
 
@@ -142,11 +142,32 @@ Browse the
 repository [here](https://s01.oss.sonatype.org/content/repositories/snapshots/net/brunomendola/querity/querity-parent/)
 to find the lastest SNAPSHOT version.
 
+## Development
+
+### Running tests
+
+Run with Maven (wrapper):
+
+```bash
+./mvnw test
+```
+
+or just run them with your favourite IDE.
+
+### Test dataset
+
+The test dataset is generated with [Mockaroo](https://mockaroo.com).
+
+If you want to make changes, you don't need to do it manually, please find the
+schema [here](https://mockaroo.com/ec155390).
+
 ## Authors
 
 Contributors names and contact info
 
 * Bruno Mendola [@brunomendola](https://twitter.com/brunomendola)
+
+**PRs are welcome!**
 
 ## Version History
 
