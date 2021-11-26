@@ -2,6 +2,7 @@ package net.brunomendola.querity.spring.data.mongodb;
 
 import net.brunomendola.querity.spring.data.mongodb.domain.Person;
 import net.brunomendola.querity.test.QuerityGenericSpringTestSuite;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
@@ -11,6 +12,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.util.Comparator;
 
+@SpringBootTest(classes = QuerityMongodbTestApplication.class)
 @Testcontainers
 class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, String> {
 
