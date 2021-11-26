@@ -35,14 +35,13 @@ class JpaPropertyUtils {
 
   private static <T, P> Path<P> getPropertyPath(Path<T> rootPath, String propertyName) {
     Path<P> propertyPath = rootPath.get(propertyName);
-    if (isCollectionPath(rootPath, propertyPath))
+    if (isCollectionPath(propertyPath))
       propertyPath = getJoin((From<?, T>) rootPath, propertyName);
     return propertyPath;
   }
 
-  private static <P> boolean isCollectionPath(Path<?> rootPath, Path<P> propertyPath) {
-    return PluralAttributePath.class.isAssignableFrom(propertyPath.getClass()) &&
-        From.class.isAssignableFrom(rootPath.getClass());
+  private static <P> boolean isCollectionPath(Path<P> propertyPath) {
+    return PluralAttributePath.class.isAssignableFrom(propertyPath.getClass());
   }
 
   private static <T, P> Join<T, P> getJoin(From<?, T> from, String joinProperty) {

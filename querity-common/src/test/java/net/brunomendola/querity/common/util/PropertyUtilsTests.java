@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,7 +53,9 @@ class PropertyUtilsTests {
         Arguments.of(MyClass.class, "bigDecimalValue", "42.00", BigDecimal.class),
         Arguments.of(MyClass.class, "doubleValue", "1.2", BigDecimal.class),
         Arguments.of(MyClass.class, "doubleValue", 1.2, Double.class),
-        Arguments.of(MyClass.class, "nested.stringValue", "test", String.class)
+        Arguments.of(MyClass.class, "nested.stringValue", "test", String.class),
+        Arguments.of(MyClass.class, "stringList", "test", String.class),
+        Arguments.of(MyClass.class, "nestedList.stringValue", "test", String.class)
     );
   }
 
@@ -69,6 +72,8 @@ class PropertyUtilsTests {
     private BigDecimal bigDecimalValue;
     private double doubleValue;
     private MyNestedClass nested;
+    private List<String> stringList;
+    private List<MyNestedClass> nestedList;
 
     public static class MyNestedClass {
       private String stringValue;
