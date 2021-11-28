@@ -1,15 +1,15 @@
 package net.brunomendola.querity.spring.data.mongodb;
 
 import lombok.experimental.Delegate;
-import net.brunomendola.querity.api.ConditionsWrapper;
+import net.brunomendola.querity.api.LogicConditionsWrapper;
 import net.brunomendola.querity.api.LogicOperator;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-class MongodbConditionsWrapper extends MongodbCondition {
+abstract class MongodbConditionsWrapper extends MongodbCondition {
   @Delegate
-  private final ConditionsWrapper conditionsWrapper;
+  private final LogicConditionsWrapper conditionsWrapper;
 
-  public MongodbConditionsWrapper(ConditionsWrapper conditionsWrapper) {
+  protected MongodbConditionsWrapper(LogicConditionsWrapper conditionsWrapper) {
     this.conditionsWrapper = conditionsWrapper;
   }
 

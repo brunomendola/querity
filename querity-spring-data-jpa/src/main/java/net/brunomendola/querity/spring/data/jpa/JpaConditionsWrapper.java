@@ -1,7 +1,7 @@
 package net.brunomendola.querity.spring.data.jpa;
 
 import lombok.experimental.Delegate;
-import net.brunomendola.querity.api.ConditionsWrapper;
+import net.brunomendola.querity.api.LogicConditionsWrapper;
 import net.brunomendola.querity.api.LogicOperator;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,11 +9,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-class JpaConditionsWrapper extends JpaCondition {
+abstract class JpaConditionsWrapper extends JpaCondition {
   @Delegate
-  private final ConditionsWrapper conditionsWrapper;
+  private final LogicConditionsWrapper conditionsWrapper;
 
-  public JpaConditionsWrapper(ConditionsWrapper conditionsWrapper) {
+  protected JpaConditionsWrapper(LogicConditionsWrapper conditionsWrapper) {
     this.conditionsWrapper = conditionsWrapper;
   }
 

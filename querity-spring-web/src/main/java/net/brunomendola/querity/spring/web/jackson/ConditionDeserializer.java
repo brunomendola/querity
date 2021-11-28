@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import net.brunomendola.querity.api.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Function;
@@ -16,8 +17,8 @@ import java.util.stream.StreamSupport;
 
 public class ConditionDeserializer extends StdDeserializer<Condition> {
 
-  public static final String FIELD_CONDITIONS_WRAPPER_LOGIC = "logic";
-  public static final String FIELD_CONDITIONS_WRAPPER_CONDITIONS = "conditions";
+  public static final String FIELD_CONDITIONS_WRAPPER_AND_CONDITIONS = "and";
+  public static final String FIELD_CONDITIONS_WRAPPER_OR_CONDITIONS = "or";
   public static final String FIELD_SIMPLE_CONDITION_PROPERTY_NAME = "propertyName";
   public static final String FIELD_SIMPLE_CONDITION_OPERATOR = "operator";
   public static final String FIELD_SIMPLE_CONDITION_VALUE = "value";
@@ -36,29 +37,42 @@ public class ConditionDeserializer extends StdDeserializer<Condition> {
   private static Condition parseCondition(JsonNode jsonNode, JsonParser jsonParser) {
     JsonParser jp = jsonNode.traverse();
     jp.setCodec(jsonParser.getCodec());
-    if (isConditionsWrapper(jsonNode)) return parseConditionsWrapper(jsonNode, jsonParser);
+    if (isAndConditionsWrapper(jsonNode)) return parseAndConditionsWrapper(jsonNode, jsonParser);
+    if (isOrConditionsWrapper(jsonNode)) return parseOrConditionsWrapper(jsonNode, jsonParser);
     if (isNotCondition(jsonNode)) return parseNotCondition(jsonNode, jsonParser);
     return parseSimpleCondition(jsonNode);
   }
 
-  private static boolean isConditionsWrapper(JsonNode jsonNode) {
-    return jsonNode.hasNonNull(FIELD_CONDITIONS_WRAPPER_LOGIC);
+  private static boolean isAndConditionsWrapper(JsonNode jsonNode) {
+    return jsonNode.hasNonNull(FIELD_CONDITIONS_WRAPPER_AND_CONDITIONS);
+  }
+
+  private static boolean isOrConditionsWrapper(JsonNode jsonNode) {
+    return jsonNode.hasNonNull(FIELD_CONDITIONS_WRAPPER_OR_CONDITIONS);
+  }
+
+  private static AndConditionsWrapper parseAndConditionsWrapper(JsonNode jsonNode, JsonParser jsonParser) {
+    return AndConditionsWrapper.builder()
+        .conditions(parseConditions(jsonParser, jsonNode.get(FIELD_CONDITIONS_WRAPPER_AND_CONDITIONS)))
+        .build();
+  }
+
+  private static OrConditionsWrapper parseOrConditionsWrapper(JsonNode jsonNode, JsonParser jsonParser) {
+    return OrConditionsWrapper.builder()
+        .conditions(parseConditions(jsonParser, jsonNode.get(FIELD_CONDITIONS_WRAPPER_OR_CONDITIONS)))
+        .build();
+  }
+
+  private static List<Condition> parseConditions(JsonParser jsonParser, JsonNode conditionsJsonNode) {
+    return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(conditionsJsonNode.elements(), Spliterator.ORDERED),
+            false)
+        .map(n -> parseCondition(n, jsonParser))
+        .collect(Collectors.toList());
   }
 
   private static boolean isNotCondition(JsonNode jsonNode) {
     return jsonNode.hasNonNull(FIELD_NOT_CONDITION_CONDITION);
-  }
-
-  private static ConditionsWrapper parseConditionsWrapper(JsonNode jsonNode, JsonParser jsonParser) {
-    return ConditionsWrapper.builder()
-        .logic(LogicOperator.valueOf(jsonNode.get(FIELD_CONDITIONS_WRAPPER_LOGIC).asText()))
-        .conditions(StreamSupport.stream(
-                Spliterators.spliteratorUnknownSize(
-                    jsonNode.get(FIELD_CONDITIONS_WRAPPER_CONDITIONS).elements(), Spliterator.ORDERED),
-                false)
-            .map(n -> parseCondition(n, jsonParser))
-            .collect(Collectors.toList()))
-        .build();
   }
 
   private static NotCondition parseNotCondition(JsonNode jsonNode, JsonParser jsonParser) {

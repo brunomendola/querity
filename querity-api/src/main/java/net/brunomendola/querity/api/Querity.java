@@ -34,12 +34,12 @@ public interface Querity {
         .propertyName(propertyName).operator(operator).build();
   }
 
-  static ConditionsWrapper and(Condition... conditions) {
-    return ConditionsWrapper.builder().conditions(Arrays.asList(conditions)).build();
+  static AndConditionsWrapper and(Condition... conditions) {
+    return AndConditionsWrapper.builder().conditions(Arrays.asList(conditions)).build();
   }
 
-  static ConditionsWrapper or(Condition... conditions) {
-    return ConditionsWrapper.builder().logic(LogicOperator.OR).conditions(Arrays.asList(conditions)).build();
+  static OrConditionsWrapper or(Condition... conditions) {
+    return OrConditionsWrapper.builder().conditions(Arrays.asList(conditions)).build();
   }
 
   static NotCondition not(Condition condition) {

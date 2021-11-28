@@ -1,10 +1,7 @@
 package net.brunomendola.querity.common.util;
 
 import lombok.RequiredArgsConstructor;
-import net.brunomendola.querity.api.Condition;
-import net.brunomendola.querity.api.ConditionsWrapper;
-import net.brunomendola.querity.api.NotCondition;
-import net.brunomendola.querity.api.SimpleCondition;
+import net.brunomendola.querity.api.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -17,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConditionUtilsTests {
 
   public static final HashSet<Class<?>> IMPLEMENTATION_CLASSES = new HashSet<>(Arrays.asList(
-      MySimpleCondition.class, MyConditionWrapper.class, MyNotCondition.class));
+      MySimpleCondition.class, MyAndConditionWrapper.class, MyOrConditionWrapper.class, MyNotCondition.class));
 
   @Test
   void givenSimpleCondition_whenGetConditionImplementation_thenReturnInstanceOfMySimpleCondition() {
@@ -27,10 +24,17 @@ class ConditionUtilsTests {
   }
 
   @Test
-  void givenConditionsWrapper_whenGetConditionImplementation_thenReturnInstanceOfMyConditionsWrapper() {
+  void givenAndConditionsWrapper_whenGetConditionImplementation_thenReturnInstanceOfMyConditionsWrapper() {
     Condition condition = and(getSimpleCondition());
     assertThat(ConditionUtils.getConditionImplementation(IMPLEMENTATION_CLASSES,
-        condition)).containsInstanceOf(MyConditionWrapper.class);
+        condition)).containsInstanceOf(MyAndConditionWrapper.class);
+  }
+
+  @Test
+  void givenOrConditionsWrapper_whenGetConditionImplementation_thenReturnInstanceOfMyConditionsWrapper() {
+    Condition condition = or(getSimpleCondition());
+    assertThat(ConditionUtils.getConditionImplementation(IMPLEMENTATION_CLASSES,
+        condition)).containsInstanceOf(MyOrConditionWrapper.class);
   }
 
   @Test
@@ -50,8 +54,13 @@ class ConditionUtilsTests {
   }
 
   @RequiredArgsConstructor
-  static class MyConditionWrapper {
-    private final ConditionsWrapper condition;
+  static class MyAndConditionWrapper {
+    private final AndConditionsWrapper condition;
+  }
+
+  @RequiredArgsConstructor
+  static class MyOrConditionWrapper {
+    private final OrConditionsWrapper condition;
   }
 
   @RequiredArgsConstructor
