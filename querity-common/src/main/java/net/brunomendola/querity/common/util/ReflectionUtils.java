@@ -25,9 +25,25 @@ public class ReflectionUtils {
     return field;
   }
 
+  public static Field findUnderlying(Class<?> clazz, String fieldName) throws NoSuchFieldException{
+    Class<?> current = clazz;
+    Field field;
+    do {
+      field =  Arrays.asList(current.getDeclaredFields())
+              .stream().filter(e -> e.getName().equals(fieldName))
+              .findFirst().orElse(null);
+      if (field==null){
+        current = current.getSuperclass();
+      }else{
+        return field;
+      }
+    } while(current != null);
+    return null;
+  }
+
   private static <T> Optional<Field> getField(Class<T> beanClass, String fieldName) {
     try {
-      return Optional.of(beanClass.getDeclaredField(fieldName));
+      return Optional.of(findUnderlying(beanClass,fieldName));
     } catch (NoSuchFieldException e) {
       return Optional.empty();
     }
