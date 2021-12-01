@@ -106,7 +106,11 @@ Java 14).
 
 > Note the static imports to improve the readability.
 
-### Access to SNAPSHOT builds
+## Documentation
+
+Read the full documentation [here](https://brunomendola.github.io/querity).
+
+## Access to SNAPSHOT builds
 
 Commits to the `main` branch are automatically built and deployed to OSSRH SNAPSHOTs Maven repository.
 
@@ -140,7 +144,7 @@ repositories {
 
 Browse the
 repository [here](https://s01.oss.sonatype.org/content/repositories/snapshots/net/brunomendola/querity/querity-parent/)
-to find the lastest SNAPSHOT version.
+to find the latest SNAPSHOT version.
 
 ## Development
 
