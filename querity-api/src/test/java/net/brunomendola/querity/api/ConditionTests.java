@@ -52,14 +52,30 @@ class ConditionTests {
   }
 
   @Test
-  void givenNotEmptyConditionsWrapper_whenIsEmpty_thenReturnFalse() {
-    Condition condition = and(getEqualsCondition());
+  void givenNotEmptyAndConditionsWrapper_whenIsEmpty_thenReturnFalse() {
+    LogicConditionsWrapper condition = and(getEqualsCondition());
+    assertThat(condition.getConditions()).isNotEmpty();
     assertThat(condition.isEmpty()).isFalse();
   }
 
   @Test
-  void givenEmptyConditionsWrapper_whenIsEmpty_thenReturnTrue() {
-    Condition condition = and();
+  void givenEmptyAndConditionsWrapper_whenIsEmpty_thenReturnTrue() {
+    LogicConditionsWrapper condition = and();
+    assertThat(condition.getConditions()).isEmpty();
+    assertThat(condition.isEmpty()).isTrue();
+  }
+
+  @Test
+  void givenNotEmptyOrConditionsWrapper_whenIsEmpty_thenReturnFalse() {
+    LogicConditionsWrapper condition = or(getEqualsCondition());
+    assertThat(condition.getConditions()).isNotEmpty();
+    assertThat(condition.isEmpty()).isFalse();
+  }
+
+  @Test
+  void givenEmptyOrConditionsWrapper_whenIsEmpty_thenReturnTrue() {
+    LogicConditionsWrapper condition = or();
+    assertThat(condition.getConditions()).isEmpty();
     assertThat(condition.isEmpty()).isTrue();
   }
 

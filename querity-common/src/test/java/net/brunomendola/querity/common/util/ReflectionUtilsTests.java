@@ -48,14 +48,17 @@ class ReflectionUtilsTests {
   }
 
   public static class MyClass1 implements MyInterface {
-    private final String stringValue;
+    private String stringValue;
 
-    public MyClass1(String stringValue, String otherStringValue) {
-      this.stringValue = stringValue;
+    public MyClass1() {
     }
 
     public MyClass1(String stringValue) {
       this(stringValue, null);
+    }
+
+    public MyClass1(String stringValue, String otherStringValue) {
+      this.stringValue = stringValue;
     }
   }
 
