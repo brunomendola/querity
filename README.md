@@ -33,4 +33,4 @@ Finally, run `bundle install` to download the dependencies.
 
 ### Testing locally
 
-Run `jekyll serve` in the root of the project and then open http://localhost:4000 in your web browser.
+Run `jekyll serve --baseurl /` in the root of the project and then open http://localhost:4000 in your web browser.
