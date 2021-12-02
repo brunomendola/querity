@@ -7,15 +7,23 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReflectionUtils {
   public static <T> Set<Class<? extends T>> findSubclasses(Class<T> baseClass) {
     return new Reflections(baseClass.getPackage().getName())
-        .getSubTypesOf(baseClass);
+        .getSubTypesOf(baseClass).stream()
+        .filter(ReflectionUtils::isConcreteClass)
+        .collect(Collectors.toSet());
+  }
+
+  private static boolean isConcreteClass(Class<?> clazz) {
+    return !Modifier.isAbstract(clazz.getModifiers());
   }
 
   @SuppressWarnings("java:S3011")
@@ -25,25 +33,19 @@ public class ReflectionUtils {
     return field;
   }
 
-  private static Field findUnderlying(Class<?> clazz, String fieldName) {
-    Class<?> current = clazz;
-    Field field;
-    do {
-      field =  Arrays.asList(current.getDeclaredFields())
-              .stream().filter(e -> e.getName().equals(fieldName))
-              .findFirst().orElse(null);
-      if (field==null){
-        current = current.getSuperclass();
-      }else{
-        return field;
-      }
-    } while(current != null);
-    return null;
-  }
-
   private static <T> Optional<Field> getField(Class<T> beanClass, String fieldName) {
-    Field field = findUnderlying(beanClass,fieldName);
-    return field!=null?Optional.of(field):Optional.empty();
+    Class<?> currentClass = beanClass;
+    do {
+      Optional<Field> field = Arrays.stream(currentClass.getDeclaredFields())
+          .filter(e -> e.getName().equals(fieldName))
+          .findFirst();
+      if (field.isPresent()) {
+        return field;
+      } else {
+        currentClass = currentClass.getSuperclass();
+      }
+    } while (currentClass != null);
+    return Optional.empty();
   }
 
   public static <T, A> Optional<Class<? extends T>> findClassWithConstructorArgumentOfType(Set<Class<? extends T>> allClasses,
