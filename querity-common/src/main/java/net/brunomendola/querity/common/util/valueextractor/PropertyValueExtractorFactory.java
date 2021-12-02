@@ -8,10 +8,11 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PropertyValueExtractorFactory {
-  public static final StringValueExtractor STRING_VALUE_EXTRACTOR = new StringValueExtractor();
+
+  public static final NoOpValueExtractor NO_OP_VALUE_EXTRACTOR = new NoOpValueExtractor();
 
   private static final List<PropertyValueExtractor<?>> extractors = Arrays.asList(
-      STRING_VALUE_EXTRACTOR,
+      new StringValueExtractor(),
       new NumericValueExtractor(),
       new BooleanValueExtractor(),
       new DateValueExtractor(),
@@ -25,6 +26,6 @@ public class PropertyValueExtractorFactory {
     return extractors.stream()
         .filter(e -> e.canHandle(propertyType))
         .findAny()
-        .orElse(STRING_VALUE_EXTRACTOR);
+        .orElse(NO_OP_VALUE_EXTRACTOR);
   }
 }
