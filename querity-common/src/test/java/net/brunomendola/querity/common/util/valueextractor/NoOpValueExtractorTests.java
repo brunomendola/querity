@@ -31,7 +31,7 @@ class NoOpValueExtractorTests {
 
   @Test
   void givenNull_whenExtractValue_theReturnNull() {
-    assertThat(valueExtractor.extractValue(Object.class, null)).isEqualTo(null);
+    assertThat(valueExtractor.extractValue(Object.class, null)).isNull();
   }
 
   @Test
