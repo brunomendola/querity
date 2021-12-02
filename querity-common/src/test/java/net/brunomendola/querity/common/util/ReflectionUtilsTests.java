@@ -12,20 +12,27 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ReflectionUtilsTests {
 
   @Test
-  void findSubclasses() {
+  void givenInterfaceImplementedByClassesAndOneAbstractClass_whenFindSubclasses_thenReturnTheImplementingConcreteClasses() {
     assertThat(ReflectionUtils.findSubclasses(MyInterface.class))
         .containsExactlyInAnyOrder(MyClass1.class, MyClass2.class);
   }
 
   @Test
-  void getAccessibleField() {
+  void givenClassProperty_whenGetAccessibleField_thenReturnAccessibleField() {
     assertThat(ReflectionUtils.getAccessibleField(MyClass1.class, "stringValue"))
         .map(AccessibleObject::isAccessible)
         .contains(true);
   }
 
   @Test
-  void findClassWithConstructorArgumentOfType() {
+  void givenSuperclassProperty_whenGetAccessibleField_thenReturnAccessibleField() {
+    assertThat(ReflectionUtils.getAccessibleField(MyClass1.class, "superclassStringValue"))
+        .map(AccessibleObject::isAccessible)
+        .contains(true);
+  }
+
+  @Test
+  void givenMultipleClassesAndOnlyOneClassHavingConstructorStringArgument_whenFindClassWithConstructorArgumentOfType_thenReturnTheClassHavingConstructorStringArgument() {
     assertThat(ReflectionUtils.findClassWithConstructorArgumentOfType(
         new HashSet<>(Arrays.asList(MyClass1.class, MyClass2.class)),
         String.class))
@@ -33,7 +40,7 @@ class ReflectionUtilsTests {
   }
 
   @Test
-  void constructInstanceWithArgument() {
+  void givenClassWithConstructorStringArgument_whenConstructInstanceWithArgument_thenReturnAnInstanceOfTheClassWithTheFieldSetToTheConstructorArgumentValue() {
     assertThat(ReflectionUtils.constructInstanceWithArgument(MyClass1.class, "test"))
         .isInstanceOf(MyClass1.class)
         .matches(c -> c.stringValue.equals("test"));
@@ -47,7 +54,11 @@ class ReflectionUtilsTests {
   public interface MyInterface {
   }
 
-  public static class MyClass1 implements MyInterface {
+  public static abstract class MySuperclass implements MyInterface {
+    private String superclassStringValue;
+  }
+
+  public static class MyClass1 extends MySuperclass {
     private String stringValue;
 
     public MyClass1() {

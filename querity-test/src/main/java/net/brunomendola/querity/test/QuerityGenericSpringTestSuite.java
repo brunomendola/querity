@@ -79,6 +79,17 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     }
 
     @Test
+    void givenFilterByIdEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+      Query query = Querity.query()
+          .filter(filterBy(PROPERTY_ID, EQUALS, entity1.getId()))
+          .build();
+      List<T> result = querity.findAll(getEntityClass(), query);
+      assertThat(result).isNotEmpty();
+      assertThat(result).hasSize(1);
+      assertThat(result.get(0).getId()).isEqualTo(entity1.getId());
+    }
+
+    @Test
     void givenFilterWithStringEqualsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
       Query query = Querity.query()
           .filter(filterBy(PROPERTY_LAST_NAME, EQUALS, entity1.getLastName()))
