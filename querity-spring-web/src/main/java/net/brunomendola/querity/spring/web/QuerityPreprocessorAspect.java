@@ -28,7 +28,7 @@ public class QuerityPreprocessorAspect {
   }
 
   @Pointcut("execution(public * *(..))")
-  private static void anyPublicMethod() {
+  public static void anyPublicMethod() {
   }
 
   @Around("anyRestControllerMethod() && anyPublicMethod() && @annotation(withQueryPreprocessor) && args(query)")
