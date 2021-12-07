@@ -1,4 +1,4 @@
-package net.brunomendola.querity.common.util.valueextractor;
+package net.brunomendola.querity.common.valueextractor;
 
 public class StringValueExtractor implements PropertyValueExtractor<String> {
   @Override

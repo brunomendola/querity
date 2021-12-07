@@ -1,4 +1,4 @@
-package net.brunomendola.querity.common.util.valueextractor;
+package net.brunomendola.querity.common.valueextractor;
 
 public interface PropertyValueExtractor<T> {
   boolean canHandle(Class<?> propertyType);

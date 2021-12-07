@@ -2,7 +2,7 @@ package net.brunomendola.querity.common.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.brunomendola.querity.common.util.valueextractor.PropertyValueExtractorFactory;
+import net.brunomendola.querity.common.valueextractor.PropertyValueExtractorFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;

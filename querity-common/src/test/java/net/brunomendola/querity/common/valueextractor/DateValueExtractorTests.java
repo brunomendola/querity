@@ -1,4 +1,4 @@
-package net.brunomendola.querity.common.util.valueextractor;
+package net.brunomendola.querity.common.valueextractor;
 
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -7,13 +7,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.stream.Stream;
 
-class ZonedDateTimeValueExtractorTests extends AbstractPropertyValueExtractorTests {
+class DateValueExtractorTests extends AbstractPropertyValueExtractorTests {
 
   @Override
   protected PropertyValueExtractor<?> getValueExtractor() {
-    return new ZonedDateTimeValueExtractor();
+    return new DateValueExtractor();
   }
 
   public static Stream<Arguments> provideTypesAndCanHandle() {
@@ -24,16 +25,21 @@ class ZonedDateTimeValueExtractorTests extends AbstractPropertyValueExtractorTes
         Arguments.of(Boolean.class, false),
         Arguments.of(LocalDate.class, false),
         Arguments.of(LocalDateTime.class, false),
-        Arguments.of(ZonedDateTime.class, true)
+        Arguments.of(ZonedDateTime.class, false),
+        Arguments.of(Date.class, true)
     );
   }
 
   public static Stream<Arguments> provideInputAndExpectedExtractedValue() {
-    ZonedDateTime testValue = ZonedDateTime.of(2021, 4, 17, 4, 30, 0, 0, ZoneOffset.ofHours(2));
+    Date testValue = Date.from(
+        LocalDateTime.of(2021, 4, 17, 4, 30, 0)
+            .toInstant(ZoneOffset.UTC));
     return Stream.of(
-        Arguments.of(ZonedDateTime.class, null, null),
-        Arguments.of(ZonedDateTime.class, "2021-06-09T13:45:15.000+01:00", ZonedDateTime.of(2021, 6, 9, 13, 45, 15, 0, ZoneOffset.ofHours(1))),
-        Arguments.of(ZonedDateTime.class, testValue, testValue)
+        Arguments.of(Date.class, null, null),
+        Arguments.of(Date.class, "2021-06-09T13:45:15Z", Date.from(
+            LocalDateTime.of(2021, 6, 9, 13, 45, 15)
+                .toInstant(ZoneOffset.UTC))),
+        Arguments.of(Date.class, testValue, testValue)
     );
   }
 }
