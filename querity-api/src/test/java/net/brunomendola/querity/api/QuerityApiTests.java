@@ -4,6 +4,7 @@ import net.brunomendola.querity.api.domain.Person;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static net.brunomendola.querity.api.Operator.*;
@@ -217,6 +218,41 @@ class QuerityApiTests {
       Long count = querity.count(Person.class,
           filterBy("lastName", EQUALS, "Skywalker"));
       assertThat(count).isNotNull();
+    }
+  }
+
+  @Nested
+  class PreprocessingTests {
+    private final QueryPreprocessor dummyPreprocessor = query -> query;
+
+    @Test
+    void givenPreprocessor_whenRegisterPreprocessor_thenAddPreprocessorToTheList() {
+      Query query = Querity.query().withPreprocessor(dummyPreprocessor).build();
+      assertThat(query.getPreprocessors()).contains(dummyPreprocessor);
+    }
+  }
+
+  @Test
+  void givenCondition_whenWrapConditionInQuery_thenReturnQueryWithJustTheCondition() {
+    Condition condition = SimpleCondition.builder()
+        .propertyName("prop1")
+        .operator(IS_NULL)
+        .build();
+    Query query = Querity.wrapConditionInQuery(condition);
+    assertThat(query.getFilter()).isEqualTo(condition);
+    assertThat(query.hasSort()).isFalse();
+    assertThat(query.hasPagination()).isFalse();
+  }
+
+  static class QuerityDummyImpl implements Querity {
+    @Override
+    public <T> List<T> findAll(Class<T> entityClass, Query query) {
+      return Collections.emptyList();
+    }
+
+    @Override
+    public <T> Long count(Class<T> entityClass, Condition condition) {
+      return 0L;
     }
   }
 }

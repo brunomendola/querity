@@ -14,11 +14,23 @@
       <groupId>net.brunomendola.querity</groupId>
       <artifactId>querity-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>net.brunomendola.querity</groupId>
+      <artifactId>querity-common</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

@@ -10,12 +10,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class QueritySpringWebMvcTestController {
   @GetMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE)
-  Query getQuery(@RequestParam(required = false) Query q) {
+  public Query getQuery(@RequestParam(required = false) Query q) {
+    return q;
+  }
+
+  @GetMapping(value = "/query-with-preprocessor", produces = MediaType.APPLICATION_JSON_VALUE)
+  @WithQueryPreprocessor(beanName = "preprocessor1")
+  public Query getQueryWithPreprocessor(@RequestParam(required = false) Query q) {
     return q;
   }
 
   @GetMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
-  Condition getQuery(@RequestParam(required = false) Condition filter) {
+  public Condition getCount(@RequestParam(required = false) Condition filter) {
+    return filter;
+  }
+
+  @GetMapping(value = "/count-with-preprocessor", produces = MediaType.APPLICATION_JSON_VALUE)
+  @WithQueryPreprocessor(beanName = "preprocessor1")
+  public Condition getCountWithPreprocessor(@RequestParam(required = false) Condition filter) {
     return filter;
   }
 }

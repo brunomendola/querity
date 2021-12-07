@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.jackson.Jacksonized;
 
-@Builder
+@Builder(toBuilder = true)
 @Jacksonized
 @Getter
 public class Sort {

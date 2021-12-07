@@ -8,7 +8,7 @@ import lombok.extern.jackson.Jacksonized;
 import java.util.List;
 
 public class OrConditionsWrapper extends LogicConditionsWrapper {
-  @Builder
+  @Builder(toBuilder = true)
   @Jacksonized
   public OrConditionsWrapper(List<Condition> conditions) {
     super(LogicOperator.OR, conditions);

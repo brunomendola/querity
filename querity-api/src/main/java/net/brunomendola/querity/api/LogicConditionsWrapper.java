@@ -12,9 +12,9 @@ import java.util.List;
 public abstract class LogicConditionsWrapper implements Condition {
   @NonNull
   @JsonIgnore
-  private final LogicOperator logic;
+  protected final LogicOperator logic;
   @NonNull
-  private final List<Condition> conditions;
+  protected final List<Condition> conditions;
 
   @Override
   public boolean isEmpty() {

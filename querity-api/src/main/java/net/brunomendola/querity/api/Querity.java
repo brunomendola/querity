@@ -57,4 +57,10 @@ public interface Querity {
   static Sort sortBy(String propertyName, Sort.Direction direction) {
     return Sort.builder().propertyName(propertyName).direction(direction).build();
   }
+
+  static Query wrapConditionInQuery(Condition condition) {
+    return Querity.query()
+        .filter(condition)
+        .build();
+  }
 }
