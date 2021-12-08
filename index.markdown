@@ -38,17 +38,17 @@ Maven:
 <dependency>
   <groupId>net.brunomendola.querity</groupId>
   <artifactId>querity-spring-data-jpa</artifactId>
-  <version>${querity.version}</version>
+  <version>{{ site.querity_version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation "net.brunomendola.querity:querity-spring-data-jpa:${querityVersion}"
+implementation "net.brunomendola.querity:querity-spring-data-jpa:{{ site.querity_version }}"
 ```
 
-See [Releases](https://github.com/brunomendola/querity/releases) to know the latest version and see the changelogs.
+See [Releases](https://github.com/brunomendola/querity/releases) to check the latest version and see the changelogs.
 
 All modules are "Spring Boot starters", if you use Spring Boot you just need to add the dependency to your project and
 start using it, no other configuration needed.
