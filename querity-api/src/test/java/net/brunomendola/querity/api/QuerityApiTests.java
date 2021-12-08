@@ -226,7 +226,7 @@ class QuerityApiTests {
     private final QueryPreprocessor dummyPreprocessor = query -> query;
 
     @Test
-    void givenPreprocessor_whenRegisterPreprocessor_thenAddPreprocessorToTheList() {
+    void givenQuery_whenWithPreprocessor_thenAddPreprocessorToTheList() {
       Query query = Querity.query().withPreprocessor(dummyPreprocessor).build();
       assertThat(query.getPreprocessors()).contains(dummyPreprocessor);
     }
