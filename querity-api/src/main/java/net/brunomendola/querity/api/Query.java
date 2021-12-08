@@ -45,6 +45,7 @@ public class Query {
 
   public static class QueryBuilder {
     private Pagination pagination;
+    @SuppressWarnings({"java:S1068", "java:S1450"})
     private Sort[] sort = new Sort[0];
     private List<QueryPreprocessor> preprocessors = new ArrayList<>();
 

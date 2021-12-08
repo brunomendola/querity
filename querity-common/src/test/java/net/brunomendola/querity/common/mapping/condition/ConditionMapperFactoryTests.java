@@ -8,9 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ConditionMapperFactoryTests {
   @Test
   void givenNotSupportedCondition_whenGetConditionMapper_thenThrowsIllegalArgumentException() {
+    Condition condition = new Condition() {
+    };
     assertThrows(IllegalArgumentException.class,
-        () -> ConditionMapperFactory.getConditionMapper(new Condition() {
-        }),
+        () -> ConditionMapperFactory.getConditionMapper(condition),
         "Condition mapper not found");
   }
 }

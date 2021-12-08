@@ -31,14 +31,17 @@ public class QuerityPreprocessorAspect {
 
   @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
   public void anyRestControllerMethod() {
+    // no code needed, just the annotation
   }
 
   @Pointcut("execution(public * *(..))")
   public void anyPublicMethod() {
+    // no code needed, just the annotation
   }
 
   @Pointcut("execution(* *(.., @WithPreprocessor (*), ..))")
   public void annotatedArgument() {
+    // no code needed, just the annotation
   }
 
   @Around("anyRestControllerMethod() && anyPublicMethod() && annotatedArgument()")
