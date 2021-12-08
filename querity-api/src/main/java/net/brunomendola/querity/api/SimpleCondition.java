@@ -13,7 +13,7 @@ public class SimpleCondition implements Condition {
   private Operator operator = Operator.EQUALS;
   private final Object value;
 
-  @Builder
+  @Builder(toBuilder = true)
   @Jacksonized
   public SimpleCondition(@NonNull String propertyName, Operator operator, Object value) {
     this.propertyName = propertyName;

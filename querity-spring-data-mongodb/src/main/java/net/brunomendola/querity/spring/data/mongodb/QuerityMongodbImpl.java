@@ -23,7 +23,7 @@ public class QuerityMongodbImpl implements Querity {
 
   @Override
   public <T> Long count(Class<T> entityClass, Condition condition) {
-    Query query = Querity.query().filter(condition).build();
+    Query query = Querity.wrapConditionInQuery(condition);
     org.springframework.data.mongodb.core.query.Query q = getMongodbQuery(entityClass, query);
     return mongoTemplate.count(q, entityClass);
   }

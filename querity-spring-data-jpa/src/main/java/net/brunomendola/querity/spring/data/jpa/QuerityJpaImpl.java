@@ -24,7 +24,7 @@ public class QuerityJpaImpl implements Querity {
 
   @Override
   public <T> Long count(Class<T> entityClass, Condition condition) {
-    Query query = Querity.query().filter(condition).build();
+    Query query = Querity.wrapConditionInQuery(condition);
     TypedQuery<Long> jpaQuery = getJpaQueryFactory(entityClass, query).getJpaCountQuery();
     return jpaQuery.getSingleResult();
   }

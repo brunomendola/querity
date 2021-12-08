@@ -743,6 +743,10 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
 
   /**
    * Override this method if the database sorts the strings differently
+   *
+   * @param extractValueFunction the function to extract a sort value from the object
+   * @param <C>                  the object type
+   * @return a Comparator for the object of type C
    */
   protected <C> Comparator<C> getStringComparator(Function<C, String> extractValueFunction) {
     return Comparator.comparing(extractValueFunction, getSortComparator());
@@ -750,6 +754,9 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
 
   /**
    * Override this method if the database doesn't support handling null values in sorting
+   *
+   * @param <C> the object type
+   * @return a Comparator for the object of type C
    */
   protected <C extends Comparable<? super C>> Comparator<C> getSortComparator() {
     return Comparator.nullsLast(Comparator.naturalOrder());

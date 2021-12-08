@@ -8,7 +8,7 @@ import lombok.extern.jackson.Jacksonized;
 import java.util.List;
 
 public class AndConditionsWrapper extends LogicConditionsWrapper {
-  @Builder
+  @Builder(toBuilder = true)
   @Jacksonized
   public AndConditionsWrapper(List<Condition> conditions) {
     super(LogicOperator.AND, conditions);

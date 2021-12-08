@@ -106,4 +106,33 @@ class QueritySpringWebTests {
         .andExpect(status().isOk())
         .andExpect(content().string(""));
   }
+
+  @Test
+  void givenQuery_whenGetQueryWithPreprocessor_thenReturnsPreprocessedQuery() throws Exception {
+    mockMvc.perform(get("/query-with-preprocessor")
+            .queryParam("q", "{\"filter\":{\"propertyName\":\"prop1\",\"operator\":\"EQUALS\",\"value\":\"test\"}}"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json("{\"filter\":{\"propertyName\":\"prop2\",\"operator\":\"EQUALS\",\"value\":\"test\"}}", false));
+  }
+
+  @Test
+  void givenQuery_whenGetQueryWithPreprocessorMultiParams_thenReturnsPreprocessedQuery() throws Exception {
+    mockMvc.perform(get("/query-with-preprocessor-multi-params")
+            .queryParam("param1", "test1")
+            .queryParam("param2", "test2")
+            .queryParam("q", "{\"filter\":{\"propertyName\":\"prop1\",\"operator\":\"EQUALS\",\"value\":\"test\"}}"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json("{\"filter\":{\"propertyName\":\"prop2\",\"operator\":\"EQUALS\",\"value\":\"test\"}}", false));
+  }
+
+  @Test
+  void givenCondition_whenGetConditionWithPreprocessor_thenReturnsPreprocessedCondition() throws Exception {
+    mockMvc.perform(get("/count-with-preprocessor")
+            .queryParam("filter", "{\"propertyName\":\"prop1\",\"operator\":\"EQUALS\",\"value\":\"test\"}"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json("{\"propertyName\":\"prop2\",\"operator\":\"EQUALS\",\"value\":\"test\"}", false));
+  }
 }

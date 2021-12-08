@@ -1,5 +1,6 @@
 package net.brunomendola.querity.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -8,15 +9,19 @@ import lombok.extern.jackson.Jacksonized;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-@Builder
+@Builder(toBuilder = true)
 @Jacksonized
 @Getter
 public class Query {
-  private Condition filter;
-  private Pagination pagination;
+  private final Condition filter;
+  private final Pagination pagination;
   @NonNull
-  private List<Sort> sort;
+  private final Sort[] sort;
+  @NonNull
+  @JsonIgnore
+  private List<QueryPreprocessor> preprocessors;
 
   public boolean hasFilter() {
     return filter != null && !filter.isEmpty();
@@ -27,15 +32,29 @@ public class Query {
   }
 
   public boolean hasSort() {
-    return !sort.isEmpty();
+    return Arrays.stream(sort).anyMatch(s -> true);
+  }
+
+  public List<Sort> getSort() {
+    return Arrays.asList(sort);
+  }
+
+  @NonNull List<QueryPreprocessor> getPreprocessors() {
+    return preprocessors;
   }
 
   public static class QueryBuilder {
     private Pagination pagination;
-    private List<Sort> sort = new ArrayList<>();
+    private Sort[] sort = new Sort[0];
+    private List<QueryPreprocessor> preprocessors = new ArrayList<>();
+
+    public QueryBuilder withPreprocessor(QueryPreprocessor preprocessor) {
+      this.preprocessors.add(preprocessor);
+      return this;
+    }
 
     public QueryBuilder sort(Sort... sort) {
-      this.sort = Arrays.asList(sort);
+      this.sort = sort;
       return this;
     }
 
@@ -48,5 +67,11 @@ public class Query {
       this.pagination = Querity.paged(page, pageSize);
       return this;
     }
+  }
+
+  public Query preprocess() {
+    AtomicReference<Query> atomicQuery = new AtomicReference<>(this);
+    this.getPreprocessors().forEach(p -> atomicQuery.set(p.preprocess(atomicQuery.get())));
+    return atomicQuery.get();
   }
 }

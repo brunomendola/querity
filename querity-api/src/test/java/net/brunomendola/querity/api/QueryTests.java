@@ -1,6 +1,7 @@
 package net.brunomendola.querity.api;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static net.brunomendola.querity.api.Operator.EQUALS;
 import static net.brunomendola.querity.api.Querity.*;
@@ -53,5 +54,29 @@ class QueryTests {
   void givenSort_whenHasSort_thenReturnsTrue() {
     Query query = Querity.query().sort(sortBy("lastName")).build();
     assertThat(query.hasSort()).isTrue();
+  }
+
+  @Test
+  void givenSort_whenGetSort_thenReturnsListContainingTheSort() {
+    Sort sort = sortBy("lastName");
+    Query query = Querity.query().sort(sort).build();
+    assertThat(query.getSort()).hasSize(1);
+    assertThat(query.getSort()).contains(sort);
+  }
+
+  @Test
+  void givenPreprocessor_whenPreprocess_thenCallPreprocessors() {
+    QueryPreprocessor preprocessor = Mockito.spy(new DummyQueryPreprocessor());
+    Query query = Querity.query().withPreprocessor(preprocessor).build();
+    query.preprocess();
+
+    Mockito.verify(preprocessor).preprocess(query);
+  }
+
+  static class DummyQueryPreprocessor implements QueryPreprocessor {
+    @Override
+    public Query preprocess(Query query) {
+      return query;
+    }
   }
 }
