@@ -119,8 +119,9 @@ class QueritySpringWebTests {
   @Test
   void givenQuery_whenGetQueryWithPreprocessorMultiParams_thenReturnsPreprocessedQuery() throws Exception {
     mockMvc.perform(get("/query-with-preprocessor-multi-params")
-            .queryParam("param1", "test1")
-            .queryParam("param2", "test2")
+            .queryParam("someParam1", "test1")
+            .queryParam("someParam2", "test2")
+            .queryParam("requiredWithPreprocessorAnnotatedString", "shouldBeIgnoredByPreprocessorAspect")
             .queryParam("q", "{\"filter\":{\"propertyName\":\"prop1\",\"operator\":\"EQUALS\",\"value\":\"test\"}}"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))

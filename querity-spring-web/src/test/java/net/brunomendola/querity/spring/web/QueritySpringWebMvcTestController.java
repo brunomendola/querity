@@ -20,7 +20,12 @@ public class QueritySpringWebMvcTestController {
   }
 
   @GetMapping(value = "/query-with-preprocessor-multi-params", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Query getQueryWithPreprocessorMultipleParams(@RequestParam String param1, @RequestParam(required = false) @WithPreprocessor("preprocessor1") Query q, @RequestParam String param2) {
+  public Query getQueryWithPreprocessorMultipleParams(@RequestParam String someParam1,
+                                                      @RequestParam(required = false) @WithPreprocessor("preprocessor1") Query q,
+                                                      @RequestParam String someParam2,
+                                                      @RequestParam(required = false) @WithPreprocessor("preprocessor1") String notRequiredWithPreprocessorAnnotatedString,
+                                                      @RequestParam @WithPreprocessor("preprocessor1") String requiredWithPreprocessorAnnotatedString
+  ) {
     return q;
   }
 
