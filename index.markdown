@@ -215,6 +215,33 @@ Query query = Querity.query()
     ).build();
 ```
 
+#### Native conditions
+
+Use `Querity.filterByNative` and specify a native condition to use a database-specific condition in your query.
+
+This could be useful if you really want to add very complex query conditions that cannot be built with the Querity APIs.
+
+> Native conditions are supported only with Java API, not REST.
+
+Example with Spring Data JPA:
+
+```
+Specification<Person> specification = (root, cq, cb) -> cb.equal(root.get("lastName"), "Skywalker");
+Query query = Querity.query()
+    .filter(filterByNative(specification))
+    .build();
+```
+
+Example with Spring Data MongoDB:
+
+```
+Criteria criteria = Criteria.where("lastName").is("Skywalker");
+Query query = Querity.query()
+    .filter(filterByNative(criteria))
+    .build();
+```
+
+
 ## Sorting
 
 Use `Querity.query().sort(...).build()` to build a query with sorting.
