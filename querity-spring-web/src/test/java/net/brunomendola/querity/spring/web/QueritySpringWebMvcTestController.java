@@ -19,6 +19,11 @@ public class QueritySpringWebMvcTestController {
     return q;
   }
 
+  @GetMapping(value = "/query-with-preprocessor-multi-params", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Query getQueryWithPreprocessorMultipleParams(@RequestParam String param1, @RequestParam(required = false) @WithPreprocessor("preprocessor1") Query q, @RequestParam String param2) {
+    return q;
+  }
+
   @GetMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
   public Condition getCount(@RequestParam(required = false) Condition filter) {
     return filter;
