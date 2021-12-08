@@ -82,21 +82,26 @@ public class QuerityPreprocessorAspect {
     } else return arg;
   }
 
-  Query preprocessQuery(Query query, WithPreprocessor withPreprocessor) {
+  private Query preprocessQuery(Query query, WithPreprocessor withPreprocessor) {
     List<QueryPreprocessor> preprocessors = getQueryPreprocessors(withPreprocessor);
+    return preprocessQuery(query, preprocessors);
+  }
+
+  private Query preprocessQuery(Query query, List<QueryPreprocessor> preprocessors) {
     Query queryWithPreprocessors = query.toBuilder()
         .preprocessors(preprocessors)
         .build();
     return queryWithPreprocessors.preprocess();
   }
 
-  Condition preprocessCondition(Condition condition, WithPreprocessor withPreprocessor) {
+  private Condition preprocessCondition(Condition condition, WithPreprocessor withPreprocessor) {
     List<QueryPreprocessor> preprocessors = getQueryPreprocessors(withPreprocessor);
-    Query queryWithPreprocessors = Querity.query()
-        .filter(condition)
-        .preprocessors(preprocessors)
-        .build();
-    Query preprocessedQuery = queryWithPreprocessors.preprocess();
+    return preprocessCondition(condition, preprocessors);
+  }
+
+  private Condition preprocessCondition(Condition condition, List<QueryPreprocessor> preprocessors) {
+    Query query = Querity.wrapConditionInQuery(condition);
+    Query preprocessedQuery = preprocessQuery(query, preprocessors);
     return preprocessedQuery.getFilter();
   }
 
