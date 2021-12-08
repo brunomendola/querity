@@ -29,10 +29,11 @@ public abstract class QuerityJpaImplTests extends QuerityGenericSpringTestSuite<
         .filter(filterByNative(specification))
         .build();
     List<Person> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).isNotEmpty();
-    assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> entity1.getLastName().equals(p.getLastName()))
-        .collect(Collectors.toList()));
+    assertThat(result)
+        .isNotEmpty()
+        .isEqualTo(entities.stream()
+            .filter(p -> entity1.getLastName().equals(p.getLastName()))
+            .collect(Collectors.toList()));
   }
 
   @Test
@@ -45,9 +46,10 @@ public abstract class QuerityJpaImplTests extends QuerityGenericSpringTestSuite<
         .filter(not(filterByNative(specification)))
         .build();
     List<Person> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).isNotEmpty();
-    assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> !entity1.getLastName().equals(p.getLastName()))
-        .collect(Collectors.toList()));
+    assertThat(result)
+        .isNotEmpty()
+        .isEqualTo(entities.stream()
+            .filter(p -> !entity1.getLastName().equals(p.getLastName()))
+            .collect(Collectors.toList()));
   }
 }

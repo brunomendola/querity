@@ -56,11 +56,12 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, Stri
     Query query = Querity.query()
         .filter(filterByNative(criteria))
         .build();
-    List<Person> result = querity.findAll(getEntityClass(), query);
-    assertThat(result).isNotEmpty();
-    assertThat(result).isEqualTo(entities.stream()
-        .filter(p -> entity1.getLastName().equals(p.getLastName()))
-        .collect(Collectors.toList()));
+    List<Person> result = querity.findAll(Person.class, query);
+    assertThat(result)
+        .isNotEmpty()
+        .isEqualTo(entities.stream()
+            .filter(p -> entity1.getLastName().equals(p.getLastName()))
+            .collect(Collectors.toList()));
   }
 
   @Test
@@ -70,7 +71,7 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, Stri
         .filter(not(filterByNative(criteria)))
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> querity.findAll(getEntityClass(), query),
+        () -> querity.findAll(Person.class, query),
         "Not conditions wrapping native conditions is not supported; just write a negative native condition.");
   }
 }
