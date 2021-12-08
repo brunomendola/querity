@@ -8,11 +8,17 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Aspect
 public class QuerityPreprocessorAspect {
@@ -28,39 +34,74 @@ public class QuerityPreprocessorAspect {
   }
 
   @Pointcut("execution(public * *(..))")
-  public static void anyPublicMethod() {
+  public void anyPublicMethod() {
   }
 
-  @Around("anyRestControllerMethod() && anyPublicMethod() && @annotation(withQueryPreprocessor) && args(query)")
-  public Object applyPreprocessorsToQuery(ProceedingJoinPoint pjp, WithQueryPreprocessor withQueryPreprocessor, Query query) throws Throwable {
-    Query preprocessedQuery = null;
-    if (query != null) {
-      List<QueryPreprocessor> preprocessors = getQueryPreprocessors(withQueryPreprocessor);
-      Query queryWithPreprocessors = query.toBuilder()
-          .preprocessors(preprocessors)
-          .build();
-      preprocessedQuery = queryWithPreprocessors.preprocess();
-    }
-    return pjp.proceed(new Object[]{preprocessedQuery});
+  @Pointcut("execution(* *(.., @WithPreprocessor (*), ..))")
+  public void annotatedArgument() {
   }
 
-  @Around("anyRestControllerMethod() && anyPublicMethod() && @annotation(withQueryPreprocessor) && args(condition)")
-  public Object applyPreprocessorsToCondition(ProceedingJoinPoint pjp, WithQueryPreprocessor withQueryPreprocessor, Condition condition) throws Throwable {
-    Condition preprocessedCondition = null;
-    if (condition != null) {
-      List<QueryPreprocessor> preprocessors = getQueryPreprocessors(withQueryPreprocessor);
-      Query queryWithPreprocessors = Querity.query()
-          .filter(condition)
-          .preprocessors(preprocessors)
-          .build();
-      Query preprocessedQuery = queryWithPreprocessors.preprocess();
-      preprocessedCondition = preprocessedQuery.getFilter();
-    }
-    return pjp.proceed(new Object[]{preprocessedCondition});
+  @Around("anyRestControllerMethod() && anyPublicMethod() && annotatedArgument()")
+  public Object applyPreprocessorsToQuerityArgs(ProceedingJoinPoint pjp) throws Throwable {
+    Object[] args = pjp.getArgs();
+    MethodSignature signature = (MethodSignature) pjp.getSignature();
+    Method method = signature.getMethod();
+    Parameter[] params = method.getParameters();
+
+    Object[] preprocessedArgs = applyAnyWithPreprocessorAnnotation(args, params);
+
+    return pjp.proceed(preprocessedArgs);
   }
 
-  private List<QueryPreprocessor> getQueryPreprocessors(WithQueryPreprocessor withQueryPreprocessor) {
-    return Arrays.stream(withQueryPreprocessor.beanName())
+  private Object[] applyAnyWithPreprocessorAnnotation(Object[] args, Parameter[] params) {
+    return IntStream
+        .range(0, params.length)
+        .mapToObj(i -> {
+          Object arg = args[i];
+          Parameter param = params[i];
+          return applyAnyWithPreprocessorAnnotation(arg, param);
+        })
+        .toArray(Object[]::new);
+  }
+
+  private Object applyAnyWithPreprocessorAnnotation(Object arg, Parameter param) {
+    return findWithProcessorAnnotation(param)
+        .map(annotation -> preprocessArg(arg, annotation))
+        .orElse(arg);
+  }
+
+  private Optional<WithPreprocessor> findWithProcessorAnnotation(Parameter param) {
+    return Optional.ofNullable(AnnotationUtils.findAnnotation(param, WithPreprocessor.class));
+  }
+
+  private Object preprocessArg(Object arg, WithPreprocessor annotation) {
+    if (arg instanceof Query) {
+      return preprocessQuery((Query) arg, annotation);
+    } else if (arg instanceof Condition) {
+      return preprocessCondition((Condition) arg, annotation);
+    } else return arg;
+  }
+
+  Query preprocessQuery(Query query, WithPreprocessor withPreprocessor) {
+    List<QueryPreprocessor> preprocessors = getQueryPreprocessors(withPreprocessor);
+    Query queryWithPreprocessors = query.toBuilder()
+        .preprocessors(preprocessors)
+        .build();
+    return queryWithPreprocessors.preprocess();
+  }
+
+  Condition preprocessCondition(Condition condition, WithPreprocessor withPreprocessor) {
+    List<QueryPreprocessor> preprocessors = getQueryPreprocessors(withPreprocessor);
+    Query queryWithPreprocessors = Querity.query()
+        .filter(condition)
+        .preprocessors(preprocessors)
+        .build();
+    Query preprocessedQuery = queryWithPreprocessors.preprocess();
+    return preprocessedQuery.getFilter();
+  }
+
+  private List<QueryPreprocessor> getQueryPreprocessors(WithPreprocessor withPreprocessor) {
+    return Arrays.stream(withPreprocessor.beanName())
         .map(beanName -> applicationContext.getBean(beanName, QueryPreprocessor.class))
         .collect(Collectors.toList());
   }

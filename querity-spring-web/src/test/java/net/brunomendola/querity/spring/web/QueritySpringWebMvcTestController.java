@@ -15,8 +15,7 @@ public class QueritySpringWebMvcTestController {
   }
 
   @GetMapping(value = "/query-with-preprocessor", produces = MediaType.APPLICATION_JSON_VALUE)
-  @WithQueryPreprocessor(beanName = "preprocessor1")
-  public Query getQueryWithPreprocessor(@RequestParam(required = false) Query q) {
+  public Query getQueryWithPreprocessor(@RequestParam(required = false) @WithPreprocessor("preprocessor1") Query q) {
     return q;
   }
 
@@ -26,8 +25,7 @@ public class QueritySpringWebMvcTestController {
   }
 
   @GetMapping(value = "/count-with-preprocessor", produces = MediaType.APPLICATION_JSON_VALUE)
-  @WithQueryPreprocessor(beanName = "preprocessor1")
-  public Condition getCountWithPreprocessor(@RequestParam(required = false) Condition filter) {
+  public Condition getCountWithPreprocessor(@RequestParam(required = false) @WithPreprocessor("preprocessor1") Condition filter) {
     return filter;
   }
 }
