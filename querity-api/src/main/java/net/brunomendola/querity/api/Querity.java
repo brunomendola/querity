@@ -34,6 +34,12 @@ public interface Querity {
         .propertyName(propertyName).operator(operator).build();
   }
 
+  static <T> NativeConditionWrapper<T> filterByNative(T nativeCondition) {
+    return NativeConditionWrapper.<T>builder()
+        .nativeCondition(nativeCondition)
+        .build();
+  }
+
   static AndConditionsWrapper and(Condition... conditions) {
     return AndConditionsWrapper.builder().conditions(Arrays.asList(conditions)).build();
   }

@@ -9,11 +9,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-abstract class JpaConditionsWrapper extends JpaCondition {
+abstract class JpaLogicConditionsWrapper extends JpaCondition {
   @Delegate
   private final LogicConditionsWrapper conditionsWrapper;
 
-  protected JpaConditionsWrapper(LogicConditionsWrapper conditionsWrapper) {
+  protected JpaLogicConditionsWrapper(LogicConditionsWrapper conditionsWrapper) {
     this.conditionsWrapper = conditionsWrapper;
   }
 

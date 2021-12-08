@@ -41,15 +41,15 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
   @Autowired
   private DatabaseSeeder<T> databaseSeeder;
 
-  private List<T> entities;
-  private T entity1;
-  private T entity2;
+  protected List<T> entities;
+  protected T entity1;
+  protected T entity2;
 
   @Autowired
   PersonRepository<T, K> repository;
 
   @Autowired
-  Querity querity;
+  protected Querity querity;
 
   @BeforeEach
   void setUp() {

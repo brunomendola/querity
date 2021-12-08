@@ -185,6 +185,15 @@ class QuerityApiTests {
               .build());
       assertThat(people).isNotNull();
     }
+
+    @Test
+    void givenFilterWithNativeCondition_whenFindAll_thenReturnListOfEntity() {
+      List<Person> people = querity.findAll(Person.class,
+          Querity.query()
+              .filter(filterByNative(new Object()))
+              .build());
+      assertThat(people).isNotNull();
+    }
   }
 
   @Nested

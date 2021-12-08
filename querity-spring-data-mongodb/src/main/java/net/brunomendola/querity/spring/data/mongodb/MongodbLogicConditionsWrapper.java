@@ -5,11 +5,11 @@ import net.brunomendola.querity.api.LogicConditionsWrapper;
 import net.brunomendola.querity.api.LogicOperator;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-abstract class MongodbConditionsWrapper extends MongodbCondition {
+abstract class MongodbLogicConditionsWrapper extends MongodbCondition {
   @Delegate
   private final LogicConditionsWrapper conditionsWrapper;
 
-  protected MongodbConditionsWrapper(LogicConditionsWrapper conditionsWrapper) {
+  protected MongodbLogicConditionsWrapper(LogicConditionsWrapper conditionsWrapper) {
     this.conditionsWrapper = conditionsWrapper;
   }
 
