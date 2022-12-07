@@ -5,7 +5,8 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.Comparator;
 
 @TestPropertySource(properties = {
-    "spring.datasource.driver-class-name=org.h2.Driver"
+    "spring.datasource.driver-class-name=org.h2.Driver",
+    "spring.jpa.properties.hibernate.globally_quoted_identifiers=true"
 })
 class H2QuerityJpaImplTests extends QuerityJpaImplTests {
 
