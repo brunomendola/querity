@@ -1,13 +1,13 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import jakarta.persistence.criteria.From;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.hibernate.query.criteria.internal.path.PluralAttributePath;
+import org.hibernate.query.sqm.tree.domain.SqmPluralValuedSimplePath;
 
-import javax.persistence.criteria.From;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Path;
 import java.util.Arrays;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -41,7 +41,7 @@ class JpaPropertyUtils {
   }
 
   private static <P> boolean isCollectionPath(Path<P> propertyPath) {
-    return PluralAttributePath.class.isAssignableFrom(propertyPath.getClass());
+    return SqmPluralValuedSimplePath.class.isAssignableFrom(propertyPath.getClass());
   }
 
   private static <T, P> Join<T, P> getJoin(From<?, T> from, String joinProperty) {

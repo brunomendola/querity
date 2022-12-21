@@ -2,11 +2,13 @@ package net.brunomendola.querity.spring.web;
 
 import com.fasterxml.jackson.databind.Module;
 import net.brunomendola.querity.spring.web.jackson.QuerityModule;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
+@AutoConfiguration
 @Import(QuerityWebMvcSupport.class)
 @EnableAspectJAutoProxy
 public class QueritySpringWebAutoConfiguration {

@@ -1,12 +1,11 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.NotCondition;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 class JpaNotCondition extends JpaCondition {
   @Delegate
@@ -18,6 +17,8 @@ class JpaNotCondition extends JpaCondition {
 
   @Override
   public <T> Predicate toPredicate(Class<T> entityClass, Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-    return cb.not(JpaCondition.of(getCondition()).toPredicate(entityClass, root, cq, cb));
+    return cb.not(
+        cb.and( // work-around to make double-negation work (regression on Hibernate 6)
+            JpaCondition.of(getCondition()).toPredicate(entityClass, root, cq, cb)));
   }
 }

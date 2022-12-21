@@ -1,11 +1,11 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import net.brunomendola.querity.api.Condition;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Set;
 
 import static net.brunomendola.querity.common.util.ConditionUtils.getConditionImplementation;

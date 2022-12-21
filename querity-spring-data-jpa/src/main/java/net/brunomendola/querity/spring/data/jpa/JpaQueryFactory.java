@@ -1,13 +1,13 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import net.brunomendola.querity.api.Condition;
 import net.brunomendola.querity.api.Pagination;
 import net.brunomendola.querity.api.Query;
 import net.brunomendola.querity.api.Sort;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,12 +1,12 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import jakarta.persistence.criteria.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.brunomendola.querity.api.Operator;
 import net.brunomendola.querity.api.SimpleCondition;
 import net.brunomendola.querity.common.util.PropertyUtils;
 
-import javax.persistence.criteria.*;
 import java.util.EnumMap;
 import java.util.Map;
 
