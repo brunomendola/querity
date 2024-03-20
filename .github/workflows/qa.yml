@@ -3,7 +3,6 @@ name: QA
 on:
   workflow_run:
     workflows: [ "Java CI with Maven" ]
-    branches: [ main ]
     types:
       - completed
 

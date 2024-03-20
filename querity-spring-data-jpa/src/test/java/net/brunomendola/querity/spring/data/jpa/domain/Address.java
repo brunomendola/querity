@@ -1,10 +1,9 @@
 package net.brunomendola.querity.spring.data.jpa.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
-
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 @Entity
 @Getter

@@ -1,11 +1,11 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import net.brunomendola.querity.api.Condition;
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class QuerityJpaImpl implements Querity {

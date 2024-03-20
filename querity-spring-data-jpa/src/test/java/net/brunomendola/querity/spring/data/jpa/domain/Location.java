@@ -1,11 +1,11 @@
 package net.brunomendola.querity.spring.data.jpa.domain;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 

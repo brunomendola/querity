@@ -1,10 +1,10 @@
 package net.brunomendola.querity.spring.data.jpa.domain;
 
+import jakarta.persistence.*;
 import lombok.*;
 import net.brunomendola.querity.test.domain.ProductCategory;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;

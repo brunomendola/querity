@@ -1,9 +1,9 @@
 package net.brunomendola.querity.spring.data.jpa.domain;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

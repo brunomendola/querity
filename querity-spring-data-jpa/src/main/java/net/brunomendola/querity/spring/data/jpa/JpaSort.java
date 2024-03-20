@@ -1,12 +1,11 @@
 package net.brunomendola.querity.spring.data.jpa;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Root;
 import lombok.experimental.Delegate;
 import net.brunomendola.querity.api.Sort;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
 
 class JpaSort {
   @Delegate
