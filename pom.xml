@@ -5,7 +5,7 @@
 
   <groupId>net.brunomendola.querity</groupId>
   <artifactId>querity-parent</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
+  <version>2.1.0</version>
   <packaging>pom</packaging>
 
   <name>querity</name>
@@ -38,7 +38,7 @@
     <url>https://github.com/brunomendola/querity</url>
     <connection>scm:git:https://github.com/brunomendola/querity.git</connection>
     <developerConnection>scm:git:https://github.com/brunomendola/querity.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v2.1.0</tag>
   </scm>
 
   <ciManagement>
@@ -84,17 +84,17 @@
       <dependency>
         <groupId>net.brunomendola.querity</groupId>
         <artifactId>querity-api</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.1.0</version>
       </dependency>
       <dependency>
         <groupId>net.brunomendola.querity</groupId>
         <artifactId>querity-common</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.1.0</version>
       </dependency>
       <dependency>
         <groupId>net.brunomendola.querity</groupId>
         <artifactId>querity-test</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.1.0</version>
       </dependency>
 
       <dependency>
