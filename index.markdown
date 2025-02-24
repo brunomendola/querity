@@ -21,8 +21,8 @@ Why you should use Querity?
 
 # Requirements
 
-* Java 8+
-* Spring Framework (optionally Spring Boot... makes things a lot simpler)
+* Java 17+
+* Spring Framework 6 (optionally Spring Boot 3... makes things a lot simpler)
 
 # Installing
 
