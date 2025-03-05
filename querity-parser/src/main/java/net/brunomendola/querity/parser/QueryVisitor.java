@@ -30,14 +30,13 @@ class QueryVisitor extends QueryParserBaseVisitor<Object> {
 
   @Override
   public Object visitCondition(QueryParser.ConditionContext ctx) {
-    if (ctx.simpleCondition() != null) {
-      return visit(ctx.simpleCondition());
-    } else if (ctx.conditionWrapper() != null) {
+    if (ctx.conditionWrapper() != null) {
       return visit(ctx.conditionWrapper());
     } else if (ctx.notCondition() != null) {
       return visit(ctx.notCondition());
+    } else {
+      return visit(ctx.simpleCondition());
     }
-    return null; // Should never reach here
   }
 
   @Override
@@ -51,12 +50,11 @@ class QueryVisitor extends QueryParserBaseVisitor<Object> {
       return AndConditionsWrapper.builder()
           .conditions(conditions)
           .build();
-    } else if (ctx.OR() != null) {
+    } else {
       return OrConditionsWrapper.builder()
           .conditions(conditions)
           .build();
     }
-    return null; // Should never reach here
   }
 
   @Override
@@ -113,8 +111,9 @@ class QueryVisitor extends QueryParserBaseVisitor<Object> {
       return Operator.IS_NULL;
     } else if (ctx.IS_NOT_NULL() != null) {
       return Operator.IS_NOT_NULL;
+    } else {
+      throw new UnsupportedOperationException("Unsupported operator: " + ctx.getText());
     }
-    return null; // Should never reach here
   }
 
   @Override
@@ -136,10 +135,9 @@ class QueryVisitor extends QueryParserBaseVisitor<Object> {
   public Object visitDirection(QueryParser.DirectionContext ctx) {
     if (ctx.ASC() != null) {
       return Sort.Direction.ASC;
-    } else if (ctx.DESC() != null) {
+    } else {
       return Sort.Direction.DESC;
     }
-    return null;
   }
 }
 
