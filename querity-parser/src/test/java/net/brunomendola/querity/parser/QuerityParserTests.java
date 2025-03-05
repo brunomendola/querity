@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import static net.brunomendola.querity.api.Operator.*;
@@ -24,6 +25,14 @@ class QuerityParserTests {
             Querity.query().filter(filterBy("lastName", STARTS_WITH, "Sky")).build()),
         Arguments.of("and(firstName=\"Luke\", lastName=\"Skywalker\")",
             Querity.query().filter(and(filterBy("firstName", "Luke"), filterBy("lastName", "Skywalker"))).build()),
+        Arguments.of("age>30",
+            Querity.query().filter(filterBy("age", GREATER_THAN, 30)).build()),
+        Arguments.of("age<30",
+            Querity.query().filter(filterBy("age", LESSER_THAN, 30)).build()),
+        Arguments.of("height>=1.80",
+            Querity.query().filter(filterBy("height", GREATER_THAN_EQUALS, new BigDecimal("1.80"))).build()),
+        Arguments.of("height<=1.80",
+            Querity.query().filter(filterBy("height", LESSER_THAN_EQUALS, new BigDecimal("1.80"))).build()),
         Arguments.of("and(lastName=\"Skywalker\", age>30)",
             Querity.query().filter(and(filterBy("lastName", "Skywalker"), filterBy("age", GREATER_THAN, 30))).build()),
         Arguments.of("and(or(firstName=\"Luke\", firstName=\"Anakin\"), lastName=\"Skywalker\") sort by age desc",
