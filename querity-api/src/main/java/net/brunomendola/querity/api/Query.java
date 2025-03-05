@@ -1,9 +1,7 @@
 package net.brunomendola.querity.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.ArrayList;
@@ -14,6 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Builder(toBuilder = true)
 @Jacksonized
 @Getter
+@EqualsAndHashCode(of = {"filter", "pagination", "sort"})
+@ToString(of = {"filter", "pagination", "sort"})
 public class Query {
   private final Condition filter;
   private final Pagination pagination;
