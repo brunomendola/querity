@@ -43,12 +43,33 @@ public class Query {
     return preprocessors;
   }
 
+  public static QueryBuilder builder() {
+    return new QueryBuilder();
+  }
+
+  public static QueryBuilder builder(Query query) {
+    return new QueryBuilder(query);
+  }
+
   public static class QueryBuilder {
+    private Condition filter;
     @SuppressWarnings("java:S1068")
     private Pagination pagination;
     @SuppressWarnings({"java:S1068", "java:S1450"})
     private Sort[] sort = new Sort[0];
     private List<QueryPreprocessor> preprocessors = new ArrayList<>();
+
+    public QueryBuilder() {
+    }
+
+    public QueryBuilder(Query query) {
+      if (query != null) {
+        this.filter = query.filter;
+        this.pagination = query.pagination;
+        this.sort = query.sort;
+        this.preprocessors = query.preprocessors;
+      }
+    }
 
     public QueryBuilder withPreprocessor(QueryPreprocessor preprocessor) {
       this.preprocessors.add(preprocessor);

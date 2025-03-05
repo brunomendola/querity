@@ -79,4 +79,16 @@ class QueryTests {
       return query;
     }
   }
+
+  @Test
+  void givenQuery_whenCopy_thenCopiesQuery() {
+    Query original = Querity.query()
+        .filter(filterBy("lastName", EQUALS, "Skywalker"))
+        .sort(sortBy("lastName"))
+        .pagination(1, 20)
+        .withPreprocessor(new DummyQueryPreprocessor())
+        .build();
+    Query copy = Querity.copy(original).build();
+    assertThat(copy).isEqualTo(original);
+  }
 }

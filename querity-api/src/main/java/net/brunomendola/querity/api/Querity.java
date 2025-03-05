@@ -12,6 +12,10 @@ public interface Querity {
     return Query.builder();
   }
 
+  static Query.QueryBuilder copy(Query query) {
+    return Query.builder(query);
+  }
+
   /**
    * Filter by propertyName EQUALS value
    *
