@@ -45,7 +45,8 @@ Available modules:
 
 * **querity-spring-data-jpa**: supports Spring Data JPA
 * **querity-spring-data-mongodb**: supports Spring Data MongoDB
-* **querity-spring-web**: supports JSON serialization and deserialization of Querity objects in Spring Web MVC
+* **querity-spring-web**: supports JSON de/serialization of Querity objects in Spring Web MVC
+* **querity-parser**: enable the parsing of Querity objects from a **simple query language**
 
 All modules are "Spring Boot starters", you just need to add the dependency to your Spring Boot project and start using
 it, no other configuration needed.
@@ -107,6 +108,29 @@ The `count` method returns the total filtered items count excluding pagination (
 Java 14).
 
 > Note the static imports to improve the readability.
+
+#### Query language
+
+The `querity-parser` module provides a simple query language to build a `Query` object,
+useful when you need the user to write and understand the query.
+
+It is an alternative approach to the one provided by the module `querity-spring-web`, which parses JSON.
+
+The following snippet rewrites the previous example using the query language:
+
+```java
+import net.brunomendola.querity.api.Query;
+import net.brunomendola.querity.parser.QuerityParser;
+
+//...
+
+public List<Person> getPeople() {
+  Query query = QuerityParser.parseQuery("not(and(lastName=\"Skywalker\", firstName=\"Luke\")) sort by lastName, birthDate desc page 1,10");
+  return querity.findAll(Person.class, query);
+}
+
+//...
+```
 
 ## Documentation
 
