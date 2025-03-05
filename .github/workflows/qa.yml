@@ -1,10 +1,10 @@
 name: QA
 
 on:
-  workflow_run:
-    workflows: [ "Java CI with Maven" ]
-    types:
-      - completed
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   qa:
