@@ -70,6 +70,10 @@ Supports [Spring Data MongoDB](https://spring.io/projects/spring-data-mongodb).
 Supports JSON serialization and deserialization of Querity objects
 in [Spring Web MVC](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html).
 
+## querity-parser
+
+Enables the parsing of Querity objects from a **simple query language**.
+
 # Quick start
 
 In your Spring Boot project, add the dependency as shown in [Installing](#installing) and create a Spring service as
@@ -112,7 +116,7 @@ Luke Skywalker, sorted by last name and then birthdate descending.<br />
 The `count` method returns the total filtered items count excluding pagination (the record keyword is implemented from
 Java 14).
 
-> Note the static imports to improve the readability.
+> Notice the static imports to improve the readability.
 
 # Features
 
@@ -295,6 +299,112 @@ Then the above REST API could be invoked like this:
 ```bash
 curl 'http://localhost:8080/people?q={"filter":{"and":[{"propertyName":"lastName","operator":"EQUALS","value":"Skywalker"},{"propertyName":"lastName","operator":"EQUALS","value":"Luke"}]}}'
 ```
+
+## Query language
+
+The `querity-parser` module provides a simple query language to build a `Query` object,
+useful when you need the user to write and understand the query.
+
+It is an alternative approach to the one provided by the module `querity-spring-web`, which parses JSON.
+
+To enable the query language, import the `querity-parser` module (see [Installing](#installing)).
+
+The following snippet rewrites the previous example using the support for the query language:
+
+```java
+import net.brunomendola.querity.api.Query;
+import net.brunomendola.querity.parser.QuerityParser;
+
+@RestController
+public class MyRestController {
+
+  @Autowired
+  MyService service;
+
+  @GetMapping(value = "/people", produces = MediaType.APPLICATION_JSON_VALUE)
+  Result<Person> getPeople(@RequestParam(required = false) String q) {
+    Query query = QuerityParser.parseQuery(q);
+    return service.getPeople(query);
+  }
+}
+```
+
+Then the above REST API could be invoked like this:
+
+```bash
+curl 'http://localhost:8080/people?q=and(lastName="Skywalker",firstName="Luke")'
+```
+
+_Much simpler than JSON, isn't it?_
+
+### Query language syntax
+
+The query language supports the following grammar (ANTLR v4 format):
+
+```
+AND        : 'and';
+OR         : 'or';
+NOT        : 'not';
+SORT       : 'sort by';
+ASC        : 'asc';
+DESC       : 'desc';
+PAGINATION : 'page';
+NEQ        : '!=';
+LTE        : '<=';
+GTE        : '>=';
+EQ         : '=';
+LT         : '<';
+GT         : '>';
+STARTS_WITH: 'starts with';
+ENDS_WITH  : 'ends with';
+CONTAINS   : 'contains';
+IS_NULL    : 'is null';
+IS_NOT_NULL: 'is not null';
+LPAREN     : '(';
+RPAREN     : ')';
+COMMA      : ',';
+
+INT_VALUE     : [0-9]+;
+DECIMAL_VALUE : [0-9]+'.'[0-9]+;
+PROPERTY      : [a-zA-Z_][a-zA-Z0-9_.]*;
+STRING_VALUE  : '"' (~["\\] | '\\' .)* '"';
+
+query            : (condition)? (SORT sortFields)? (PAGINATION paginationParams)? ;
+condition        : simpleCondition | conditionWrapper | notCondition;
+operator         : NEQ | LTE | GTE | EQ | LT | GT | STARTS_WITH | ENDS_WITH | CONTAINS | IS_NULL | IS_NOT_NULL ;
+conditionWrapper : (AND | OR) LPAREN condition (COMMA condition)* RPAREN ;
+notCondition     : NOT LPAREN condition RPAREN ;
+simpleCondition  : PROPERTY operator (INT_VALUE | DECIMAL_VALUE | STRING_VALUE)? ;
+direction        : ASC | DESC ;
+sortField        : PROPERTY (direction)? ;
+sortFields       : sortField (COMMA sortField)* ;
+paginationParams : INT_VALUE COMMA INT_VALUE ;
+```
+
+Some examples of valid queries:
+
+```text
+lastName="Skywalker"
+lastName!="Skywalker"
+lastName starts with "Sky"
+lastName ends with "walker"
+lastName contains "wal"
+and(firstName="Luke", lastName="Skywalker")
+age>30
+age<30
+height>=1.80
+height<=1.80
+and(lastName="Skywalker", age>30)
+and(or(firstName="Luke", firstName="Anakin"), lastName="Skywalker") sort by age desc
+and(not(firstName="Luke"), lastName="Skywalker")
+lastName="Skywalker" page 2,10
+lastName is null
+lastName is not null
+address.city="Rome"
+sort by lastName asc, age desc page 1,10
+```
+
+> Notice that string values must always be enclosed in double quotes.
 
 ## Support for DTO layer
 
