@@ -23,7 +23,7 @@ RPAREN     : ')';
 COMMA      : ',';
 
 INT_VALUE    : [0-9]+;
-PROPERTY     : [a-zA-Z_][a-zA-Z0-9_]*;
+PROPERTY     : [a-zA-Z_][a-zA-Z0-9_.]*;
 STRING_VALUE : '"' (~["\\] | '\\' .)* '"';
 
 WS : [ \t\r\n]+ -> skip;

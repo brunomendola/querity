@@ -34,6 +34,8 @@ class QuerityParserTests {
             Querity.query().filter(filterBy("lastName", "Skywalker")).pagination(2, 10).build()),
         Arguments.of("lastName is null",
             Querity.query().filter(filterBy("lastName", IS_NULL)).build()),
+        Arguments.of("address.city=\"Rome\"",
+            Querity.query().filter(filterBy("address.city", "Rome")).build()),
         Arguments.of("sort by lastName, firstName page 1,10",
             Querity.query().sort(sortBy("lastName"), sortBy("firstName")).pagination(1, 10).build())
     );
