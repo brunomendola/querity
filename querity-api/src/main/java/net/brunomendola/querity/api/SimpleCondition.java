@@ -1,11 +1,11 @@
 package net.brunomendola.querity.api;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
+@EqualsAndHashCode
+@ToString
 public class SimpleCondition implements Condition {
   @NonNull
   private final String propertyName;

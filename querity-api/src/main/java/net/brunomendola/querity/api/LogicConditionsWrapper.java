@@ -1,13 +1,13 @@
 package net.brunomendola.querity.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
+@EqualsAndHashCode
+@ToString
 @AllArgsConstructor
 public abstract class LogicConditionsWrapper implements Condition {
   @NonNull

@@ -1,13 +1,13 @@
 package net.brunomendola.querity.api;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 @Builder(toBuilder = true)
 @Jacksonized
 @Getter
+@EqualsAndHashCode
+@ToString
 public class Sort {
   @NonNull
   private String propertyName;

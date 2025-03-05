@@ -77,6 +77,7 @@
     <module>querity-test</module>
     <module>querity-spring-web</module>
     <module>querity-common</module>
+    <module>querity-parser</module>
   </modules>
 
   <dependencyManagement>
@@ -89,6 +90,11 @@
       <dependency>
         <groupId>net.brunomendola.querity</groupId>
         <artifactId>querity-common</artifactId>
+        <version>2.1.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>net.brunomendola.querity</groupId>
+        <artifactId>querity-parser</artifactId>
         <version>2.1.1-SNAPSHOT</version>
       </dependency>
       <dependency>

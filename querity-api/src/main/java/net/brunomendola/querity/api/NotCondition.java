@@ -1,14 +1,14 @@
 package net.brunomendola.querity.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 @Builder(toBuilder = true)
 @Jacksonized
 @Getter
+@EqualsAndHashCode
+@ToString
 public class NotCondition implements Condition {
   @NonNull
   @JsonProperty("not")
