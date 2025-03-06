@@ -149,6 +149,10 @@ Query query = Querity.query()
     .build();
 ```
 
+Supports **nested properties** with dot notation, also with one-to-many/many-to-many relationships. 
+
+E.g. `address.city` (one-to-one), `visitedPlaces.country` (one-to-many).
+
 ##### Operators
 
 * EQUALS
