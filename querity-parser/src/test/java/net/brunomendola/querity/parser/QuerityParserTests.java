@@ -52,6 +52,8 @@ class QuerityParserTests {
             Querity.query().filter(filterBy("lastName", IS_NULL)).build()),
         Arguments.of("lastName is not null",
             Querity.query().filter(filterBy("lastName", IS_NOT_NULL)).build()),
+        Arguments.of("deleted=false",
+            Querity.query().filter(filterBy("deleted", Boolean.FALSE)).build()),
         Arguments.of("address.city=\"Rome\"",
             Querity.query().filter(filterBy("address.city", "Rome")).build()),
         Arguments.of("sort by lastName asc, age desc page 1,10",

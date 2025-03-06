@@ -75,6 +75,8 @@ class QueryVisitor extends QueryParserBaseVisitor<Object> {
         value = Integer.parseInt(ctx.INT_VALUE().getText());
       } else if (ctx.DECIMAL_VALUE() != null) {
         value = new BigDecimal(ctx.DECIMAL_VALUE().getText());
+      } else if (ctx.BOOLEAN_VALUE() != null) {
+        value = Boolean.valueOf(ctx.BOOLEAN_VALUE().getText());
       } else {
         value = ctx.STRING_VALUE().getText().replace("\"", "");  // Remove quotes if present
       }
