@@ -380,6 +380,7 @@ COMMA      : ',';
 
 INT_VALUE     : [0-9]+;
 DECIMAL_VALUE : [0-9]+'.'[0-9]+;
+BOOLEAN_VALUE : 'true' | 'false';
 PROPERTY      : [a-zA-Z_][a-zA-Z0-9_.]*;
 STRING_VALUE  : '"' (~["\\] | '\\' .)* '"';
 
@@ -388,7 +389,7 @@ condition        : simpleCondition | conditionWrapper | notCondition;
 operator         : NEQ | LTE | GTE | EQ | LT | GT | STARTS_WITH | ENDS_WITH | CONTAINS | IS_NULL | IS_NOT_NULL ;
 conditionWrapper : (AND | OR) LPAREN condition (COMMA condition)* RPAREN ;
 notCondition     : NOT LPAREN condition RPAREN ;
-simpleCondition  : PROPERTY operator (INT_VALUE | DECIMAL_VALUE | STRING_VALUE)? ;
+simpleCondition  : PROPERTY operator (INT_VALUE | DECIMAL_VALUE | BOOLEAN_VALUE | STRING_VALUE)? ;
 direction        : ASC | DESC ;
 sortField        : PROPERTY (direction)? ;
 sortFields       : sortField (COMMA sortField)* ;
@@ -414,6 +415,7 @@ and(not(firstName="Luke"), lastName="Skywalker")
 lastName="Skywalker" page 2,10
 lastName is null
 lastName is not null
+deleted=false
 address.city="Rome"
 sort by lastName asc, age desc page 1,10
 ```
