@@ -157,9 +157,9 @@ E.g. `address.city` (one-to-one), `visitedPlaces.country` (one-to-many).
 
 * EQUALS
 * NOT_EQUALS
-* STARTS_WITH
-* ENDS_WITH
-* CONTAINS
+* STARTS_WITH (case-insensitive)
+* ENDS_WITH (case-insensitive)
+* CONTAINS (case-insensitive)
 * GREATER_THAN
 * GREATER_THAN_EQUALS
 * LESSER_THAN
