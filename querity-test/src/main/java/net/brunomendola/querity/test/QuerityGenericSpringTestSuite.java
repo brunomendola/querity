@@ -328,41 +328,41 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     }
 
     @Test
-    void givenFilterWithStringStartsWithCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-      String prefix = entity1.getLastName().substring(0, 3);
+    void givenFilterWithStringStartsWithCondition_whenFilterAll_thenReturnOnlyFilteredElementsWithCaseInsensitiveMatch() {
+      String prefix = entity1.getLastName().substring(0, 3).toUpperCase();
       Query query = Querity.query()
           .filter(filterBy(PROPERTY_LAST_NAME, STARTS_WITH, prefix))
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
       assertThat(result).isEqualTo(entities.stream()
-          .filter(p -> p.getLastName() != null && p.getLastName().startsWith(prefix))
+          .filter(p -> p.getLastName() != null && p.getLastName().toUpperCase().startsWith(prefix))
           .collect(Collectors.toList()));
     }
 
     @Test
-    void givenFilterWithStringEndsWithCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-      String suffix = entity1.getLastName().substring(3);
+    void givenFilterWithStringEndsWithCondition_whenFilterAll_thenReturnOnlyFilteredElementsWithCaseInsensitiveMatch() {
+      String suffix = entity1.getLastName().substring(3).toUpperCase();
       Query query = Querity.query()
           .filter(filterBy(PROPERTY_LAST_NAME, ENDS_WITH, suffix))
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
       assertThat(result).isEqualTo(entities.stream()
-          .filter(p -> p.getLastName() != null && p.getLastName().endsWith(suffix))
+          .filter(p -> p.getLastName() != null && p.getLastName().toUpperCase().endsWith(suffix))
           .collect(Collectors.toList()));
     }
 
     @Test
-    void givenFilterWithStringContainsCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
-      String substring = entity1.getLastName().substring(1, 3);
+    void givenFilterWithStringContainsCondition_whenFilterAll_thenReturnOnlyFilteredElementsWithCaseInsensitiveMatch() {
+      String substring = entity1.getLastName().substring(1, 3).toUpperCase();
       Query query = Querity.query()
           .filter(filterBy(PROPERTY_LAST_NAME, CONTAINS, substring))
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
       assertThat(result).isEqualTo(entities.stream()
-          .filter(p -> p.getLastName() != null && p.getLastName().contains(substring))
+          .filter(p -> p.getLastName() != null && p.getLastName().toUpperCase().contains(substring))
           .collect(Collectors.toList()));
     }
 
