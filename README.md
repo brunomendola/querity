@@ -12,22 +12,31 @@ Open-source extensible query builder supporting SQL and NoSQL.
 
 ## Description
 
-The aim of this project is to provide a simple generic interface, supporting fluent Java and REST APIs, to query
-databases in Java applications.
+Querity is an extensible query builder to create and run database queries in your Java application.
 
-The modules implement the support for different databases and frameworks.
+It supports **SQL** and **NoSQL** databases technologies, and each support is built into small modules, so you
+can import the one which fits into your project.
 
-Why you should use Querity?
+### Features
 
-✔ learn once, use everywhere
+Database support:
 
-✔ zero logic needed apart building a generic Query object
+* any SQL database (with the JPA module)
+* MongoDB
+* Elasticsearch
 
-✔ switch database without rewriting the logic of your application
+Query features:
 
-✔ ready to use REST API which implements filtering, sorting and pagination, to be consumed by your UI components
+* filtering
+* sorting
+* pagination
+* textual query language
+* JSON serialization/deserialization
+* and more...
 
-✔ expose the same REST API in all your projects
+## Documentation
+
+Read the full documentation [here](https://brunomendola.github.io/querity).
 
 ## Getting Started
 
@@ -132,10 +141,6 @@ public List<Person> getPeople() {
 
 //...
 ```
-
-## Documentation
-
-Read the full documentation [here](https://brunomendola.github.io/querity).
 
 ## Access to SNAPSHOT builds
 
