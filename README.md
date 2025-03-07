@@ -31,7 +31,8 @@ Query features:
 * sorting
 * pagination
 * textual query language
-* JSON serialization/deserialization
+* support for REST APIs
+* support for DTO layer
 * and more...
 
 ## Documentation
