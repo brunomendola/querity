@@ -65,6 +65,12 @@ Supports [Spring Data JPA](https://spring.io/projects/spring-data-jpa).
 
 Supports [Spring Data MongoDB](https://spring.io/projects/spring-data-mongodb).
 
+## querity-spring-data-elasticsearch
+
+Supports [Spring Data Elasticsearch](https://spring.io/projects/spring-data-elasticsearch).
+
+> Remember to map the fields you want to query as "keyword" in your Elasticsearch index.
+
 ## querity-spring-web
 
 Supports JSON serialization and deserialization of Querity objects
@@ -157,15 +163,20 @@ E.g. `address.city` (one-to-one), `visitedPlaces.country` (one-to-many).
 
 * EQUALS
 * NOT_EQUALS
-* STARTS_WITH (case-insensitive)
-* ENDS_WITH (case-insensitive)
-* CONTAINS (case-insensitive)
+* STARTS_WITH (case-insensitive where supported*)
+* ENDS_WITH (case-insensitive where supported*)
+* CONTAINS (case-insensitive where supported*)
 * GREATER_THAN
 * GREATER_THAN_EQUALS
 * LESSER_THAN
 * LESSER_THAN_EQUALS
 * IS_NULL
 * IS_NOT_NULL
+
+> \* Operators STARTS_WITH, ENDS_WITH, CONTAINS are case-insensitive only if the underlying database supports case-insensitive matching and proper configurations are applied.
+>
+>    E.g. JPA supports case-insensitive matching by default, 
+> while Elasticsearch requires a specific configuration (see [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html) and [Spring Data Elasticsearch Documentation](https://docs.spring.io/spring-data/elasticsearch/reference/elasticsearch/object-mapping.html#elasticsearch.mapping.meta-model.annotations)).
 
 #### AND conditions
 

@@ -27,7 +27,7 @@ url: "https://brunomendola.github.io" # the base hostname & protocol for your si
 twitter_username: brunomendola
 github_username: brunomendola
 logo: /assets/img/querity-logo.jpg
-querity_version: 2.2.1
+querity_version: 2.3.0
 
 # Build settings
 remote_theme: pages-themes/minimal@v0.2.0
