@@ -48,9 +48,11 @@ public class Person extends AbstractPersistable<Long> implements net.brunomendol
   @Override
   public @NonNull String toString() {
     return "Person{" +
-        "id='" + getId() + '\'' +
-        ", firstName='" + firstName + '\'' +
-        ", lastName='" + lastName + '\'' +
-        '}';
+           "id='" + getId() + '\'' +
+           ", firstName='" + firstName + '\'' +
+           ", lastName='" + lastName + '\'' +
+           ", birthDate='" + birthDate + '\'' +
+           ", city='" + address.getCity() + '\'' +
+           '}';
   }
 }

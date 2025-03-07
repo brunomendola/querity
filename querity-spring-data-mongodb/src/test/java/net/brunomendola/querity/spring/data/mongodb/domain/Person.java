@@ -48,6 +48,8 @@ public class Person implements net.brunomendola.querity.test.domain.Person<Strin
         "id='" + id + '\'' +
         ", firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
+           ", birthDate='" + birthDate + '\'' +
+           ", city='" + address.getCity() + '\'' +
         '}';
   }
 }

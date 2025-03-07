@@ -43,9 +43,14 @@ public class QuerityElasticsearchImplTests extends QuerityGenericSpringTestSuite
     return Person.class;
   }
 
+  /**
+   * Overridden because sort behaves differently in Elasticsearch regarding null values
+   */
   @Override
-  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator() {
-    return Comparator.nullsFirst(Comparator.naturalOrder());
+  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator(boolean reversed) {
+    Comparator<C> comparator = Comparator.naturalOrder();
+    if (reversed) comparator = comparator.reversed();
+    return Comparator.nullsLast(comparator);
   }
 
   @Test

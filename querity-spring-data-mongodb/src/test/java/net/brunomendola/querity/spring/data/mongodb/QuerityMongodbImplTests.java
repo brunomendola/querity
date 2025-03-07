@@ -43,11 +43,13 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, Stri
   }
 
   /**
-   * Overridden because sort with nulls last is not supported in MongoDB
+   * Overridden because sort with nulls last is not supported by MongoDB
    */
   @Override
-  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator() {
-    return Comparator.nullsFirst(Comparator.naturalOrder());
+  protected <C extends Comparable<? super C>> Comparator<C> getSortComparator(boolean reversed) {
+    Comparator<C> comparator = Comparator.nullsFirst(Comparator.naturalOrder());
+    if (reversed) comparator = comparator.reversed();
+    return comparator;
   }
 
   @Test

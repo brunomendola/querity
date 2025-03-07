@@ -35,11 +35,11 @@ class PostgresqlQuerityJpaImplTests extends QuerityJpaImplTests {
    * Overridden because sort behaves differently in PostgreSQL regarding accented strings
    */
   @Override
-  protected <C> Comparator<C> getStringComparator(Function<C, String> extractValueFunction) {
+  protected <C> Comparator<C> getStringComparator(Function<C, String> extractValueFunction, boolean reversed) {
     return Comparator.comparing(
         (C c) -> StringUtils.lowerCase(
             StringUtils.stripAccents(
                 extractValueFunction.apply(c))),
-        getSortComparator());
+        getSortComparator(reversed));
   }
 }

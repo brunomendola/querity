@@ -17,7 +17,7 @@ class ElasticsearchSort {
             org.springframework.data.domain.Sort.Direction.ASC :
             org.springframework.data.domain.Sort.Direction.DESC,
         getPropertyName(),
-        org.springframework.data.domain.Sort.NullHandling.NULLS_FIRST // ES doesn't support NULLS_LAST
+        org.springframework.data.domain.Sort.NullHandling.NULLS_LAST
     );
   }
 }
