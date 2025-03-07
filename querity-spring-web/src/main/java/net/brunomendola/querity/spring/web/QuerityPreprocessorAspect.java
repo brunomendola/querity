@@ -17,7 +17,6 @@ import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Aspect
@@ -111,6 +110,6 @@ public class QuerityPreprocessorAspect {
   private List<QueryPreprocessor> getQueryPreprocessors(WithPreprocessor withPreprocessor) {
     return Arrays.stream(withPreprocessor.beanName())
         .map(beanName -> applicationContext.getBean(beanName, QueryPreprocessor.class))
-        .collect(Collectors.toList());
+        .toList();
   }
 }

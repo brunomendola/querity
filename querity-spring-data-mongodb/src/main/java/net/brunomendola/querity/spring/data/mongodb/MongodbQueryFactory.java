@@ -7,7 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 class MongodbQueryFactory<T> {
   private final Class<T> entityClass;
@@ -58,6 +57,6 @@ class MongodbQueryFactory<T> {
     return query.getSort().stream()
         .map(MongodbSort::new)
         .map(MongodbSort::toMongoSortOrder)
-        .collect(Collectors.toList());
+        .toList();
   }
 }

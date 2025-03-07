@@ -9,7 +9,6 @@ import net.brunomendola.querity.api.Query;
 import net.brunomendola.querity.api.Sort;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 class JpaQueryFactory<T> {
   private final Class<T> entityClass;
@@ -70,7 +69,7 @@ class JpaQueryFactory<T> {
     return sort.stream()
         .map(JpaSort::new)
         .map(jpaSort -> jpaSort.toOrder(root, cb))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private void applyPagination(TypedQuery<T> tq) {

@@ -1,15 +1,15 @@
-package net.brunomendola.querity.spring.data.mongodb;
+package net.brunomendola.querity.spring.data.elasticsearch;
 
 import net.brunomendola.querity.api.Querity;
 import net.brunomendola.querity.api.Query;
-import net.brunomendola.querity.spring.data.mongodb.domain.Person;
+import net.brunomendola.querity.spring.data.elasticsearch.domain.Person;
 import net.brunomendola.querity.test.QuerityGenericSpringTestSuite;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -22,18 +22,19 @@ import static net.brunomendola.querity.api.Querity.not;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(classes = QuerityMongodbTestApplication.class)
+@SpringBootTest(classes = QuerityElasticsearchTestApplication.class)
 @Testcontainers
-class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, String> {
+class QuerityElasticsearchImplTests extends QuerityGenericSpringTestSuite<Person, String> {
 
-  public static final String MONGO_DB_DOCKER_IMAGE = "mongo:5.0.4";
+  private static final String ELASTICSEARCH_IMAGE = "docker.elastic.co/elasticsearch/elasticsearch:8.16.5";
 
   @Container
-  private static final MongoDBContainer MONGO_DB_CONTAINER = new MongoDBContainer(DockerImageName.parse(MONGO_DB_DOCKER_IMAGE));
+  private static final ElasticsearchContainer ELASTICSEARCH_CONTAINER = new ElasticsearchContainer(DockerImageName.parse(ELASTICSEARCH_IMAGE))
+      .withEnv("xpack.security.enabled", "false");
 
   @DynamicPropertySource
   static void setProperties(DynamicPropertyRegistry registry) {
-    registry.add("spring.data.mongodb.uri", MONGO_DB_CONTAINER::getReplicaSetUrl);
+    registry.add("spring.elasticsearch.uris", ELASTICSEARCH_CONTAINER::getHttpHostAddress);
   }
 
   @Override
@@ -42,17 +43,17 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, Stri
   }
 
   /**
-   * Overridden because sort with nulls last is not supported by MongoDB
+   * Overridden because sort behaves differently in Elasticsearch regarding null values
    */
   @Override
   protected <C extends Comparable<? super C>> Comparator<C> getSortComparator(boolean reversed) {
-    Comparator<C> comparator = Comparator.nullsFirst(Comparator.naturalOrder());
+    Comparator<C> comparator = Comparator.naturalOrder();
     if (reversed) comparator = comparator.reversed();
-    return comparator;
+    return Comparator.nullsLast(comparator);
   }
 
   @Test
-  void givenMongodbNativeCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
+  void givenElasticsearchNativeCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Criteria criteria = Criteria.where("lastName").is(entity1.getLastName());
     Query query = Querity.query()
         .filter(filterByNative(criteria))
@@ -66,7 +67,7 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, Stri
   }
 
   @Test
-  void givenNotConditionWrappingMongodbNativeCondition_whenFilterAll_thenThrowIllegalArgumentException() {
+  void givenNotConditionWrappingElasticsearchNativeCondition_whenFilterAll_thenThrowIllegalArgumentException() {
     Criteria criteria = Criteria.where("lastName").is(entity1.getLastName());
     Query query = Querity.query()
         .filter(not(filterByNative(criteria)))
