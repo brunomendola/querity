@@ -16,7 +16,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static net.brunomendola.querity.api.Operator.*;
 import static net.brunomendola.querity.api.Querity.*;
@@ -98,7 +97,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> entity1.getLastName().equals(p.getLastName()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -110,7 +109,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getChildren() != null && p.getChildren().equals(entity1.getChildren()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -122,7 +121,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getChildren() != null && p.getChildren().equals(entity1.getChildren()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -134,7 +133,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getBirthDate() != null && p.getBirthDate().isEqual(entity1.getBirthDate()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -146,7 +145,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getBirthDate() != null && p.getBirthDate().isEqual(entity1.getBirthDate()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -158,7 +157,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(Person::isMarried)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -170,7 +169,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(Person::isMarried)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -182,7 +181,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getHeight().compareTo(entity1.getHeight()) == 0)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -194,7 +193,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getHeight().compareTo(entity1.getHeight()) == 0)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -206,7 +205,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getHeight().compareTo(entity1.getHeight()) > 0)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -218,7 +217,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> !(p.getHeight().compareTo(entity1.getHeight()) > 0))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -230,7 +229,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getHeight().compareTo(entity1.getHeight()) >= 0)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -242,7 +241,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> !(p.getHeight().compareTo(entity1.getHeight()) >= 0))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -254,7 +253,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getHeight().compareTo(entity1.getHeight()) < 0)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -266,7 +265,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> !(p.getHeight().compareTo(entity1.getHeight()) < 0))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -278,7 +277,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getHeight().compareTo(entity1.getHeight()) <= 0)
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -290,7 +289,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> !(p.getHeight().compareTo(entity1.getHeight()) <= 0))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -300,7 +299,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> !entity1.getLastName().equals(p.getLastName())).collect(Collectors.toList()));
+      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> !entity1.getLastName().equals(p.getLastName())).toList());
     }
 
     @Test
@@ -312,7 +311,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> entity1.getLastName().equals(p.getLastName()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -325,7 +324,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getLastName() != null && p.getLastName().startsWith(prefix))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -338,7 +337,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getLastName() != null && p.getLastName().endsWith(suffix))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -351,7 +350,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getLastName() != null && p.getLastName().contains(substring))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -364,7 +363,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getLastName() == null || !p.getLastName().contains(substring))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -374,7 +373,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> p.getLastName() == null).collect(Collectors.toList()));
+      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> p.getLastName() == null).toList());
     }
 
     @Test
@@ -384,7 +383,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> p.getLastName() != null).collect(Collectors.toList()));
+      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> p.getLastName() != null).toList());
     }
 
     @Test
@@ -394,7 +393,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> p.getLastName() == null).collect(Collectors.toList()));
+      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> p.getLastName() == null).toList());
     }
 
     @Test
@@ -409,7 +408,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> entity1.getLastName().equals(p.getLastName()) && entity1.getFirstName().equals(p.getFirstName()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -424,7 +423,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> entity1.getLastName().equals(p.getLastName()) || entity2.getLastName().equals(p.getLastName()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -443,7 +442,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> entity1.getLastName().equals(p.getLastName()) &&
               (entity1.getFirstName().equals(p.getFirstName()) || entity2.getFirstName().equals(p.getFirstName())))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -455,7 +454,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> entity1.getAddress().getCity().equals(p.getAddress().getCity()))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -470,7 +469,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .filter(p -> p.getVisitedLocations().stream()
               .map(Location::getCountry)
               .anyMatch(visitedCountry::equals))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -484,7 +483,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getVisitedLocations().stream()
               .anyMatch(l -> l.getCities().contains(visitedCity)))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -503,7 +502,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .filter(p -> p.getVisitedLocations().stream()
               .anyMatch(l -> visitedCountry.equals(l.getCountry()) &&
                   l.getCities().contains(visitedCity)))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -525,7 +524,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(e -> e.getFavouriteProductCategory().equals(category)).collect(Collectors.toList()));
+      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(e -> e.getFavouriteProductCategory().equals(category)).toList());
     }
 
     @Test
@@ -535,7 +534,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> !(entity1.getLastName().equals(p.getLastName()))).collect(Collectors.toList()));
+      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> !(entity1.getLastName().equals(p.getLastName()))).toList());
     }
 
     @Test
@@ -545,7 +544,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> entity1.getLastName().equals(p.getLastName())).collect(Collectors.toList()));
+      assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream().filter(p -> entity1.getLastName().equals(p.getLastName())).toList());
     }
 
     @Test
@@ -560,7 +559,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> !(entity1.getLastName().equals(p.getLastName()) && entity1.getFirstName().equals(p.getFirstName())))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -575,7 +574,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> !(entity1.getLastName().equals(p.getLastName()) || entity2.getLastName().equals(p.getLastName())))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     @Test
@@ -593,7 +592,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> !(entity1.getLastName().equals(p.getLastName()) && (entity1.getFirstName().equals(p.getFirstName()) || entity2.getFirstName().equals(p.getFirstName()))))
-          .collect(Collectors.toList()));
+          .toList());
     }
 
     private List<T> findByOrderContainingItemMatching(Predicate<OrderItem> matchPredicate) {
@@ -602,7 +601,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
               .map(Order::getItems)
               .flatMap(Collection::stream)
               .anyMatch(matchPredicate))
-          .collect(Collectors.toList());
+          .toList();
     }
 
     private String formatDate(LocalDate birthDate) {
@@ -620,7 +619,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).isEqualTo(entities.stream().skip(3).limit(3).collect(Collectors.toList()));
+      assertThat(result).isEqualTo(entities.stream().skip(3).limit(3).toList());
     }
   }
 
@@ -637,7 +636,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .thenComparing((T p) -> p.getId());
       assertThat(result).isNotEmpty();
       assertThat(result).hasSize(entities.size());
-      assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+      assertThat(result).isEqualTo(entities.stream().sorted(comparator).toList());
     }
 
     @Test
@@ -650,7 +649,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .comparing((T p) -> p.getBirthDate(), getSortComparator())
           .thenComparing((T p) -> p.getId());
       assertThat(result).isNotEmpty();
-      assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+      assertThat(result).isEqualTo(entities.stream().sorted(comparator).toList());
     }
 
     @Test
@@ -663,7 +662,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .thenComparing((T p) -> p.getId());
       assertThat(result).isNotEmpty();
       assertThat(result).hasSize(entities.size());
-      assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+      assertThat(result).isEqualTo(entities.stream().sorted(comparator).toList());
     }
 
     @Test
@@ -676,7 +675,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .thenComparing((T p) -> p.getId());
       assertThat(result).isNotEmpty();
       assertThat(result).hasSize(entities.size());
-      assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+      assertThat(result).isEqualTo(entities.stream().sorted(comparator).toList());
     }
 
     @Test
@@ -688,7 +687,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       Comparator<T> comparator = getStringComparator((T p) -> p.getLastName())
           .thenComparing((T p) -> p.getFirstName());
       assertThat(result).isNotEmpty();
-      assertThat(result).isEqualTo(entities.stream().sorted(comparator).collect(Collectors.toList()));
+      assertThat(result).isEqualTo(entities.stream().sorted(comparator).toList());
     }
   }
 

@@ -16,7 +16,6 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static net.brunomendola.querity.api.Querity.filterByNative;
 import static net.brunomendola.querity.api.Querity.not;
@@ -63,7 +62,7 @@ class QuerityMongodbImplTests extends QuerityGenericSpringTestSuite<Person, Stri
         .isNotEmpty()
         .isEqualTo(entities.stream()
             .filter(p -> entity1.getLastName().equals(p.getLastName()))
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test

@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static net.brunomendola.querity.api.Querity.filterByNative;
 import static net.brunomendola.querity.api.Querity.not;
@@ -33,7 +32,7 @@ public abstract class QuerityJpaImplTests extends QuerityGenericSpringTestSuite<
         .isNotEmpty()
         .isEqualTo(entities.stream()
             .filter(p -> entity1.getLastName().equals(p.getLastName()))
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test
@@ -50,6 +49,6 @@ public abstract class QuerityJpaImplTests extends QuerityGenericSpringTestSuite<
         .isNotEmpty()
         .isEqualTo(entities.stream()
             .filter(p -> !entity1.getLastName().equals(p.getLastName()))
-            .collect(Collectors.toList()));
+            .toList());
   }
 }

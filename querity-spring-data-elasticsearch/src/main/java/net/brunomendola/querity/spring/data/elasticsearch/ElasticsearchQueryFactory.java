@@ -7,7 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ElasticsearchQueryFactory<T> {
   private final Class<T> entityClass;
@@ -58,6 +57,6 @@ public class ElasticsearchQueryFactory<T> {
     return query.getSort().stream()
         .map(ElasticsearchSort::new)
         .map(ElasticsearchSort::toElasticsearchSortOrder)
-        .collect(Collectors.toList());
+        .toList();
   }
 }

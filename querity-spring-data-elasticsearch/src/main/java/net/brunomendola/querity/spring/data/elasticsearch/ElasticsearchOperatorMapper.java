@@ -56,13 +56,6 @@ class ElasticsearchOperatorMapper {
     return negate ? where.not().contains(value.toString()) : where.contains(value.toString());
   }
 
-  private static Criteria getRegex(Criteria where, Object value, boolean negate) {
-    String regexp = value.toString();
-    return negate ?
-        where.not().regexp(regexp) :
-        where.regexp(regexp);
-  }
-
   private static Criteria getGreaterThan(Criteria where, Object value, boolean negate) {
     return negate ? where.lessThanEqual(value) : where.greaterThan(value);
   }
