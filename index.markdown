@@ -2,22 +2,26 @@
 layout: default
 ---
 
-Querity is a generic interface to run database queries in your Java application.
+Querity is an extensible query builder to create and run database queries in your Java application.
 
-It supports various database technologies, both **SQL** and **NoSQL**, and each support is built into modules, so you
+It supports **SQL** and **NoSQL** databases technologies, and each support is built into small modules, so you
 can import the one which fits into your project.
+
+Querity currently supports any **SQL database** (with the JPA module), **MongoDB** and **Elasticsearch**.
 
 Why you should use Querity?
 
 ✔ learn once, use everywhere
 
-✔ zero logic needed apart building a generic Query object
+✔ write queries with filtering, sorting and pagination regardless of the database technology
 
-✔ switch database without rewriting the logic of your application
+✔ fluent Java API to build complex queries
 
-✔ ready to use REST API which implements filtering, sorting and pagination, to be consumed by your UI components
+✔ a simple textual query language to be used in REST APIs
 
 ✔ expose the same REST API in all your projects
+
+✔ switch database without rewriting the logic of your application
 
 # Requirements
 
