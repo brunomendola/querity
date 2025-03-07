@@ -8,7 +8,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=brunomendola_querity&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=brunomendola_querity)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/QuerityLib.svg?style=social&label=Follow%20%40QuerityLib)](https://twitter.com/QuerityLib)
 
-Generic interface to query a database.
+Open-source extensible query builder supporting SQL and NoSQL.
 
 ## Description
 
@@ -45,6 +45,7 @@ Available modules:
 
 * **querity-spring-data-jpa**: supports Spring Data JPA
 * **querity-spring-data-mongodb**: supports Spring Data MongoDB
+* **querity-spring-data-elasticsearch**: supports Spring Data Elasticsearch
 * **querity-spring-web**: supports JSON de/serialization of Querity objects in Spring Web MVC
 * **querity-parser**: enable the parsing of Querity objects from a **simple query language**
 
