@@ -17,20 +17,20 @@ If you choose the Docker option, you could create Bash command aliases to make i
 to do this, add the following lines to `~/.bash_aliases`:
 
 ```
-alias jekyll='docker run --rm --volume="$(pwd):/srv/jekyll" --volume="$(pwd)/vendor/bundle:/usr/local/bundle" -p 4000:4000 -it jekyll/jekyll:4.2.0 jekyll'
-alias bundle='docker run --rm --volume="$(pwd):/srv/jekyll" --volume="$(pwd)/vendor/bundle:/usr/local/bundle" -it jekyll/jekyll:4.2.0 bundle'
+alias jekyll='docker run --rm --volume="$(pwd):/src/site" --volume="$(pwd)/vendor/bundle:/usr/local/bundle" -w /src/site -p 4000:4000 -it ruby:3.3.0 jekyll'
+alias bundle='docker run --rm --volume="$(pwd):/src/site" --volume="$(pwd)/vendor/bundle:/usr/local/bundle" -w /src/site -it ruby:3.3.0 bundle'
 ```
 
 and restart the Bash command line to read the new aliases.
 
-Configure bundler to download the dependencies in a project subdirectory:
+Create the project subdirectory to download the dependencies:
 
 ```
-bundle config set --local path 'vendor/bundle'
+mkdir -p vendor/bundle
 ```
 
 Finally, run `bundle install` to download the dependencies.
 
 ### Testing locally
 
-Run `jekyll serve --baseurl /` in the root of the project and then open http://localhost:4000 in your web browser.
+Run `jekyll serve --baseurl= --host=0.0.0.0` in the root of the project and then open http://localhost:4000 in your web browser.
