@@ -807,4 +807,8 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     if (reversed) comparator = comparator.reversed();
     return comparator;
   }
+
+  protected boolean canUseDistinct() {
+    return false;
+  }
 }
