@@ -18,6 +18,9 @@ class MongodbQueryFactory<T> {
   }
 
   org.springframework.data.mongodb.core.query.Query getMongodbQuery() {
+    if (query != null && query.isDistinct()) {
+      throw new UnsupportedOperationException("Distinct queries are not supported in MongoDB");
+    }
     org.springframework.data.mongodb.core.query.Query q = initMongodbQuery();
     q = applyPaginationAndSorting(q);
     return q;

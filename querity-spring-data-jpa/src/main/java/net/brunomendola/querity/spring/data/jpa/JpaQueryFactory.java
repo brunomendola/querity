@@ -26,6 +26,7 @@ class JpaQueryFactory<T> {
     CriteriaQuery<T> cq = cb.createQuery(entityClass);
     Root<T> root = cq.from(entityClass);
 
+    applyDistinct(cq);
     applyFilters(root, cq, cb);
     applySorting(root, cq, cb);
 
@@ -34,6 +35,11 @@ class JpaQueryFactory<T> {
     applyPagination(tq);
 
     return tq;
+  }
+
+  private void applyDistinct(CriteriaQuery<T> cq) {
+    if (query != null && query.isDistinct())
+      cq.distinct(true);
   }
 
   public TypedQuery<Long> getJpaCountQuery() {
@@ -48,7 +54,7 @@ class JpaQueryFactory<T> {
   }
 
   private void applySelectCount(Root<T> root, CriteriaQuery<Long> cq, CriteriaBuilder cb) {
-    cq.select(cb.count(root));
+    cq.select(cb.countDistinct(root)); // always counting distinct rows, should not be a problem since there's no sorting
   }
 
   private void applyFilters(Root<T> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {

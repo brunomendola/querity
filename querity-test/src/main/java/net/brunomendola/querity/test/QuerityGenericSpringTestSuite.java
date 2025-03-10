@@ -441,7 +441,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> entity1.getLastName().equals(p.getLastName()) &&
-              (entity1.getFirstName().equals(p.getFirstName()) || entity2.getFirstName().equals(p.getFirstName())))
+                       (entity1.getFirstName().equals(p.getFirstName()) || entity2.getFirstName().equals(p.getFirstName())))
           .toList());
     }
 
@@ -501,7 +501,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       assertThat(result).containsExactlyInAnyOrderElementsOf(entities.stream()
           .filter(p -> p.getVisitedLocations().stream()
               .anyMatch(l -> visitedCountry.equals(l.getCountry()) &&
-                  l.getCities().contains(visitedCity)))
+                             l.getCities().contains(visitedCity)))
           .toList());
     }
 
@@ -514,6 +514,29 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
       assertThat(result).containsExactlyInAnyOrderElementsOf(findByOrderContainingItemMatching(i -> i.getSku().equals(sku)));
+    }
+
+    /**
+     * This test should allow to catch issues with duplicated rows from SQL queries when filtering by nested collection fields.
+     * We cannot spot those issues without pagination, because JPA automatically removes duplicates.
+     * But when pagination is applied, if the query produced duplicated rows, the pagination will return fewer elements than expected.
+     * In those cases, the distinct flag should be set to true to remove duplicates.
+     */
+    @Test
+    void givenFilterWithNumberGreaterThanConditionOnDoubleNestedCollectionItemFieldAndDistinctAndSortAndPagination_whenFilterAll_thenReturnOnlyFilteredElements() {
+      int quantity = 8;
+      Query query = Querity.query()
+          .distinct(true)
+          .filter(filterBy("orders.items.quantity", GREATER_THAN, quantity))
+          .sort(sortBy(PROPERTY_ID))
+          .pagination(1, 10)
+          .build();
+      List<T> result = querity.findAll(getEntityClass(), query);
+      assertThat(result).isNotEmpty();
+      assertThat(result).containsExactlyInAnyOrderElementsOf(findByOrderContainingItemMatching(i -> i.getQuantity() > quantity).stream()
+          .sorted(Comparator.comparing(T::getId))
+          .skip(0).limit(10)
+          .toList());
     }
 
     @Test
@@ -594,16 +617,6 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
           .filter(p -> !(entity1.getLastName().equals(p.getLastName()) && (entity1.getFirstName().equals(p.getFirstName()) || entity2.getFirstName().equals(p.getFirstName()))))
           .toList());
     }
-
-    private List<T> findByOrderContainingItemMatching(Predicate<OrderItem> matchPredicate) {
-      return entities.stream()
-          .filter(p -> p.getOrders().stream()
-              .map(Order::getItems)
-              .flatMap(Collection::stream)
-              .anyMatch(matchPredicate))
-          .toList();
-    }
-
     private String formatDate(LocalDate birthDate) {
       return birthDate.format(DateTimeFormatter.ISO_DATE);
     }
@@ -615,11 +628,15 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     @Test
     void givenPagination_whenFilterAll_thenReturnThePageElements() {
       Query query = Querity.query()
+          .sort(sortBy(PROPERTY_ID))
           .pagination(2, 3)
           .build();
       List<T> result = querity.findAll(getEntityClass(), query);
       assertThat(result).isNotEmpty();
-      assertThat(result).isEqualTo(entities.stream().skip(3).limit(3).toList());
+      assertThat(result).containsExactlyElementsOf(entities.stream()
+          .sorted(Comparator.comparing(T::getId))
+          .skip(3).limit(3)
+          .toList());
     }
   }
 
@@ -711,6 +728,23 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
       Long count = querity.count(getEntityClass(), filterBy(PROPERTY_LAST_NAME, EQUALS, entity1.getLastName()));
       assertThat(count).isEqualTo(entities.stream().filter(e -> entity1.getLastName().equals(e.getLastName())).count());
     }
+
+    @Test
+    void givenFilterWithNumberGreaterThanConditionOnDoubleNestedCollectionItemField_whenCount_thenReturnOnlyFilteredElementsCount() {
+      int quantity = 8;
+      Long count = querity.count(getEntityClass(), filterBy("orders.items.quantity", GREATER_THAN, quantity));
+      assertThat(count).isEqualTo(findByOrderContainingItemMatching(i -> i.getQuantity() > quantity).size());
+    }
+
+  }
+
+  private List<T> findByOrderContainingItemMatching(Predicate<OrderItem> matchPredicate) {
+    return entities.stream()
+        .filter(p -> p.getOrders().stream()
+            .map(Order::getItems)
+            .flatMap(Collection::stream)
+            .anyMatch(matchPredicate))
+        .toList();
   }
 
   protected abstract Class<T> getEntityClass();

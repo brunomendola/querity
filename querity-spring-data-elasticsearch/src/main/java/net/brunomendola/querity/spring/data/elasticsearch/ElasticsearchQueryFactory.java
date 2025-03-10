@@ -18,6 +18,9 @@ public class ElasticsearchQueryFactory<T> {
   }
 
   org.springframework.data.elasticsearch.core.query.Query getElasticsearchQuery() {
+    if (query != null && query.isDistinct()) {
+      throw new UnsupportedOperationException("Distinct queries are not supported in Elasticsearch");
+    }
     org.springframework.data.elasticsearch.core.query.Query q = initElasticsearchQuery();
     q = applyPaginationAndSorting(q);
     return q;

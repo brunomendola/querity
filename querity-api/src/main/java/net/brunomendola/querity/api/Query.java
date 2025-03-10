@@ -22,6 +22,7 @@ public class Query {
   @NonNull
   @JsonIgnore
   private List<QueryPreprocessor> preprocessors;
+  private boolean distinct;
 
   public boolean hasFilter() {
     return filter != null && !filter.isEmpty();
