@@ -526,7 +526,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     void givenFilterWithNumberGreaterThanConditionOnDoubleNestedCollectionItemFieldAndDistinctAndSortAndPagination_whenFilterAll_thenReturnOnlyFilteredElements() {
       int quantity = 8;
       Query query = Querity.query()
-          .distinct(true)
+          .distinct(canUseDistinct())
           .filter(filterBy("orders.items.quantity", GREATER_THAN, quantity))
           .sort(sortBy(PROPERTY_ID))
           .pagination(1, 10)
