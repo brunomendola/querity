@@ -35,6 +35,8 @@ Query features:
 * support for DTO layer
 * and more...
 
+All with ONE SINGLE LANGUAGE!
+
 ## Documentation
 
 Read the full documentation [here](https://brunomendola.github.io/querity).
