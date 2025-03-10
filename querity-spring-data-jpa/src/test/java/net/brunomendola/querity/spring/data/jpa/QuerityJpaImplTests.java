@@ -30,7 +30,7 @@ public abstract class QuerityJpaImplTests extends QuerityGenericSpringTestSuite<
     List<Person> result = querity.findAll(getEntityClass(), query);
     assertThat(result)
         .isNotEmpty()
-        .isEqualTo(entities.stream()
+        .containsExactlyInAnyOrderElementsOf(entities.stream()
             .filter(p -> entity1.getLastName().equals(p.getLastName()))
             .toList());
   }
@@ -47,7 +47,7 @@ public abstract class QuerityJpaImplTests extends QuerityGenericSpringTestSuite<
     List<Person> result = querity.findAll(getEntityClass(), query);
     assertThat(result)
         .isNotEmpty()
-        .isEqualTo(entities.stream()
+        .containsExactlyInAnyOrderElementsOf(entities.stream()
             .filter(p -> !entity1.getLastName().equals(p.getLastName()))
             .toList());
   }

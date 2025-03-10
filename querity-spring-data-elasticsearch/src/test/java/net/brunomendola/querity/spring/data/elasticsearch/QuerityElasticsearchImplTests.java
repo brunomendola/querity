@@ -61,7 +61,7 @@ class QuerityElasticsearchImplTests extends QuerityGenericSpringTestSuite<Person
     List<Person> result = querity.findAll(Person.class, query);
     assertThat(result)
         .isNotEmpty()
-        .isEqualTo(entities.stream()
+        .containsExactlyInAnyOrderElementsOf(entities.stream()
             .filter(p -> entity1.getLastName().equals(p.getLastName()))
             .toList());
   }
