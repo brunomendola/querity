@@ -57,13 +57,17 @@ See [Releases](https://github.com/brunomendola/querity/releases) to check the la
 All modules are "Spring Boot starters", if you use Spring Boot you just need to add the dependency to your project and
 start using it, no other configuration needed.
 
+# Demo
+
+Check out the simplest demo application using Querity at [querity-demo](https://github.com/brunomendola/querity-demo).
+
 # Available modules
 
 Currently, Querity supports the following technologies with its modules:
 
 ## querity-spring-data-jpa
 
-Supports [Spring Data JPA](https://spring.io/projects/spring-data-jpa).
+Supports [Spring Data JPA](https://spring.io/projects/spring-data-jpa) and any SQL database with a compatible JDBC driver.
 
 ## querity-spring-data-mongodb
 
@@ -77,12 +81,19 @@ Supports [Spring Data Elasticsearch](https://spring.io/projects/spring-data-elas
 
 ## querity-spring-web
 
-Supports JSON serialization and deserialization of Querity objects
-in [Spring Web MVC](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html).
+Supports JSON serialization and deserialization of Querity objects in [Spring Web MVC](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html).
+
+This is an alternative approach to the one provided by the module `querity-parser`.
+
+See [Support for Spring MVC and REST APIs](#support-for-spring-mvc-and-rest-apis) for more details.
 
 ## querity-parser
 
 Enables the parsing of Querity objects from a **simple query language**.
+
+This is an alternative approach to the one provided by the module `querity-spring-web`.
+
+See [Query language](#query-language) for more details.
 
 # Quick start
 
@@ -287,6 +298,24 @@ Query query = Querity.query()
     .build();
 ```
 
+## Distinct results
+
+Use `Querity.query().distinct(true).build()` to build a query with distinct results.
+
+You should set this flag to `true` when you are filtering by some nested properties that may produce duplicate results in SQL databases.
+
+```
+Query query = Querity.query()
+    .distinct(true)
+    .filter(filterBy("orders.items.quantity", GREATER_THAN, 8))
+    .pagination(1, 5)
+    .build();
+```
+
+> Because of limitations of SQL databases, when the distinct flag is set to `true`, you cannot sort by nested properties.
+
+> The distinct flag is meaningless in NoSQL databases and will be ignored.
+
 ## Modify an existing Query
 
 Query objects are immutable, so you can't modify them directly (there are no "setters").
@@ -306,8 +335,7 @@ Query query = originalQuery.toBuilder()
 Querity objects need some configuration to be correctly deserialized when they are received by a
 Spring `@RestController` as a JSON payload.
 
-These configurations are automatically done by importing the `querity-spring-web` module (see [Installing](#installing))
-.
+These configurations are automatically done by importing the `querity-spring-web` module (see [Installing](#installing)).
 
 After that, you'll be able to use a `Query` or `Condition` as a controller parameter and build REST APIs like this:
 
