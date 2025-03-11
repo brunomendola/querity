@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Builder(toBuilder = true)
 @Jacksonized
 @Getter
-@EqualsAndHashCode(of = {"filter", "pagination", "sort"})
-@ToString(of = {"filter", "pagination", "sort"})
+@EqualsAndHashCode(of = {"filter", "pagination", "sort", "distinct"})
+@ToString(of = {"filter", "pagination", "sort", "distinct"})
 public class Query {
   private final Condition filter;
   private final Pagination pagination;

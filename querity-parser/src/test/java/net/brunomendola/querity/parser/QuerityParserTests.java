@@ -56,6 +56,8 @@ class QuerityParserTests {
             Querity.query().filter(filterBy("deleted", Boolean.FALSE)).build()),
         Arguments.of("address.city=\"Rome\"",
             Querity.query().filter(filterBy("address.city", "Rome")).build()),
+        Arguments.of("distinct orders.rows.quantity>10",
+            Querity.query().distinct(true).filter(filterBy("orders.rows.quantity", GREATER_THAN, 10)).build()),
         Arguments.of("sort by lastName asc, age desc page 1,10",
             Querity.query().sort(sortBy("lastName", ASC), sortBy("age", DESC)).pagination(1, 10).build())
     );

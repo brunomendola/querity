@@ -1,5 +1,6 @@
 lexer grammar QueryLexer;
 
+DISTINCT   : 'distinct';
 AND        : 'and';
 OR         : 'or';
 NOT        : 'not';
