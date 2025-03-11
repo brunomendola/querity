@@ -403,6 +403,7 @@ _Much simpler than JSON, isn't it?_
 The query language supports the following grammar (ANTLR v4 format):
 
 ```
+DISTINCT   : 'distinct';
 AND        : 'and';
 OR         : 'or';
 NOT        : 'not';
@@ -431,7 +432,7 @@ BOOLEAN_VALUE : 'true' | 'false';
 PROPERTY      : [a-zA-Z_][a-zA-Z0-9_.]*;
 STRING_VALUE  : '"' (~["\\] | '\\' .)* '"';
 
-query            : (condition)? (SORT sortFields)? (PAGINATION paginationParams)? ;
+query            : DISTINCT? (condition)? (SORT sortFields)? (PAGINATION paginationParams)? ;
 condition        : simpleCondition | conditionWrapper | notCondition;
 operator         : NEQ | LTE | GTE | EQ | LT | GT | STARTS_WITH | ENDS_WITH | CONTAINS | IS_NULL | IS_NOT_NULL ;
 conditionWrapper : (AND | OR) LPAREN condition (COMMA condition)* RPAREN ;
@@ -464,6 +465,7 @@ lastName is null
 lastName is not null
 deleted=false
 address.city="Rome"
+distinct and(orders.totalPrice>1000,currency="EUR")
 sort by lastName asc, age desc page 1,10
 ```
 
