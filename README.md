@@ -41,6 +41,10 @@ All with ONE SINGLE LANGUAGE!
 
 Read the full documentation [here](https://brunomendola.github.io/querity).
 
+## Demo
+
+Check out the simplest demo application using Querity at [querity-demo](https://github.com/brunomendola/querity-demo).
+
 ## Getting Started
 
 ### Dependencies
