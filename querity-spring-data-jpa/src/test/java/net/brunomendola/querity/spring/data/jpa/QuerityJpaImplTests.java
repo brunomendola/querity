@@ -21,11 +21,6 @@ public abstract class QuerityJpaImplTests extends QuerityGenericSpringTestSuite<
     return Person.class;
   }
 
-  @Override
-  protected boolean canUseDistinct() {
-    return true;
-  }
-
   @Test
   void givenJpaNativeCondition_whenFilterAll_thenReturnOnlyFilteredElements() {
     Specification<Person> specification = (root, cq, cb) -> cb.equal(root.get("lastName"), entity1.getLastName());

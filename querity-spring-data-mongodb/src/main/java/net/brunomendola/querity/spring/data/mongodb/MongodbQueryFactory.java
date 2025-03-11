@@ -1,5 +1,6 @@
 package net.brunomendola.querity.spring.data.mongodb;
 
+import lombok.extern.slf4j.Slf4j;
 import net.brunomendola.querity.api.Pagination;
 import net.brunomendola.querity.api.Query;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.List;
 
+@Slf4j
 class MongodbQueryFactory<T> {
   private final Class<T> entityClass;
   private final Query query;
@@ -19,7 +21,7 @@ class MongodbQueryFactory<T> {
 
   org.springframework.data.mongodb.core.query.Query getMongodbQuery() {
     if (query != null && query.isDistinct()) {
-      throw new UnsupportedOperationException("Distinct queries are not supported in MongoDB");
+      log.debug("Distinct queries are not supported in MongoDB, ignoring the distinct flag");
     }
     org.springframework.data.mongodb.core.query.Query q = initMongodbQuery();
     q = applyPaginationAndSorting(q);

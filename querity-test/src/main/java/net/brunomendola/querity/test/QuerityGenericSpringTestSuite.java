@@ -526,7 +526,7 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     void givenFilterWithNumberGreaterThanConditionOnDoubleNestedCollectionItemFieldAndDistinctAndSortAndPagination_whenFilterAll_thenReturnOnlyFilteredElements() {
       int quantity = 8;
       Query query = Querity.query()
-          .distinct(canUseDistinct())
+          .distinct(true)
           .filter(filterBy("orders.items.quantity", GREATER_THAN, quantity))
           .sort(sortBy(PROPERTY_ID))
           .pagination(1, 10)
@@ -806,9 +806,5 @@ public abstract class QuerityGenericSpringTestSuite<T extends Person<K, ?, ?, ? 
     Comparator<C> comparator = Comparator.nullsLast(Comparator.naturalOrder());
     if (reversed) comparator = comparator.reversed();
     return comparator;
-  }
-
-  protected boolean canUseDistinct() {
-    return false;
   }
 }
