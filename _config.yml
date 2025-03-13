@@ -21,7 +21,7 @@
 title: Querity
 #email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Open-source extensible query builder supporting SQL and NoSQL.
+  Open-source Java query builder for SQL and NoSQL.
 baseurl: "/querity" # the subpath of your site, e.g. /blog
 url: "https://brunomendola.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: brunomendola
