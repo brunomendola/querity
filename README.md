@@ -8,7 +8,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=brunomendola_querity&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=brunomendola_querity)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/QuerityLib.svg?style=social&label=Follow%20%40QuerityLib)](https://twitter.com/QuerityLib)
 
-Open-source extensible query builder supporting SQL and NoSQL.
+Open-source Java query builder for SQL and NoSQL.
 
 ## Description
 
