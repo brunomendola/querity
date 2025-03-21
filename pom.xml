@@ -12,7 +12,7 @@
   <description>Generic interface to query a database.</description>
 
   <inceptionYear>2021</inceptionYear>
-  <url>https://github.com/brunomendola/querity</url>
+  <url>https://github.com/queritylib/querity</url>
 
   <developers>
     <developer>
@@ -24,26 +24,26 @@
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
-      <url>https://github.com/brunomendola/querity/blob/main/LICENSE</url>
+      <url>https://github.com/queritylib/querity/blob/main/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/brunomendola/querity/issues</url>
+    <url>https://github.com/queritylib/querity/issues</url>
   </issueManagement>
 
   <scm>
-    <url>https://github.com/brunomendola/querity</url>
-    <connection>scm:git:https://github.com/brunomendola/querity.git</connection>
-    <developerConnection>scm:git:https://github.com/brunomendola/querity.git</developerConnection>
+    <url>https://github.com/queritylib/querity</url>
+    <connection>scm:git:https://github.com/queritylib/querity.git</connection>
+    <developerConnection>scm:git:https://github.com/queritylib/querity.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <ciManagement>
     <system>GitHub Actions</system>
-    <url>https://github.com/brunomendola/querity/actions</url>
+    <url>https://github.com/queritylib/querity/actions</url>
   </ciManagement>
 
   <properties>
@@ -248,7 +248,7 @@
         <repository>
           <id>github</id>
           <name>GitHub Packages</name>
-          <url>https://maven.pkg.github.com/brunomendola/querity</url>
+          <url>https://maven.pkg.github.com/queritylib/querity</url>
         </repository>
       </distributionManagement>
     </profile>
