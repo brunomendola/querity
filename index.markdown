@@ -52,14 +52,14 @@ Gradle:
 implementation "net.brunomendola.querity:querity-spring-data-jpa:{{ site.querity_version }}"
 ```
 
-See [Releases](https://github.com/brunomendola/querity/releases) to check the latest version and see the changelogs.
+See [Releases](https://github.com/queritylib/querity/releases) to check the latest version and see the changelogs.
 
 All modules are "Spring Boot starters", if you use Spring Boot you just need to add the dependency to your project and
 start using it, no other configuration needed.
 
 # Demo
 
-Check out the simplest demo application using Querity at [querity-demo](https://github.com/brunomendola/querity-demo).
+Check out the simplest demo application using Querity at [querity-demo](https://github.com/queritylib/querity-demo).
 
 # Available modules
 
